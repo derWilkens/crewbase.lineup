@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
+    <menu id="lineUp"
+          icon="font-icon:GROUP"
+          insertBefore="administration">
+        <item screen="rota-timeline"/>
+        <item id="emlTime"
+              screen="eml-timeline"/>
+    </menu>
+    <menu id="crewChange"
+          icon="font-icon:ARROWS_ALT"
+          insertBefore="administration">
+        <item screen="lineup$NumberRangeRule.browse"/>
+        <item screen="lineup$Site.browse"/>
+        <item screen="lineup$SiteRoleRule.browse"/>
+    </menu>
+    <menu id="capDB"
+          icon="font-icon:GRADUATION_CAP"
+          insertBefore="administration">
+        <item screen="lineup$RoleQualificationType.browse"/>
+    </menu>
+    <menu id="favorites"
+          icon="font-icon:STAR"
+          insertBefore="administration">
+        <item screen="lineup$FunctionCategory.choose"/>
+        <item icon="icons/user-group-ok.png"
+              screen="lineup$DepartmentUser.choose"/>
+        <item screen="userpreference-sitecolors"/>
+        <item id="lineup$UserPreference.browse"/>
+        <item screen="lineup$CampaignSite.choose"/>
+        <item screen="lineup$EmlSite.choose"/>
+    </menu>
+    <menu id="admintools"
+          icon="font-icon:COGS"
+          insertBefore="administration">
+        <item icon="font-icon:USER_PLUS"
+              screen="importUsers"/>
+        <item screen="importPeriods"/>
+        <item screen="lineup$PeriodImportStage.browse"/>
+        <item screen="lineup$UserImportStage.browse"/>
+    </menu>
+    <menu id="masterdata"
+          icon="font-icon:TABLE"
+          insertBefore="administration">
+        <item id="lineup$Company.browse"/>
+        <item screen="lineup$FunctionCategory.browse"/>
+        <item screen="lineup$Department.browse"/>
+        <item screen="lineup$DutyPeriodTemplate.browse"/>
+        <item screen="lineup$AppUser.browse"/>
+    </menu>
+</menu-config>

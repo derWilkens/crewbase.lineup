@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.periodimportstage.PeriodImportStageBrowse"
+        focusComponent="periodImportStagesTable"
+        lookupComponent="periodImportStagesTable"
+        messagesPack="eu.crewbase.lineup.web.periodimportstage">
+    <dsContext>
+        <groupDatasource id="periodImportStagesDs"
+                         class="eu.crewbase.lineup.entity.batchimport.PeriodImportStage"
+                         view="_local">
+            <query>
+                <![CDATA[select e from lineup$PeriodImportStage e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="periodImportStagesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="periodImportStagesTable"
+                datasource="periodImportStagesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="periodImportStagesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="itemDesignation"/>
+                <column id="campaignNumber"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="shutdown"/>
+                <column id="importLog"/>
+            </columns>
+            <rows datasource="periodImportStagesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="periodImportStagesTable.create"/>
+                <button id="editBtn"
+                        action="periodImportStagesTable.edit"/>
+                <button id="removeBtn"
+                        action="periodImportStagesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

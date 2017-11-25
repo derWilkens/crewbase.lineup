@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.numberrangerule.NumberRangeRuleEdit"
+        datasource="numberRangeRuleDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.numberrangerule">
+    <dsContext>
+        <datasource id="numberRangeRuleDs"
+                    class="eu.crewbase.lineup.entity.coredata.NumberRangeRule"
+                    view="numberRangeRule-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="numberRangeRuleDs">
+            <column width="250px">
+                <field property="amountFrom"/>
+                <field property="amountTo"/>
+                <field property="requiredNumber"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

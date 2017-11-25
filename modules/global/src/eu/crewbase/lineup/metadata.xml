@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<metadata xmlns="http://schemas.haulmont.com/cuba/metadata.xsd">
+
+    <metadata-model root-package="eu.crewbase.lineup" namespace="lineup">
+            <class>eu.crewbase.lineup.entity.dto.TimelineItem</class>
+        <class>eu.crewbase.lineup.entity.dto.TimelineGroup</class>
+        <class>eu.crewbase.lineup.entity.batchimport.PeriodImportRecord</class>
+        <class>eu.crewbase.lineup.entity.dto.TimelineDTO</class>
+        <class>eu.crewbase.lineup.entity.dto.DutyPeriodDTO</class>
+    </metadata-model>
+
+</metadata>

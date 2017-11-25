@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.web.rotaplan.EmlTimeline"
+        messagesPack="eu.crewbase.lineup.web.emlplan">
+    <dsContext>
+        <datasource id="attendencePeriodDs"
+                    class="eu.crewbase.lineup.entity.period.AttendencePeriodDs"
+                    view="attendencePeriod-edit-view"/>
+        <collectionDatasource id="attendencePeriodsDs"
+                              class="eu.crewbase.lineup.entity.period.AttendencePeriod"
+                              view="attendencePeriod-edit-view">
+            <query>
+                <![CDATA[select e from lineup$AttendencePeriod e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="functionCategoriesDs"
+                              class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$FunctionCategory e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="timelineBox">
+        <hbox id="radioBtnBox"
+              spacing="true">
+            <optionsGroup id="siteChooser"
+                          orientation="horizontal"/>
+        </hbox>
+        <scrollBox id="timelineBox"
+                   scrollBars="both"
+                   spacing="true"/>
+    </layout>
+</window>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="eu.crewbase.lineup.web.userpreference.Preferredsites"
+        messagesPack="eu.crewbase.lineup.web.userpreference">
+    <dsContext>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site">
+            <query>
+                <![CDATA[select e from lineup$Site e where e.siteType.type like '%Platform']]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <popupView id="popupView"
+                   align="BOTTOM_LEFT"
+                   hideOnMouseOut="false"
+                   minimizedValue="Minimized Value 2137">
+            <vbox height="100%">
+                <optionsGroup id="optionsGroup"
+                              align="MIDDLE_CENTER"
+                              multiselect="true"
+                              optionsDatasource="sitesDs"
+                              property="siteName"/>
+            </vbox>
+        </popupView>
+        <button caption="Open the popup programmatically"
+                invoke="openPopup"
+                width="367px"/>
+        <table height="100px"
+               width="607px">
+            <columns>
+                <column id="client"/>
+                <column id="siteName"/>
+                <column id="itemDesignation"/>
+                <column id="shortItemDesignation"/>
+                <column id="category"/>
+            </columns>
+            <rows datasource="sitesDs"/>
+        </table>
+    </layout>
+</window>

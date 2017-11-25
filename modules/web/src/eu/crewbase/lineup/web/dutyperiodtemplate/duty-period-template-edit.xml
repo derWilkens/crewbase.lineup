@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.dutyperiodtemplate.DutyPeriodTemplateEdit"
+        datasource="dutyPeriodTemplateDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.dutyperiodtemplate">
+    <dsContext>
+        <datasource id="dutyPeriodTemplateDs"
+                    class="eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate"
+                    view="dutyPeriodTemplate-view"/>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dutyPeriodTemplateDs">
+            <column width="250px">
+                <field property="functionCategory"/>
+                <field property="defaultDuration"/>
+                <field optionsDatasource="sitesDs"
+                       property="site"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

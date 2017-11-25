@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.web.userpreference.UserpreferenceSitecolors"
+        messagesPack="eu.crewbase.lineup.web.userpreference">
+    <dsContext>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="siteSelect">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="userPreferencesDs"
+                              class="eu.crewbase.lineup.UserPreference">
+            <query>
+                <![CDATA[select e from lineup$UserPreference e where e.contextId = 30 and e.userId =  :session$userId]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <table id="siteColors"
+               height="100%"
+               width="100%">
+            <columns>
+                <column id="siteName"/>
+                <column id="category"/>
+            </columns>
+            <rows datasource="sitesDs"/>
+        </table>
+    </layout>
+</window>

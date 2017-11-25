@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view class="eu.crewbase.lineup.entity.Transfer"
+          extends="_local"
+          name="transfer-browser-view">
+        <property name="modeOfTransfer"
+                  view="_minimal">
+            <property name="mode"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.Transfer"
+          extends="_local"
+          name="transfer-edit-view">
+        <property name="waypointList"
+                  view="_minimal">
+            <property name="site">
+                <property name="client"/>
+                <property name="siteName"/>
+            </property>
+            <property name="client"/>
+        </property>
+        <property name="crewChange"
+                  view="_minimal">
+            <property name="flightDate"/>
+        </property>
+        <property name="operatedBy"
+                  view="_minimal"/>
+        <property name="modeOfTransfer"
+                  view="_minimal">
+            <property name="mode"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          extends="_local"
+          name="site-browser-view">
+        <property name="parentSite"
+                  view="_minimal"/>
+        <property name="siteType"
+                  view="_minimal"/>
+        <property name="category"
+                  view="_minimal"/>
+        <property name="siteRoleRules">
+            <property name="role"
+                      view="_minimal"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.ShiftPeriod"
+          extends="_local"
+          name="dutyPeriod-edit-view">
+        <property name="personOnDuty"
+                  view="_minimal"/>
+        <property name="functionCategory"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.Waypoint"
+          extends="_local"
+          name="waypoint-browser-view">
+        <property name="site"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
+          extends="_local"
+          name="campaign-view">
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          extends="_local"
+          name="siteCampaignsView">
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
+          extends="_local"
+          name="campaignOverview">
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          extends="_local"
+          name="siteSelect">
+        <property name="category"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.UserPreference"
+          extends="_local"
+          name="userPreference-view"/>
+    <view class="eu.crewbase.lineup.entity.coredata.PeriodType"
+          extends="_local"
+          name="periodType-view">
+        <property name="parentType"
+                  view="_minimal">
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          extends="_local"
+          name="site-view"/>
+    <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+          name="functionCategory-treeView">
+        <property name="parentType"
+                  view="_minimal">
+            <property name="periodSubClass"/>
+        </property>
+        <property name="categoryName"/>
+        <property name="periodSubClass"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+          name="functionCategory-view">
+        <property name="categoryName"/>
+        <property name="periodSubClass"/>
+        <property name="parentType"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.SiteType"
+          extends="_local"
+          name="siteType-view">
+        <property name="parentType"
+                  view="_minimal">
+            <property name="type"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
+          name="campaign-templateView"
+          overwrite="true">
+        <property name="site">
+            <property name="itemDesignation"/>
+        </property>
+        <property name="start"/>
+        <property name="end"/>
+        <property name="campaignNumber"/>
+        <property name="remark"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.UserPreference"
+          name="userPreference-SiteColors">
+        <property name="entityUuid"/>
+        <property name="userValue"/>
+        <property name="userId"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.cap.Certificate"
+          extends="_local"
+          name="certificate-view">
+        <property name="qualificationType"
+                  view="_minimal"/>
+        <property name="fileData"
+                  view="_minimal"/>
+        <property name="certificateType"
+                  view="_minimal"/>
+        <property name="appUser"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Department"
+          extends="_local"
+          name="department-treeview">
+        <property name="parentDepartment"
+                  view="_minimal">
+        </property>
+        <property name="leader"
+                  view="_minimal">
+        </property>
+        <property name="deputyLeader"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.AppUser"
+          name="appUser-view">
+        <property name="jobfunction"
+                  view="_local"/>
+        <property name="firstname"/>
+        <property name="department"
+                  view="_minimal"/>
+        <property name="email"/>
+        <property name="company"
+                  view="_minimal"/>
+        <property name="lastname"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.CraftType"
+          extends="_local"
+          name="craftType-view">
+        <property name="modeOfTransfer"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.ShiftPeriod"
+          extends="_local"
+          name="dutyPeriod-view">
+        <property name="personOnDuty"
+                  view="_minimal"/>
+        <property name="functionCategory"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          name="preferred-site-view">
+        <property name="siteName"/>
+        <property name="itemDesignation"/>
+        <property name="siteType"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Department"
+          name="department-view">
+        <property name="parentDepartment"
+                  view="_minimal">
+            <property name="acronym"/>
+        </property>
+        <property name="leader"
+                  view="_minimal">
+        </property>
+        <property name="deputyLeader"
+                  view="_minimal">
+        </property>
+        <property name="name"/>
+        <property name="acronym"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Department"
+          name="department-user-choose-view">
+        <property name="name"/>
+        <property name="parentDepartment"
+                  view="_minimal">
+            <property name="acronym"/>
+        </property>
+        <property name="acronym"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate"
+          name="dutyPeriodTemplate-view">
+        <property name="functionCategory">
+            <property name="categoryName"/>
+        </property>
+        <property name="defaultDuration"/>
+        <property name="site">
+            <property name="siteName"/>
+        </property>
+        <property name="user">
+            <property name="login"/>
+            <property name="name"/>
+        </property>
+        <property name="color"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          name="campaing-site-choose">
+        <property name="siteName"/>
+        <property name="itemDesignation"/>
+        <property name="category"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.cap.coredata.Jobfunction"
+          extends="_local"
+          name="jobfunction-view">
+        <property name="role"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.cap.coredata.Role"
+          name="role-view">
+        <property name="name"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.cap.coredata.RoleQualificationType"
+          extends="_local"
+          name="roleQualificationType-view">
+        <property name="qualificationType"
+                  view="_minimal"/>
+        <property name="role"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.cap.coredata.QualificationType"
+          name="qualificationType-view">
+        <property name="name"/>
+        <property name="validity"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.SiteRoleRule"
+          extends="_local"
+          name="siteRoleRules-view">
+        <property name="site"
+                  view="_minimal"/>
+        <property name="rangeRule"
+                  view="_local"/>
+        <property name="role"
+                  view="_minimal"/>
+        <property name="functionCategory"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.NumberRangeRule"
+          extends="_local"
+          name="numberRangeRule-view"/>
+    <view class="eu.crewbase.lineup.entity.coredata.AppUser"
+          extends="_local"
+          name="appUser-template-view">
+        <property name="jobfunction"
+                  view="_minimal"/>
+        <property name="company"
+                  view="_minimal"/>
+        <property name="department"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
+          name="userImportStage-view">
+        <property name="firstname"/>
+        <property name="lastname"/>
+        <property name="email"/>
+        <property name="department"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.OffshoreUser"
+          extends="_local"
+          name="offshoreUser-view">
+        <property name="jobfunction"
+                  view="_minimal"/>
+        <property name="company"
+                  view="_minimal"/>
+        <property name="department"
+                  view="_minimal"/>
+    </view>
+</views>

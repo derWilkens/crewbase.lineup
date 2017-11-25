@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2017 Haulmont Technology Ltd. All Rights Reserved.
+  ~ Haulmont Technology proprietary and confidential.
+  ~ Use is subject to license terms.
+  -->
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.web.appuser.AppUserBrowse"
+        focusComponent="table"
+        lookupComponent="table"
+        messagesPack="eu.crewbase.lineup.web.appuser">
+    <dsContext>
+        <datasource id="appUserDs"
+                    class="eu.crewbase.lineup.entity.coredata.AppUser"
+                    view="appUser-view">
+            <collectionDatasource id="jobfunctionDs"
+                                  property="jobfunction"/>
+        </datasource>
+        <collectionDatasource id="appUsersDs"
+                              class="eu.crewbase.lineup.entity.coredata.AppUser"
+                              view="appUser-view">
+            <query>
+                <![CDATA[select e from lineup$AppUser e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="save"
+                caption="mainMsg://actions.Ok"
+                icon="icons/ok.png"
+                invoke="save"
+                shortcut="CTRL-ENTER"/>
+        <action id="cancel"
+                caption="mainMsg://actions.Cancel"
+                description="Esc"
+                icon="icons/cancel.png"
+                invoke="cancel"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <split id="split"
+               height="100%"
+               orientation="horizontal"
+               reversePosition="true"
+               width="100%">
+            <vbox id="lookupBox"
+                  expand="table"
+                  height="100%"
+                  margin="false,true,false,false"
+                  spacing="true">
+                <filter id="filter"
+                        applyTo="table"
+                        datasource="appUsersDs">
+                    <properties include=".*"/>
+                </filter>
+                <table id="table"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="lastname"/>
+                        <column id="firstname"/>
+                        <column id="email"/>
+                        <column id="company"/>
+                        <column id="department"/>
+                    </columns>
+                    <rows datasource="appUsersDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="table.create"/>
+                        <button id="editBtn"
+                                action="table.edit"/>
+                        <button id="removeBtn"
+                                action="table.remove"/>
+                    </buttonsPanel>
+                </table>
+            </vbox>
+            <vbox id="editBox"
+                  expand="tabSheetBox"
+                  height="100%"
+                  margin="false,false,false,true"
+                  spacing="true">
+                <vbox id="tabSheetBox">
+                    <tabSheet id="tabSheet"
+                              height="100%">
+                        <tab id="mainTab"
+                             caption="msg://mainTab"
+                             margin="true">
+                            <fieldGroup id="fieldGroup"
+                                        datasource="appUserDs">
+                                <column width="250px">
+                                    <field property="lastname"/>
+                                    <field property="firstname"/>
+                                    <field property="email"/>
+                                    <field property="company"/>
+                                    <field property="department"/>
+                                </column>
+                            </fieldGroup>
+                        </tab>
+                        <tab id="jobfunctionTab"
+                             caption="msg://eu.crewbase.lineup.entity.coredata/AppUser.jobfunction"
+                             margin="true,false,false,false">
+                            <table id="jobfunctionTable"
+                                   height="200px"
+                                   width="100%">
+                                <actions>
+                                    <action id="add"/>
+                                    <action id="remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="name"/>
+                                </columns>
+                                <rows datasource="jobfunctionDs"/>
+                                <buttonsPanel>
+                                    <button action="jobfunctionTable.add"/>
+                                    <button action="jobfunctionTable.remove"/>
+                                </buttonsPanel>
+                            </table>
+                        </tab>
+                    </tabSheet>
+                </vbox>
+                <hbox id="actionsPane"
+                      spacing="true"
+                      visible="false">
+                    <button id="saveBtn"
+                            action="save"/>
+                    <button id="cancelBtn"
+                            action="cancel"/>
+                </hbox>
+            </vbox>
+        </split>
+    </layout>
+</window>

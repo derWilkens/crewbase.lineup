@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
+
+    <include file="eu/crewbase/lineup/screens.xml"/>
+    <screen id="Demo"
+            template="eu/crewbase/lineup/Demo.xml"/>
+
+    <screen id="lineup$Site.edit"
+            template="eu/crewbase/lineup/web/site/site-edit.xml"/>
+            
+    <screen id="lineup$Company.browse"
+            template="eu/crewbase/lineup/web/company/company-browse.xml"/>
+            
+    <screen id="lineup$Company.edit"
+            template="eu/crewbase/lineup/web/company/company-edit.xml"/>
+    <!--  screen id="mainWindow"
+            template="eu/crewbase/lineup/gui/screens/ext-mainwindow.xml"/>
+          -->   
+    <screen id="lineup$UserPreference.browse"
+            template="eu/crewbase/lineup/web/userpreference/user-preference-browse.xml"/>
+    <screen id="lineup$Campaign.campaignOverview"
+            template="eu/crewbase/lineup/web/campaign/campaignOverview.xml"/>
+    <screen id="importPeriods"
+            template="eu/crewbase/lineup/gui/screens/importPeriods.xml"/>
+    <screen id="lineup$PeriodImportStage.browse"
+            template="eu/crewbase/lineup/web/periodimportstage/period-import-stage-browse.xml"/>
+    <screen id="userpreference-sitecolors"
+            template="eu/crewbase/lineup/web/userpreference/userpreference-sitecolors.xml"/>
+    <screen id="PreferredSites"
+            template="eu/crewbase/lineup/web/userpreference/PreferredSites.xml"/>
+    <screen id="rota-timeline"
+            template="eu/crewbase/lineup/web/rotaplan/rota-timeline.xml"/>
+    <screen id="lineup$Department.browse"
+            template="eu/crewbase/lineup/web/department/department-browse.xml"/>
+    <screen id="lineup$DepartmentUser.choose"
+            template="eu/crewbase/lineup/web/department/department-user-choose.xml"/>
+    <screen id="lineup$Department.edit"
+            template="eu/crewbase/lineup/web/department/department-edit.xml"/>
+    <screen id="importUsers"
+            template="eu/crewbase/lineup/gui/screens/importUsers.xml"/>
+    <screen id="lineup$UserImportStage.browse"
+            template="eu/crewbase/lineup/web/userimportstage/user-import-stage-browse.xml"/>
+    <screen id="lineup$FunctionCategory.choose"
+            template="eu/crewbase/lineup/web/functioncategory/function-category-choose.xml"/>
+    <screen id="lineup$FunctionCategory.edit"
+            template="eu/crewbase/lineup/web/functioncategory/function-category-edit.xml"/>
+    <screen id="lineup$FunctionCategory.browse"
+            template="eu/crewbase/lineup/web/functioncategory/function-category-browse.xml"/>
+    <screen id="lineup$DutyPeriodTemplate.browse"
+            template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-browse.xml"/>
+    <screen id="lineup$DutyPeriodTemplate.edit"
+            template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-edit.xml"/>
+    <screen id="lineup$CampaignSite.choose"
+            template="eu/crewbase/lineup/web/site/campaign-site-choose.xml"/>
+    <screen id="lineup$RoleQualificationType.browse"
+            template="eu/crewbase/lineup/web/rolequalificationtype/role-qualification-type-browse.xml"/>
+    <screen id="eml-timeline"
+            template="eu/crewbase/lineup/web/rotaplan/eml-timeline.xml"/>
+    <screen id="lineup$EmlSite.choose"
+            template="eu/crewbase/lineup/web/site/eml-site-choose.xml"/>
+    <screen id="lineup$SiteRoleRules.browse"
+            template="eu/crewbase/lineup/web/siterolerules/site-role-rules-browse.xml"/>
+    <screen id="lineup$NumberRangeRule.browse"
+            template="eu/crewbase/lineup/web/numberrangerule/number-range-rule-browse.xml"/>
+    <screen id="lineup$NumberRangeRule.edit"
+            template="eu/crewbase/lineup/web/numberrangerule/number-range-rule-edit.xml"/>
+    <screen id="lineup$Site.browse"
+            template="eu/crewbase/lineup/web/site/site-browse.xml"/>
+    <screen id="lineup$SiteRoleRule.browse"
+            template="eu/crewbase/lineup/web/siterolerule/site-role-rule-browse.xml"/>
+    <screen id="lineup$AppUser.browse"
+            template="eu/crewbase/lineup/web/appuser/app-user-browse.xml"/>        
+</screen-config>

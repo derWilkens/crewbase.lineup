@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.gui.screens.Importperiods"
+        messagesPack="eu.crewbase.lineup.gui.screens">
+    <dsContext>
+        <collectionDatasource id="campaignTemplateDs"
+                              class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
+                              view="campaign-templateView">
+            <query>
+                <![CDATA[select e from lineup$Campaign e 
+order by e.site.itemDesignation, e.campaignNumber]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="periodImportStagesDs"
+                              class="eu.crewbase.lineup.entity.batchimport.PeriodImportStage"
+                              view="_local">
+            <query>
+                <![CDATA[select e from lineup$PeriodImportStage e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="importRawData"
+                invoke="onImportRawData"/>
+        <action id="createCampaigns"
+                invoke="onCreateCampaigns"/>
+        <action id="clearRawDataTextArea"
+                invoke="onClearRawDataTextArea"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox spacing="true">
+            <table id="tblCampaign"
+                   height="0px"
+                   width="100%">
+                <actions>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="site.itemDesignation"
+                            caption="NAS"/>
+                    <column id="campaignNumber"
+                            caption="Kamapgnennummer"/>
+                    <column id="start"
+                            caption="Start">
+                        <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                   format="dd.MM.yyyy"/>
+                    </column>
+                    <column id="end"
+                            caption="Ende">
+                        <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                   format="dd.MM.yyyy"/>
+                    </column>
+                    <column id="remark"/>
+                </columns>
+                <rows datasource="campaignTemplateDs"/>
+            </table>
+            <button id="btnTemplateDownload"
+                    action="tblCampaign.excel"
+                    caption="msg://saveTemplate"/>
+            <label id="label"
+                   value="msg://Rohdaten-Import aus der Zwischenablage."
+                   width="100%"/>
+            <button id="btnClearTa"
+                    icon="font-icon:TRASH_O"/>
+            <textArea id="taImport"
+                      height="250px"
+                      width="832px"/>
+            <button id="btnImport"
+                    action="importRawData"
+                    caption="msg://Import"/>
+            <table id="tblPeriodImportStage"
+                   height="258px"
+                   width="100%">
+                <columns>
+                    <column id="itemDesignation"/>
+                    <column id="campaignNumber"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="importLog"/>
+                </columns>
+                <rows datasource="periodImportStagesDs"/>
+            </table>
+            <buttonsPanel>
+                <button id="btnSave"
+                        action="createCampaigns"
+                        caption="msg://createOrUpdateCampaigns"/>
+            </buttonsPanel>
+        </vbox>
+    </layout>
+</window>

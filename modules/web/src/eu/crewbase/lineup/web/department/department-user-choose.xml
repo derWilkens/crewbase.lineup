@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.department.DepartmentUserChoose"
+        focusComponent="departmentsTable"
+        messagesPack="eu.crewbase.lineup.web.department">
+    <dsContext>
+        <hierarchicalDatasource id="departmentsDs"
+                                class="eu.crewbase.lineup.entity.coredata.Department"
+                                hierarchyProperty="parentDepartment"
+                                view="department-user-choose-view">
+            <query>
+                <![CDATA[select e from lineup$Department e]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="offshoreUsersDs"
+                              class="eu.crewbase.lineup.entity.coredata.OffshoreUser"
+                              maxResults="50">
+            <query>
+                <![CDATA[select e from lineup$OffshoreUser e where e.department.id = :ds$departmentsDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="closeWindow"
+                invoke="closeWindow"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="departmentsTable">
+        <split id="departmentsTable"
+               orientation="horizontal"
+               pos="100"
+               width="100%">
+            <vbox id="topBox"
+                  height="100%"
+                  margin="false,true,false,false"
+                  spacing="true">
+                <treeTable id="depTreeTable"
+                           editable="true"
+                           height="100%"
+                           width="100%">
+                    <columns>
+                        <column id="name"/>
+                        <column id="acronym"/>
+                    </columns>
+                    <rows datasource="departmentsDs"/>
+                </treeTable>
+            </vbox>
+            <vbox id="userBox"
+                  height="100%"
+                  margin="false,false,false,true">
+                <table id="usersTable"
+                       multiselect="true"
+                       visible="false">
+                    <columns>
+                        <column id="name"/>
+                        <column id="login"/>
+                        <column id="lastname"/>
+                        <column id="firstname"/>
+                        <column id="email"/>
+                        <column id="company"/>
+                    </columns>
+                    <rows datasource="offshoreUsersDs"/>
+                </table>
+            </vbox>
+        </split>
+        <hbox align="TOP_RIGHT"
+              spacing="true">
+            <button id="closeWindow"
+                    action="closeWindow"
+                    caption="msg://closeWindow"/>
+        </hbox>
+    </layout>
+</window>

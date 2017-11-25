@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.web.campaign.CampaignOverview"
+        messagesPack="eu.crewbase.lineup.web.campaign">
+    <dsContext>
+        <collectionDatasource id="maintenanceCampaignsDs"
+                              class="eu.crewbase.lineup.entity.period.MaintenanceCampaign">
+            <query>
+                <![CDATA[select e from lineup$MaintenanceCampaign e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="siteSelect">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="userPreferencesDs"
+                              class="eu.crewbase.lineup.UserPreference"
+                              view="_local">
+            <query>
+                <![CDATA[select e from lineup$UserPreference e where e.context = 'CampaignBrowse' and e.userId =  :session$userId]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="functionCategoriesDs"
+                              class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+                              view="functionCategory-view">
+            <query>
+                <![CDATA[select e from lineup$FunctionCategory e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="attendencePeriodsDs"
+                              class="eu.crewbase.lineup.entity.period.AttendencePeriod">
+            <query>
+                <![CDATA[select e from lineup$AttendencePeriod e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="offshoreUsersDs"
+                              class="eu.crewbase.lineup.entity.coredata.OffshoreUser"
+                              datasourceClass="eu.crewbase.lineup.web.campaign.PersonOnDutyDs"
+                              view="_minimal"/>
+    </dsContext>
+    <actions>
+        <action id="save"
+                caption="mainMsg://actions.Ok"
+                icon="icons/ok.png"
+                invoke="save"
+                shortcut="CTRL-ENTER"/>
+        <action id="cancel"
+                caption="mainMsg://actions.Cancel"
+                icon="icons/cancel.png"
+                invoke="cancel"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox id="timelineBox"
+              spacing="true"/>
+        <hbox height="100%"
+              spacing="true"
+              width="100%">
+            <table id="functionCategoryUserSettings"
+                   height="100%"
+                   width="100%">
+                <columns>
+                    <column id="categoryName"/>
+                    <column id="periodSubClass"/>
+                    <column id="selected"/>
+                </columns>
+                <rows datasource="functionCategoriesDs"/>
+            </table>
+            <table id="siteUserSettings"
+                   height="100%"
+                   settingsEnabled="false"
+                   width="100%">
+                <columns>
+                    <column id="siteName"/>
+                    <column id="category"/>
+                </columns>
+                <rows datasource="sitesDs"/>
+            </table>
+            <table id="personsOnDutyUserSettings"
+                   height="100%"
+                   width="100%">
+                <columns>
+                    <column id="lastname"/>
+                    <column id="firstname"/>
+                    <column id="email"/>
+                    <column id="company"/>
+                </columns>
+                <rows datasource="offshoreUsersDs"/>
+            </table>
+        </hbox>
+    </layout>
+</window>

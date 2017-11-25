@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.site.CampaignSiteChoose"
+        focusComponent="sitesTable"
+        lookupComponent="sitesTable"
+        messagesPack="eu.crewbase.lineup.web.site">
+    <dsContext>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="campaing-site-choose">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="closeWindow"
+                invoke="closeWindow"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="sitesTable"
+            spacing="true">
+        <table id="sitesTable"
+               width="100%">
+            <columns>
+                <column id="siteName"/>
+                <column id="itemDesignation"/>
+                <column id="category"/>
+            </columns>
+            <rows datasource="sitesDs"/>
+            <rowsCount/>
+        </table>
+        <hbox align="TOP_RIGHT"
+              spacing="true">
+            <button id="closeWindow"
+                    action="closeWindow"
+                    caption="msg://closeWindow"/>
+        </hbox>
+    </layout>
+</window>

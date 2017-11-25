@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.userpreference.UserPreferenceBrowse"
+        focusComponent="userPreferencesTable"
+        lookupComponent="userPreferencesTable"
+        messagesPack="eu.crewbase.lineup.web.userpreference">
+    <dsContext>
+        <groupDatasource id="userPreferencesDs"
+                         class="eu.crewbase.lineup.UserPreference"
+                         view="_local">
+            <query>
+                <![CDATA[select e from lineup$UserPreference e where e.userId =  :session$userId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="userPreferencesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="userPreferencesTable"
+                datasource="userPreferencesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="userPreferencesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="client"/>
+                <column id="userId"/>
+                <column id="entityUuid"/>
+                <column id="userValue"/>
+                <column id="contextId"/>
+            </columns>
+            <rows datasource="userPreferencesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="userPreferencesTable.create"/>
+                <button id="editBtn"
+                        action="userPreferencesTable.edit"/>
+                <button id="removeBtn"
+                        action="userPreferencesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

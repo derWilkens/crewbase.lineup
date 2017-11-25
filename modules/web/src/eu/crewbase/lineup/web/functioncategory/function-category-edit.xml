@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.functioncategory.FunctionCategoryEdit"
+        datasource="functionCategoryDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.functioncategory">
+    <dsContext>
+        <datasource id="functionCategoryDs"
+                    class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="functionCategoryDs">
+            <column width="250px">
+                <field property="client"/>
+                <field property="categoryName"/>
+                <field property="periodSubClass"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

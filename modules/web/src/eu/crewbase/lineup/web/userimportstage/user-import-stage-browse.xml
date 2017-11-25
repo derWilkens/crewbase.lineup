@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.userimportstage.UserImportStageBrowse"
+        focusComponent="userImportStagesTable"
+        lookupComponent="userImportStagesTable"
+        messagesPack="eu.crewbase.lineup.web.userimportstage">
+    <dsContext>
+        <collectionDatasource id="userImportStagesDs"
+                              class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
+                              view="_local">
+            <query>
+                <![CDATA[select e from lineup$UserImportStage e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="userImportStagesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="userImportStagesTable"
+                datasource="userImportStagesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="userImportStagesTable"
+               width="100%">
+            <actions>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="firstname"/>
+                <column id="lastname"/>
+                <column id="email"/>
+                <column id="department"/>
+                <column id="position"/>
+                <column id="importLog"/>
+            </columns>
+            <rows datasource="userImportStagesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="removeBtn"
+                        action="userImportStagesTable.remove"/>
+                <button id="refreshBtn"
+                        action="userImportStagesTable.refresh"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

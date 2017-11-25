@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.gui.screens.ImportUsers"
+        messagesPack="eu.crewbase.lineup.gui.screens">
+    <dsContext>
+        <collectionDatasource id="userImportTemplateDs"
+                              class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
+                              maxResults="01"
+                              view="userImportStage-view">
+            <query>
+                <![CDATA[select e from lineup$UserImportStage e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="userImportStagesDs"
+                              class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
+                              view="_local">
+            <query>
+                <![CDATA[select e from lineup$UserImportStage e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="importRawData"
+                invoke="importRawData"/>
+        <action id="createUsers"
+                invoke="createUsers"/>
+        <action id="clearRawDataTextArea"
+                invoke="clearRawDataTextArea"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox spacing="true">
+            <table id="tblOffshoreUsers"
+                   height="0px"
+                   width="100%">
+                <actions>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="lastName"/>
+                    <column id="firstName"/>
+                    <column id="position"/>
+                    <column id="email"/>
+                    <column id="lastname"/>
+                    <column id="firstname"/>
+                    <column id="email"/>
+                    <column id="company"/>
+                </columns>
+                <rows datasource="userImportTemplateDs"/>
+            </table>
+            <button id="btnTemplateDownload"
+                    action="tblOffshoreUsers.excel"
+                    caption="msg://saveTemplate"/>
+            <label id="label"
+                   value="msg://Rohdaten-Import aus der Zwischenablage."
+                   width="100%"/>
+            <button id="btnClearTa"
+                    action="clearRawDataTextArea"
+                    caption="msg://clearTextfield"
+                    icon="font-icon:TRASH_O"/>
+            <textArea id="taImport"
+                      height="250px"
+                      width="832px"/>
+            <button id="btnImport"
+                    action="importRawData"
+                    caption="msg://Import"/>
+            <table id="tblUserImportStage"
+                   height="258px"
+                   width="100%">
+                <columns>
+                    <column id="lastname"/>
+                    <column id="firstname"/>
+                    <column id="email"/>
+                    <column id="position"/>
+                    <column id="importLog"/>
+                </columns>
+                <rows datasource="userImportStagesDs"/>
+            </table>
+            <buttonsPanel>
+                <button id="btnSave"
+                        action="createUsers"
+                        caption="msg://createOrUpdateCampaigns"/>
+            </buttonsPanel>
+        </vbox>
+    </layout>
+</window>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="eu.crewbase.lineup.web.rotaplan.RotaTimeline"
+        messagesPack="eu.crewbase.lineup.web.rotaplan">
+    <dsContext>
+        <datasource id="shiftPeriodDs"
+                    class="eu.crewbase.lineup.entity.period.ShiftPeriod"/>
+        <collectionDatasource id="shiftPeriodsDs"
+                              class="eu.crewbase.lineup.entity.period.ShiftPeriod"
+                              refreshMode="NEVER"/>
+        <collectionDatasource id="functionCategoriesDs"
+                              class="eu.crewbase.lineup.entity.coredata.FunctionCategory">
+            <query>
+                <![CDATA[select e from lineup$FunctionCategory e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="openCampaignSiteChooser"
+                icon="font-icon:COGS"
+                invoke="openCampaignSiteChooser"/>
+        <action id="openDepartmentChooser"
+                invoke="openDepartmentChooser"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="timelineBox">
+        <hbox spacing="true">
+            <popupView id="campaignSitePopupView"
+                       align="BOTTOM_LEFT"
+                       hideOnMouseOut="false"
+                       visible="false">
+                <vbox height="100%">
+                    <optionsGroup id="campaignSiteOptionsGroup"
+                                  align="MIDDLE_CENTER"
+                                  multiselect="true"
+                                  optionsDatasource="sitesDs"
+                                  property="siteName"/>
+                </vbox>
+            </popupView>
+            <button id="departmentChooser"
+                    action="openDepartmentChooser"
+                    caption="msg://departmentChooser"
+                    icon="icons/user-group-ok.png"/>
+            <button id="campaignSiteChooser"
+                    action="openCampaignSiteChooser"
+                    caption="msg://chooseSitesForCampaign"/>
+            <checkBox id="cbxDisplayCampaigns"
+                      align="MIDDLE_CENTER"
+                      caption="msg://displayCampaigns"/>
+        </hbox>
+        <scrollBox id="timelineBox"
+                   scrollBars="both"
+                   spacing="true"/>
+    </layout>
+</window>

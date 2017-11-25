@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editCaption"
+        class="eu.crewbase.lineup.web.site.SiteEdit"
+        datasource="siteDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.site">
+    <dsContext>
+        <datasource id="siteDs"
+                    class="eu.crewbase.lineup.entity.coredata.Site"
+                    view="site-browser-view">
+            <collectionDatasource id="rolesDs"
+                                  property="roles"/>
+        </datasource>
+        <collectionDatasource id="categoriesDs"
+                              class="eu.crewbase.lineup.entity.coredata.SiteCategory"
+                              view="_minimal">
+            <![CDATA[select e from lineup$SiteCategory e]]>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="siteDs">
+            <column width="250px">
+                <field id="client"/>
+                <field id="siteName"/>
+                <field id="itemDesignation"/>
+                <field id="parentSite"/>
+                <field id="shortItemDesignation"/>
+                <field id="siteType"/>
+                <field optionsDatasource="categoriesDs"
+                       property="category"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="rolesBox"
+                  caption="msg://eu.crewbase.lineup.entity.coredata/Site.roles">
+            <table id="rolesTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="add"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="name"/>
+                    <column id="client"/>
+                </columns>
+                <rows datasource="rolesDs"/>
+                <buttonsPanel>
+                    <button action="rolesTable.add"/>
+                    <button action="rolesTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>
