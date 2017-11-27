@@ -14,7 +14,7 @@
         </collectionDatasource>
         <collectionDatasource id="userImportStagesDs"
                               class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
-                              view="_local">
+                              view="userImportStage-view">
             <query>
                 <![CDATA[select e from lineup$UserImportStage e]]>
             </query>

@@ -13,9 +13,9 @@
             
     <screen id="lineup$Company.edit"
             template="eu/crewbase/lineup/web/company/company-edit.xml"/>
-    <!--  screen id="mainWindow"
+    <screen id="mainWindow"
             template="eu/crewbase/lineup/gui/screens/ext-mainwindow.xml"/>
-          -->   
+
     <screen id="lineup$UserPreference.browse"
             template="eu/crewbase/lineup/web/userpreference/user-preference-browse.xml"/>
     <screen id="lineup$Campaign.campaignOverview"

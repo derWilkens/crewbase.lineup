@@ -33,8 +33,7 @@
     <menu id="admintools"
           icon="font-icon:COGS"
           insertBefore="administration">
-        <item icon="font-icon:USER_PLUS"
-              screen="importUsers"/>
+        <item screen="importUsers"/>
         <item screen="importPeriods"/>
         <item screen="lineup$PeriodImportStage.browse"/>
         <item screen="lineup$UserImportStage.browse"/>
