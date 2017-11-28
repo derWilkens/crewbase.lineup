@@ -23,9 +23,9 @@
         </collectionDatasource>
     </dsContext>
     <actions>
-        <action id="openCampaignSiteChooser"
+        <action id="openSitePeriodChooser"
                 icon="font-icon:COGS"
-                invoke="openCampaignSiteChooser"/>
+                invoke="openSitePeriodChooser"/>
         <action id="openDepartmentChooser"
                 invoke="openDepartmentChooser"/>
     </actions>
@@ -33,12 +33,12 @@
                 width="800"/>
     <layout expand="timelineBox">
         <hbox spacing="true">
-            <popupView id="campaignSitePopupView"
+            <popupView id="sitePeriodPopupView"
                        align="BOTTOM_LEFT"
                        hideOnMouseOut="false"
                        visible="false">
                 <vbox height="100%">
-                    <optionsGroup id="campaignSiteOptionsGroup"
+                    <optionsGroup id="sitePeriodOptionsGroup"
                                   align="MIDDLE_CENTER"
                                   multiselect="true"
                                   optionsDatasource="sitesDs"
@@ -50,7 +50,7 @@
                     caption="msg://departmentChooser"
                     icon="icons/user-group-ok.png"/>
             <button id="campaignSiteChooser"
-                    action="openCampaignSiteChooser"
+                    action="openSitePeriodChooser"
                     caption="msg://chooseSitesForCampaign"/>
             <checkBox id="cbxDisplayCampaigns"
                       align="MIDDLE_CENTER"

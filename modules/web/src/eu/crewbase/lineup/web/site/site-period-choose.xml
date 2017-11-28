@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
-        class="eu.crewbase.lineup.web.site.PeriodSiteChoose"
+        class="eu.crewbase.lineup.web.site.SitePeriodChoose"
         focusComponent="sitesTable"
         lookupComponent="sitesTable"
         messagesPack="eu.crewbase.lineup.web.site">
     <dsContext>
         <collectionDatasource id="sitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="period-site-choose">
+                              view="sitePeriodChoose">
             <query>
-                <![CDATA[select e from lineup$Site e]]>
+                <![CDATA[select e from lineup$Site e order by e.siteName]]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -27,7 +27,6 @@
             <columns>
                 <column id="siteName"/>
                 <column id="itemDesignation"/>
-                <column id="category"/>
             </columns>
             <rows datasource="sitesDs"/>
             <rowsCount/>

@@ -61,6 +61,6 @@
             template="eu/crewbase/lineup/web/appuser/app-user-browse.xml"/>
     <screen id="lineup$Site.browse"
             template="eu/crewbase/lineup/web/site/site-browse.xml"/>
-    <screen id="lineup$PeriodSite.choose"
-            template="eu/crewbase/lineup/web/site/period-site-choose.xml"/>
+    <screen id="lineup$SitePeriod.choose"
+            template="eu/crewbase/lineup/web/site/site-period-choose.xml"/>
 </screen-config>

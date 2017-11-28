@@ -218,7 +218,7 @@
         <property name="color"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
-          name="period-site-choose">
+          name="site-period-choose">
         <property name="siteName"/>
         <property name="itemDesignation"/>
         <property name="category"
@@ -293,4 +293,9 @@
     <view class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
           extends="_local"
           name="userImportStage-importResult"/>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          name="sitePeriodChoose">
+        <property name="siteName"/>
+        <property name="itemDesignation"/>
+    </view>
 </views>

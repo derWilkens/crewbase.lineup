@@ -10,8 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import javax.persistence.PrimaryKeyJoinColumn;
+import com.haulmont.cuba.core.entity.AppFolder;
 
-@Table(name = "LINEUP_OPERATION_PERIOD")
 @Entity(name = "lineup$OperationPeriod")
 @NamePattern(" - , |")
 public class OperationPeriod extends SitePeriod {

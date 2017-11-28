@@ -1,0 +1,3 @@
+alter table lineup_attendence_period drop foreign key FK_LINEUP_ATTENDENCE_PERIOD_OPERATION_PERIOD;
+alter table lineup_operation_period drop foreign key FK_LINEUP_OPERATION_PERIOD_PARENT_PERIOD;
+drop table if exists lineup_operation_period cascade ;

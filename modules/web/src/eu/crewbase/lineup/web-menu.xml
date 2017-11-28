@@ -25,7 +25,7 @@
         <item screen="lineup$DepartmentUser.choose"/>
         <item screen="userpreference-sitecolors"/>
         <item id="lineup$UserPreference.browse"/>
-        <item screen="lineup$PeriodSite.choose"/>
+        <item screen="lineup$SitePeriod.choose"/>
         <item screen="lineup$EmlSite.choose"/>
     </menu>
     <menu id="admintools"

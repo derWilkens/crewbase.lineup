@@ -197,28 +197,7 @@ create table LINEUP_SITE_TYPE (
     primary key (ID)
 )^
 -- end LINEUP_SITE_TYPE
--- begin LINEUP_MAINTENANCE_CAMPAIGN
-create table LINEUP_MAINTENANCE_CAMPAIGN (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    CLIENT integer not null,
-    START_ datetime(3),
-    END_ datetime(3),
-    FUNCTION_CATEGORY_ID varchar(32),
-    REMARK varchar(255),
-    SITE_ID varchar(32),
-    --
-    CAMPAIGN_NUMBER varchar(10),
-    --
-    primary key (ID)
-)^
--- end LINEUP_MAINTENANCE_CAMPAIGN
+
 -- begin LINEUP_USER_PREFERENCE
 create table LINEUP_USER_PREFERENCE (
     ID varchar(32),
@@ -503,28 +482,7 @@ create table LINEUP_NUMBER_RANGE_RULE (
     primary key (ID)
 )^
 -- end LINEUP_NUMBER_RANGE_RULE
--- begin LINEUP_OPERATION_PERIOD
-create table LINEUP_OPERATION_PERIOD (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    CLIENT integer not null,
-    START_ datetime(3),
-    END_ datetime(3),
-    FUNCTION_CATEGORY_ID varchar(32),
-    REMARK varchar(255),
-    SITE_ID varchar(32),
-    --
-    PARENT_PERIOD_ID varchar(32),
-    --
-    primary key (ID)
-)^
--- end LINEUP_OPERATION_PERIOD
+
 -- begin LINEUP_ATTENDENCE_PERIOD
 create table LINEUP_ATTENDENCE_PERIOD (
     ID varchar(32),
@@ -581,3 +539,31 @@ create table LINEUP_APP_USER_JOBFUNCTION_LINK (
     primary key (JOBFUNCTION_ID, APP_USER_ID)
 )^
 -- end LINEUP_APP_USER_JOBFUNCTION_LINK
+-- begin LINEUP_SITE_PERIOD
+create table LINEUP_SITE_PERIOD (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    START_ datetime(3),
+    END_ datetime(3),
+    FUNCTION_CATEGORY_ID varchar(32),
+    REMARK varchar(255),
+    DTYPE varchar(100),
+    --
+    SITE_ID varchar(32),
+    --
+    -- from lineup$MaintenanceCampaign
+    CAMPAIGN_NUMBER varchar(10),
+    --
+    -- from lineup$OperationPeriod
+    PARENT_PERIOD_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_SITE_PERIOD
