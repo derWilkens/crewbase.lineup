@@ -401,11 +401,11 @@ create table LINEUP_USER_IMPORT_STAGE (
     CREATED_BY varchar(50),
     DTYPE varchar(31),
     --
-    FIRSTNAME varchar(20),
-    LASTNAME varchar(50),
+    FIRST_NAME varchar(20),
+    LAST_NAME varchar(50),
     EMAIL varchar(50),
-    DEPARTMENT varchar(20),
-    POSITION_ varchar(50),
+    DEPARTMENT_ACRONYM varchar(20),
+    JOBTITLE varchar(50),
     IMPORT_LOG longtext,
     --
     primary key (ID)

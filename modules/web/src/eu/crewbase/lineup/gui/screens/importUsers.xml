@@ -6,15 +6,14 @@
     <dsContext>
         <collectionDatasource id="userImportTemplateDs"
                               class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
-                              maxResults="01"
-                              view="userImportStage-view">
+                              view="userImportStage-template-view">
             <query>
-                <![CDATA[select e from lineup$UserImportStage e]]>
+                <![CDATA[select e from lineup$UserImportStage e where 1=0]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="userImportStagesDs"
                               class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
-                              view="userImportStage-view">
+                              view="userImportStage-importResult">
             <query>
                 <![CDATA[select e from lineup$UserImportStage e]]>
             </query>
@@ -33,20 +32,17 @@
     <layout>
         <vbox spacing="true">
             <table id="tblOffshoreUsers"
-                   height="0px"
+                   height="20px"
                    width="100%">
                 <actions>
                     <action id="excel"/>
                 </actions>
                 <columns>
-                    <column id="lastName"/>
                     <column id="firstName"/>
-                    <column id="position"/>
+                    <column id="lastName"/>
+                    <column id="jobtitle"/>
                     <column id="email"/>
-                    <column id="lastname"/>
-                    <column id="firstname"/>
-                    <column id="email"/>
-                    <column id="company"/>
+                    <column id="departmentAcronym"/>
                 </columns>
                 <rows datasource="userImportTemplateDs"/>
             </table>
@@ -70,10 +66,11 @@
                    height="258px"
                    width="100%">
                 <columns>
-                    <column id="lastname"/>
-                    <column id="firstname"/>
+                    <column id="firstName"/>
+                    <column id="lastName"/>
                     <column id="email"/>
-                    <column id="position"/>
+                    <column id="departmentAcronym"/>
+                    <column id="jobtitle"/>
                     <column id="importLog"/>
                 </columns>
                 <rows datasource="userImportStagesDs"/>

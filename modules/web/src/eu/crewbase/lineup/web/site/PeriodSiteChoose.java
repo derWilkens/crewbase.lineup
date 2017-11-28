@@ -17,7 +17,7 @@ import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.service.UserpreferencesService;
 
-public class CampaignSiteChoose extends AbstractLookup {
+public class PeriodSiteChoose extends AbstractLookup {
 
 	@Inject
 	private ComponentsFactory siteSelectedComponentsFactory;

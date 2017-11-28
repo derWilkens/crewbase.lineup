@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://editCaption"
+        caption="msg://editorCaption"
         class="eu.crewbase.lineup.web.site.SiteEdit"
         datasource="siteDs"
         focusComponent="fieldGroup"
@@ -8,14 +8,20 @@
     <dsContext>
         <datasource id="siteDs"
                     class="eu.crewbase.lineup.entity.coredata.Site"
-                    view="site-browser-view">
-            <collectionDatasource id="rolesDs"
-                                  property="roles"/>
-        </datasource>
+                    view="site-browser-view"/>
+        <collectionDatasource id="parentSitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
         <collectionDatasource id="categoriesDs"
                               class="eu.crewbase.lineup.entity.coredata.SiteCategory"
                               view="_minimal">
-            <![CDATA[select e from lineup$SiteCategory e]]>
+            <query>
+                <![CDATA[select e from lineup$SiteCategory e]]>
+            </query>
         </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
@@ -25,36 +31,17 @@
         <fieldGroup id="fieldGroup"
                     datasource="siteDs">
             <column width="250px">
-                <field id="client"/>
-                <field id="siteName"/>
-                <field id="itemDesignation"/>
-                <field id="parentSite"/>
-                <field id="shortItemDesignation"/>
-                <field id="siteType"/>
+                <field property="client"/>
+                <field property="siteName"/>
+                <field property="itemDesignation"/>
+                <field optionsDatasource="parentSitesDs"
+                       property="parentSite"/>
+                <field property="shortItemDesignation"/>
                 <field optionsDatasource="categoriesDs"
                        property="category"/>
+                <field property="siteType"/>
             </column>
         </fieldGroup>
-        <groupBox id="rolesBox"
-                  caption="msg://eu.crewbase.lineup.entity.coredata/Site.roles">
-            <table id="rolesTable"
-                   height="200px"
-                   width="100%">
-                <actions>
-                    <action id="add"/>
-                    <action id="remove"/>
-                </actions>
-                <columns>
-                    <column id="name"/>
-                    <column id="client"/>
-                </columns>
-                <rows datasource="rolesDs"/>
-                <buttonsPanel>
-                    <button action="rolesTable.add"/>
-                    <button action="rolesTable.remove"/>
-                </buttonsPanel>
-            </table>
-        </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

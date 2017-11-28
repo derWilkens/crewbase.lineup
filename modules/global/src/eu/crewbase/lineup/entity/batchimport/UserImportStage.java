@@ -18,26 +18,30 @@ import com.haulmont.cuba.core.entity.Updatable;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
-@NamePattern("%s |lastname")
+@NamePattern("%s |lastName,firstName")
 @Table(name = "LINEUP_USER_IMPORT_STAGE")
 @Entity(name = "lineup$UserImportStage")
 public class UserImportStage extends BaseUuidEntity implements Updatable, Creatable {
     private static final long serialVersionUID = 2133165937821283408L;
 
-    @Column(name = "FIRSTNAME", length = 20)
-    protected String firstname;
 
-    @Column(name = "LASTNAME", length = 50)
-    protected String lastname;
+
+    @Column(name = "FIRST_NAME", length = 20)
+    protected String firstName;
+
+    @Column(name = "LAST_NAME", length = 50)
+    protected String lastName;
 
     @Column(name = "EMAIL", length = 50)
     protected String email;
 
-    @Column(name = "DEPARTMENT", length = 20)
-    protected String department;
 
-    @Column(name = "POSITION_", length = 50)
-    protected String position;
+
+    @Column(name = "DEPARTMENT_ACRONYM", length = 20)
+    protected String departmentAcronym;
+
+    @Column(name = "JOBTITLE", length = 50)
+    protected String jobtitle;
 
     @Lob
     @Column(name = "IMPORT_LOG")
@@ -56,30 +60,46 @@ public class UserImportStage extends BaseUuidEntity implements Updatable, Creata
     protected String createdBy;
 
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public String getPosition() {
-        return position;
-    }
 
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+
+
+
+
+
+    public void setDepartmentAcronym(String departmentAcronym) {
+        this.departmentAcronym = departmentAcronym;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getDepartmentAcronym() {
+        return departmentAcronym;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getFirstName() {
+        return firstName;
     }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setJobtitle(String jobtitle) {
+        this.jobtitle = jobtitle;
+    }
+
+    public String getJobtitle() {
+        return jobtitle;
+    }
+
 
     public void setEmail(String email) {
         this.email = email;
@@ -89,13 +109,7 @@ public class UserImportStage extends BaseUuidEntity implements Updatable, Creata
         return email;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
 
-    public String getDepartment() {
-        return department;
-    }
 
 
     public void setImportLog(String importLog) {

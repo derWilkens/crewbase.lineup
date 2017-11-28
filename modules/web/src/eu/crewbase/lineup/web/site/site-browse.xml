@@ -14,16 +14,9 @@
         <datasource id="siteDs"
                     class="eu.crewbase.lineup.entity.coredata.Site"
                     view="site-browser-view"/>
-        <groupDatasource id="sitesDs"
-                         class="eu.crewbase.lineup.entity.coredata.Site"
-                         view="site-browser-view">
-            <query>
-                <![CDATA[select e from lineup$Site e]]>
-            </query>
-        </groupDatasource>
-        <collectionDatasource id="parentSitesDs"
+        <collectionDatasource id="sitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="_minimal">
+                              view="site-browser-view">
             <query>
                 <![CDATA[select e from lineup$Site e]]>
             </query>
@@ -57,28 +50,20 @@
                reversePosition="true"
                width="100%">
             <vbox id="lookupBox"
-                  expand="table"
                   height="100%"
                   margin="false,true,false,false"
                   spacing="true">
-                <filter id="filter"
-                        applyTo="table"
-                        datasource="sitesDs">
-                    <properties include=".*"/>
-                </filter>
-                <groupTable id="table"
-                            width="100%">
+                <table id="table"
+                       height="100%"
+                       width="100%">
                     <actions>
                         <action id="create"/>
                         <action id="edit"/>
                         <action id="remove"/>
                     </actions>
                     <columns>
-                        <column id="client"/>
                         <column id="siteName"/>
                         <column id="itemDesignation"/>
-                        <column id="parentSite"/>
-                        <column id="shortItemDesignation"/>
                         <column id="category"/>
                         <column id="siteType"/>
                     </columns>
@@ -93,7 +78,7 @@
                         <button id="removeBtn"
                                 action="table.remove"/>
                     </buttonsPanel>
-                </groupTable>
+                </table>
             </vbox>
             <vbox id="editBox"
                   expand="fieldGroupBox"
@@ -104,12 +89,8 @@
                     <fieldGroup id="fieldGroup"
                                 datasource="siteDs">
                         <column width="250px">
-                            <field property="client"/>
                             <field property="siteName"/>
                             <field property="itemDesignation"/>
-                            <field optionsDatasource="parentSitesDs"
-                                   property="parentSite"/>
-                            <field property="shortItemDesignation"/>
                             <field optionsDatasource="categoriesDs"
                                    property="category"/>
                             <field property="siteType"/>

@@ -117,8 +117,8 @@ public class RotaTimeline extends AbstractWindow {
 		});
 	}
 
-	public void openCampaignSiteChooser() {
-		Window departmentChoose = openWindow("lineup$CampaignSite.choose", WindowManager.OpenType.DIALOG);
+	public void openPeriodSiteChooser() {
+		Window departmentChoose = openWindow("llineup$PeriodSite.choose", WindowManager.OpenType.DIALOG);
 		departmentChoose.addCloseListener(new CloseListener() {
 
 			@Override

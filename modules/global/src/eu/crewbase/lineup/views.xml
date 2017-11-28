@@ -31,18 +31,13 @@
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
-          extends="_local"
           name="site-browser-view">
-        <property name="parentSite"
-                  view="_minimal"/>
         <property name="siteType"
                   view="_minimal"/>
         <property name="category"
                   view="_minimal"/>
-        <property name="siteRoleRules">
-            <property name="role"
-                      view="_minimal"/>
-        </property>
+        <property name="siteName"/>
+        <property name="itemDesignation"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.ShiftPeriod"
           extends="_local"
@@ -61,10 +56,6 @@
     <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
           extends="_local"
           name="campaign-view">
-    </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          extends="_local"
-          name="siteCampaignsView">
     </view>
     <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
           extends="_local"
@@ -227,7 +218,7 @@
         <property name="color"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
-          name="campaing-site-choose">
+          name="period-site-choose">
         <property name="siteName"/>
         <property name="itemDesignation"/>
         <property name="category"
@@ -282,11 +273,12 @@
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
-          name="userImportStage-view">
-        <property name="firstname"/>
-        <property name="lastname"/>
+          name="userImportStage-template-view">
+        <property name="firstName"/>
+        <property name="lastName"/>
+        <property name="jobtitle"/>
+        <property name="departmentAcronym"/>
         <property name="email"/>
-        <property name="department"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.OffshoreUser"
           extends="_local"
@@ -298,4 +290,7 @@
         <property name="department"
                   view="_minimal"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.batchimport.UserImportStage"
+          extends="_local"
+          name="userImportStage-importResult"/>
 </views>

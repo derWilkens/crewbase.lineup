@@ -8,8 +8,8 @@
                               class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
                               view="campaign-templateView">
             <query>
-                <![CDATA[select e from lineup$Campaign e 
-order by e.site.itemDesignation, e.campaignNumber]]>
+                <![CDATA[select e from lineup$SitePeriod e 
+order by e.site.itemDesignation]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="periodImportStagesDs"

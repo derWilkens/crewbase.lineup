@@ -8,7 +8,7 @@
     <dsContext>
         <collectionDatasource id="sitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="campaing-site-choose">
+                              view="period-site-choose">
             <query>
                 <![CDATA[select e from lineup$Site e]]>
             </query>

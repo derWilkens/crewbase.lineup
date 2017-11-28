@@ -11,7 +11,6 @@
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
         <item screen="lineup$NumberRangeRule.browse"/>
-        <item screen="lineup$Site.browse"/>
         <item screen="lineup$SiteRoleRule.browse"/>
     </menu>
     <menu id="capDB"
@@ -23,11 +22,10 @@
           icon="font-icon:STAR"
           insertBefore="administration">
         <item screen="lineup$FunctionCategory.choose"/>
-        <item icon="icons/user-group-ok.png"
-              screen="lineup$DepartmentUser.choose"/>
+        <item screen="lineup$DepartmentUser.choose"/>
         <item screen="userpreference-sitecolors"/>
         <item id="lineup$UserPreference.browse"/>
-        <item screen="lineup$CampaignSite.choose"/>
+        <item screen="lineup$PeriodSite.choose"/>
         <item screen="lineup$EmlSite.choose"/>
     </menu>
     <menu id="admintools"
@@ -41,6 +39,7 @@
     <menu id="masterdata"
           icon="font-icon:TABLE"
           insertBefore="administration">
+        <item screen="lineup$Site.browse"/>
         <item id="lineup$Company.browse"/>
         <item screen="lineup$FunctionCategory.browse"/>
         <item screen="lineup$Department.browse"/>

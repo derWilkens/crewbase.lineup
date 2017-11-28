@@ -389,7 +389,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 
 		// String queryString = "select e from lineup$Campaign e where
 		// e.site.id in :idList AND e.functionCategory.id in :catIdList";
-		String queryString = "select e from lineup$Campaign e where e.site.id in :idList";
+		String queryString = "select e from lineup$SitePeriod e where e.site.id in :idList";
 
 		TypedQuery<MaintenanceCampaign> query = persistence.getEntityManager().createQuery(queryString, MaintenanceCampaign.class);
 

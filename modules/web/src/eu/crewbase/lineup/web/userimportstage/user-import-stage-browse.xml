@@ -30,11 +30,11 @@
                 <action id="refresh"/>
             </actions>
             <columns>
-                <column id="firstname"/>
-                <column id="lastname"/>
+                <column id="firstName"/>
+                <column id="lastName"/>
                 <column id="email"/>
-                <column id="department"/>
-                <column id="position"/>
+                <column id="departmentAcronym"/>
+                <column id="jobtitle"/>
                 <column id="importLog"/>
             </columns>
             <rows datasource="userImportStagesDs"/>

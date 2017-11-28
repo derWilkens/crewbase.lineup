@@ -41,11 +41,6 @@
                   configuration="webcontent"
                   ext="zip"
                   name="lineupapp-web"/>
-        <artifact classifier="web"
-                  configuration="webcontent"
-                  ext="zip"
-                  name="lineupapp-web-toolkit"
-                  skipIfExists="web-toolkit"/>
         <property name="cuba.springContextConfig"
                   value="+eu/crewbase/lineup/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"

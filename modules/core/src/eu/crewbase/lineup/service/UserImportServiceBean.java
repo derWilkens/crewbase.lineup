@@ -40,21 +40,21 @@ public class UserImportServiceBean implements UserImportService {
 				if (values.length < 5) {
 					errorMsg += "Bitte alle Felder füllen: " + line + "\n";
 				} else {
-					userImportItem.setLastname(values[0]);
-					userImportItem.setFirstname(values[1]);
-					if (userImportItem.getFirstname() == null) {
+					userImportItem.setLastName(values[0]);
+					userImportItem.setFirstName(values[1]);
+					if (userImportItem.getFirstName() == null) {
 						errorMsg += "Vorname leer \n";
 					}
-					userImportItem.setPosition(values[2]);
-					if (userImportItem.getPosition() == null) {
+					userImportItem.setJobtitle(values[2]);
+					if (userImportItem.getJobtitle() == null) {
 						errorMsg += "Funktion/Rolle leer \n";
 					}
 					userImportItem.setEmail(values[3]);
 					if (userImportItem.getEmail() == null) {
 						errorMsg += "E-Mail leer \n";
 					}
-					userImportItem.setDepartment(values[4]);
-					if (userImportItem.getDepartment() == null) {
+					userImportItem.setDepartmentAcronym(values[4]);
+					if (userImportItem.getDepartmentAcronym() == null) {
 						errorMsg += "Team leer \n";
 					}
 				}
@@ -123,14 +123,14 @@ public class UserImportServiceBean implements UserImportService {
 					tmpUser = metadata.create(AppUser.class);
 					tmpUser.setEmail(importItem.getEmail());
 				}
-				tmpUser.setLastname(importItem.getLastname());
-				tmpUser.setFirstname(importItem.getFirstname());
-				//tmpUser.setPosition(importItem.getPosition());
+				tmpUser.setLastname(importItem.getLastName());
+				tmpUser.setFirstname(importItem.getFirstName());
+				//tmpUser.setJobfunction(importItem.getJobtitle());
 				try {
-					tmpUser.setDepartment(getDepartmentByAcronym(importItem.getDepartment()));
+					tmpUser.setDepartment(getDepartmentByAcronym(importItem.getDepartmentAcronym()));
 				} catch (Exception e) {
 					e.printStackTrace();
-					importItem.setImportLog("Team konnte nicht gefunden werden: " + importItem.getDepartment());
+					importItem.setImportLog("Team konnte nicht gefunden werden: " + importItem.getDepartmentAcronym());
 					persistence.getEntityManager().persist(importItem);
 					error = true;
 				}

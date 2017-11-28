@@ -25,6 +25,7 @@ public class ImportUsers extends AbstractWindow {
 
 
 	public void importRawData(Component source){
+		
 		int result = importService.parseCsv(taImport.getRawValue());
 
 		userImportStagesDs.clear();
@@ -40,7 +41,9 @@ public class ImportUsers extends AbstractWindow {
 	}
 	
 	public void createUsers(Component source){
+		
 		int result = importService.createOrUpdateUser();
+		
 		showNotification(result + " Einträge wurden erstellt bzw. neu angelegt.", NotificationType.HUMANIZED);
 		userImportStagesDs.refresh();
 		taImport.setValue("");
