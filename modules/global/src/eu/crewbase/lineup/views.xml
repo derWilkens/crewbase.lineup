@@ -70,32 +70,14 @@
     <view class="eu.crewbase.lineup.entity.UserPreference"
           extends="_local"
           name="userPreference-view"/>
-    <view class="eu.crewbase.lineup.entity.coredata.PeriodType"
+    <view class="eu.crewbase.lineup.entity.period.PeriodType"
           extends="_local"
           name="periodType-view">
-        <property name="parentType"
-                  view="_minimal">
-        </property>
+        <property name="parentType"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           extends="_local"
           name="site-view"/>
-    <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
-          name="functionCategory-treeView">
-        <property name="parentType"
-                  view="_minimal">
-            <property name="periodSubClass"/>
-        </property>
-        <property name="categoryName"/>
-        <property name="periodSubClass"/>
-    </view>
-    <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
-          name="functionCategory-view">
-        <property name="categoryName"/>
-        <property name="periodSubClass"/>
-        <property name="parentType"
-                  view="_minimal"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.coredata.SiteType"
           extends="_local"
           name="siteType-view">
@@ -202,7 +184,7 @@
         </property>
         <property name="acronym"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate"
+    <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           name="dutyPeriodTemplate-view">
         <property name="functionCategory">
             <property name="categoryName"/>

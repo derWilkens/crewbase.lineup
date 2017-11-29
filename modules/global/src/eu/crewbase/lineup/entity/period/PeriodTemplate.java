@@ -1,4 +1,4 @@
-package eu.crewbase.lineup.entity.coredata;
+package eu.crewbase.lineup.entity.period;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,11 +18,15 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.security.entity.User;
 
-@Listeners("LINEUP_DutyPeriodTemplateListener")
+import eu.crewbase.lineup.entity.coredata.FunctionCategory;
+import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+
+@Listeners("LINEUP_PeriodTemplateListener")
 @NamePattern("%s %s|functionCategory,site")
-@Table(name = "LINEUP_DUTY_PERIOD_TEMPLATE")
-@Entity(name = "lineup$DutyPeriodTemplate")
-public class DutyPeriodTemplate extends StandardClientEntity {
+@Table(name = "LINEUP_PERIOD_TEMPLATE")
+@Entity(name = "lineup$PeriodTemplate")
+public class PeriodTemplate extends StandardClientEntity {
 	private static final long serialVersionUID = 7361455352235329343L;
 
 	@Lookup(type = LookupType.SCREEN)

@@ -1,4 +1,4 @@
-package eu.crewbase.lineup.entity.coredata;
+package eu.crewbase.lineup.entity.period;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import eu.crewbase.lineup.entity.coredata.PeriodKind;
 
 @NamePattern("%s|typeName")
 @Table(name = "LINEUP_PERIOD_TYPE")
@@ -20,28 +22,15 @@ public class PeriodType extends StandardClientEntity {
 	@Column(name = "TYPE_NAME", length = 20)
 	protected String typeName;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PARENT_TYPE_ID")
-	protected PeriodType parentType;
+	@Column(name = "PARENT_TYPE")
+	protected String parentType;
 
-	@Column(name = "PERIOD_SUB_CLASS")
-	protected String periodSubClass;
-
-	public PeriodSubClass getPeriodSubClass() {
-		return periodSubClass == null ? null : PeriodSubClass.fromId(periodSubClass);
+	public PeriodKind getParentType() {
+		return parentType == null ? null : PeriodKind.fromId(parentType);
 	}
 
-	public void setPeriodSubClass(PeriodSubClass periodSubClass) {
-		this.periodSubClass = periodSubClass == null ? null : periodSubClass.getId();
-	}
-
-	public void setParentType(PeriodType parentType) {
-		this.parentType = parentType;
-	}
-
-	public PeriodType getParentType() {
-		return parentType;
+	public void setParentType(PeriodKind parentType) {
+		this.parentType = parentType == null ? null : parentType.getId();
 	}
 
 	public void setTypeName(String typeName) {

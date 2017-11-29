@@ -17,7 +17,7 @@ import com.haulmont.cuba.core.entity.annotation.LookupType;
 import eu.crewbase.lineup.entity.coredata.FunctionCategory;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 
-@NamePattern("%s %s %s|start,end,functionCategory")
+@NamePattern("%s %s |start,end")
 @MappedSuperclass
 public class Period extends StandardClientEntity {
 	private static final long serialVersionUID = -5029609650607107962L;
@@ -30,10 +30,7 @@ public class Period extends StandardClientEntity {
 	@Column(name = "END_")
 	protected Date end;
 
-	@Lookup(type = LookupType.DROPDOWN)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "FUNCTION_CATEGORY_ID")
-	protected FunctionCategory functionCategory;
+	
 
 	@Column(name = "REMARK")
 	protected String remark;
@@ -46,13 +43,9 @@ public class Period extends StandardClientEntity {
 		return remark;
 	}
 
-	public void setFunctionCategory(FunctionCategory functionCategory) {
-		this.functionCategory = functionCategory;
-	}
+	
 
-	public FunctionCategory getFunctionCategory() {
-		return functionCategory;
-	}
+	
 
 	public void setStart(Date start) {
 		this.start = start;

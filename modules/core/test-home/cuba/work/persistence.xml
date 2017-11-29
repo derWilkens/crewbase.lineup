@@ -80,7 +80,7 @@
     <class>eu.crewbase.lineup.entity.cap.coredata.Jobfunction</class>
     <class>eu.crewbase.lineup.entity.cap.Certificate</class>
     <class>eu.crewbase.lineup.entity.batchimport.UserImportStage</class>
-    <class>eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate</class>
+    <class>eu.crewbase.lineup.entity.coredata.PeriodTemplate</class>
     <class>eu.crewbase.lineup.entity.cap.coredata.RoleQualificationType</class>
     <class>eu.crewbase.lineup.entity.coredata.SiteCategory</class>
     <class>eu.crewbase.lineup.entity.coredata.SiteRoleRule</class>

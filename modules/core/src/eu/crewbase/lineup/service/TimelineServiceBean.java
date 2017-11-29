@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,10 +25,8 @@ import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.cap.coredata.Role;
 import eu.crewbase.lineup.entity.coredata.AppUser;
 import eu.crewbase.lineup.entity.coredata.Department;
-import eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate;
 import eu.crewbase.lineup.entity.coredata.FunctionCategory;
 import eu.crewbase.lineup.entity.coredata.NumberRangeRule;
-import eu.crewbase.lineup.entity.coredata.PeriodSubClass;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.coredata.SiteRoleRule;
 import eu.crewbase.lineup.entity.dto.DutyPeriodDTO;
@@ -41,6 +37,7 @@ import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.AttendencePeriod;
 import eu.crewbase.lineup.entity.period.MaintenanceCampaign;
 import eu.crewbase.lineup.entity.period.Period;
+import eu.crewbase.lineup.entity.period.PeriodTemplate;
 import eu.crewbase.lineup.entity.period.SitePeriod;
 
 @Service(TimelineService.NAME)
@@ -72,26 +69,26 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 
 			List<Site> preferredSites = getPreferredSites(persistence.getEntityManager(), context);
 			List<FunctionCategory> preferredFunctionCategories = loadPreferredFunctionCategories(userPreferenceList);
-			Set<PeriodSubClass> preferredSubClassList = new HashSet<PeriodSubClass>();
-
-			for (FunctionCategory functionCategory : preferredFunctionCategories) {
-				if (functionCategory.getPeriodSubClass() != null) {
-					preferredSubClassList.add(functionCategory.getPeriodSubClass());
-				}
-			}
-
-			for (PeriodSubClass periodSubClass : preferredSubClassList) {
-
-				if (periodSubClass.equals(PeriodSubClass.ModeOfOperation)) {
-					dto.addItems(getCampaigns(preferredSites, preferredFunctionCategories), campaignTimelineConfig);
-
-				} else if (periodSubClass.equals(PeriodSubClass.Administration)) {
-					List<AppUser> personsOnDuty = loadPreferredPersonsOnDuty(userPreferenceList);
-					List<AttendencePeriod> dutyPeriods = getDutyPeriods(personsOnDuty, preferredSites,
-							preferredFunctionCategories);
-					dto.addItems(dutyPeriods, dutyPeriodConfig);
-				}
-			}
+//			Set<PeriodSubClass> preferredSubClassList = new HashSet<PeriodSubClass>();
+//
+//			for (FunctionCategory functionCategory : preferredFunctionCategories) {
+//				if (functionCategory.getPeriodSubClass() != null) {
+//					preferredSubClassList.add(functionCategory.getPeriodSubClass());
+//				}
+//			}
+//
+//			for (PeriodSubClass periodSubClass : preferredSubClassList) {
+//
+//				if (periodSubClass.equals(PeriodSubClass.ModeOfOperation)) {
+//					dto.addItems(getCampaigns(preferredSites, preferredFunctionCategories), campaignTimelineConfig);
+//
+//				} else if (periodSubClass.equals(PeriodSubClass.Administration)) {
+//					List<AppUser> personsOnDuty = loadPreferredPersonsOnDuty(userPreferenceList);
+//					List<AttendencePeriod> dutyPeriods = getDutyPeriods(personsOnDuty, preferredSites,
+//							preferredFunctionCategories);
+//					dto.addItems(dutyPeriods, dutyPeriodConfig);
+//				}
+//			}
 
 			tx.commit();
 		}
@@ -127,19 +124,19 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 						UserPreferencesContext.Rotaplan);
 				List<FunctionCategory> preferredFunctionCategories = loadPreferredFunctionCategories(
 						preferredRotaplanFunctionCategories);
-				Set<PeriodSubClass> preferredSubClassList = new HashSet<PeriodSubClass>();
-
-				for (FunctionCategory functionCategory : preferredFunctionCategories) {
-					if (functionCategory.getPeriodSubClass() != null) {
-						preferredSubClassList.add(functionCategory.getPeriodSubClass());
-					}
-				}
+//				Set<PeriodSubClass> preferredSubClassList = new HashSet<PeriodSubClass>();
+//
+//				for (FunctionCategory functionCategory : preferredFunctionCategories) {
+//					if (functionCategory.getPeriodSubClass() != null) {
+//						preferredSubClassList.add(functionCategory.getPeriodSubClass());
+//					}
+//				}
 				dto.addItems(getCampaigns(preferredSites, preferredFunctionCategories),
 						getSitePeriodAsBackgroundConfig());
 			}
 
 			// preferred Sites holen, hierfür die Drag-Buttons angezeigt
-			dto.setDutyPeriodTemplates(getDutyPeriodTemplatesDTO());
+			dto.setPeriodTemplates(getPeriodTemplatesDTO());
 
 			tx.commit();
 		}
@@ -147,9 +144,9 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 
 	}
 
-	private List<DutyPeriodDTO> getDutyPeriodTemplatesDTO() {
+	private List<DutyPeriodDTO> getPeriodTemplatesDTO() {
 		List<DutyPeriodDTO> dutyPeriodTemplates = new ArrayList<DutyPeriodDTO>();
-		for (DutyPeriodTemplate template : getDutyPeriodTemplates()) {
+		for (PeriodTemplate template : getPeriodTemplates()) {
 			DutyPeriodDTO templateDTO = new DutyPeriodDTO();
 			templateDTO.setPersonId(template.getUser().getId().toString());
 			if (template.getSite() != null) {
@@ -202,12 +199,12 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		return groups;
 	}
 
-	private List<DutyPeriodTemplate> getDutyPeriodTemplates() {
+	private List<PeriodTemplate> getPeriodTemplates() {
 
-		String queryString = "select e from lineup$DutyPeriodTemplate e where e.user.id = :userId";
+		String queryString = "select e from lineup$PeriodTemplate e where e.user.id = :userId";
 
-		TypedQuery<DutyPeriodTemplate> query = persistence.getEntityManager().createQuery(queryString,
-				DutyPeriodTemplate.class);
+		TypedQuery<PeriodTemplate> query = persistence.getEntityManager().createQuery(queryString,
+				PeriodTemplate.class);
 
 		query.setParameter("userId", AppBeans.get(UserSessionSource.class).getUserSession().getUser().getId());
 		query.addViewName("dutyPeriodTemplate-view");
@@ -226,11 +223,9 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 //				return null;
 //		});
 		dutyPeriodConfig.setItemLabelFunction((AttendencePeriod e) -> {
-			if (e.getFunctionCategory() == null) {
-				Log.info("Function Category is null: " + e.getUuid().toString());
-				return null;
-			} else
-				return e.getPersonOnDuty().getInstanceName() + " " + e.getFunctionCategory().getCategoryName();
+
+				return e.getPersonOnDuty().getInstanceName();
+			
 		});
 		dutyPeriodConfig.setStyleFunction((AttendencePeriod e) -> {
 			String colorHex = userPreferenceSerivce.getSiteColorPreference(e.getOperationPeriod().getSite().getUuid());
@@ -258,9 +253,9 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 			if (e.getOperationPeriod().getSite() != null) {
 				result = e.getOperationPeriod().getSite().getItemDesignation();
 			}
-			if (e.getFunctionCategory() != null) {
-				result = result + " - " + e.getFunctionCategory().getCategoryName();
-			}
+//			if (e.getFunctionCategory() != null) {
+//				result = result + " - " + e.getFunctionCategory().getCategoryName();
+//			}
 			if (e.getRemark() != null) {
 				result = result + " - " + e.getRemark();
 			}
@@ -519,7 +514,8 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		return persistence.getEntityManager()
 		.createQuery("SELECT e from lineup$DutyPeriod e where e.site.id = :siteId and e.functionCategory.periodSubClass = :periodType")
 		.setParameter("siteId", siteId)
-		.setParameter("periodType", PeriodSubClass.DutyPeriod).getResultList().size();
+		//.setParameter("periodType", PeriodSubClass.DutyPeriod)
+		.getResultList().size();
 	}
 	
 	@SuppressWarnings("unchecked")

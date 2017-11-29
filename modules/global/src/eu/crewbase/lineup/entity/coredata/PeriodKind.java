@@ -4,13 +4,13 @@ import javax.annotation.Nullable;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
-public enum PeriodSubClass implements EnumClass<String> {
+public enum PeriodKind implements EnumClass<String> {
 
-	ModeOfOperation("1"), Administration("2"), DutyPeriod("3");
+	OperationPeriod("1"), MaintenanceCampaign("2"), OutageCampaign("3"), Absence("4"), Attendence("5");
 
 	private String id;
 
-	PeriodSubClass(String value) {
+	PeriodKind(String value) {
 		this.id = value;
 	}
 
@@ -19,8 +19,8 @@ public enum PeriodSubClass implements EnumClass<String> {
 	}
 
 	@Nullable
-	public static PeriodSubClass fromId(String id) {
-		for (PeriodSubClass at : PeriodSubClass.values()) {
+	public static PeriodKind fromId(String id) {
+		for (PeriodKind at : PeriodKind.values()) {
 			if (at.getId().equals(id)) {
 				return at;
 			}

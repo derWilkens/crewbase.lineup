@@ -161,11 +161,11 @@ public class PeriodImportServiceBean implements PeriodImportService {
 						error = true;
 					}
 					tmpCampaign.setCampaignNumber(importItem.getCampaignNumber());
-					if (importItem.getShutdown() == true) {
-						tmpCampaign.setFunctionCategory(abschaltkampagne);
-					} else {
-						tmpCampaign.setFunctionCategory(kampagne);
-					}
+//					if (importItem.getShutdown() == true) {
+//						tmpCampaign.setFunctionCategory(abschaltkampagne);
+//					} else {
+//						tmpCampaign.setFunctionCategory(kampagne);
+//					}
 				}
 				tmpCampaign.setStart(importItem.getStartDate());
 				tmpCampaign.setEnd(importItem.getEndDate());

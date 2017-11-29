@@ -21,7 +21,6 @@
     <menu id="favorites"
           icon="font-icon:STAR"
           insertBefore="administration">
-        <item screen="lineup$FunctionCategory.choose"/>
         <item screen="lineup$DepartmentUser.choose"/>
         <item screen="userpreference-sitecolors"/>
         <item id="lineup$UserPreference.browse"/>
@@ -41,9 +40,8 @@
           insertBefore="administration">
         <item screen="lineup$Site.browse"/>
         <item id="lineup$Company.browse"/>
-        <item screen="lineup$FunctionCategory.browse"/>
         <item screen="lineup$Department.browse"/>
-        <item screen="lineup$DutyPeriodTemplate.browse"/>
+        <item screen="lineup$PeriodTemplate.browse"/>
         <item screen="lineup$AppUser.browse"/>
     </menu>
 </menu-config>

@@ -154,9 +154,9 @@ public class EmlTimeline extends AbstractWindow {
 			if (e.getOperationPeriod().getSite() != null) {
 				result = e.getOperationPeriod().getSite().getItemDesignation();
 			}
-			if (e.getFunctionCategory() != null) {
-				result = result + " " + e.getFunctionCategory().getCategoryName();
-			}
+//			if (e.getFunctionCategory() != null) {
+//				result = result + " " + e.getFunctionCategory().getCategoryName();
+//			}
 			return result;
 		});
 		dutyPeriodConfig.setStyleFunction((AttendencePeriod e) -> {
@@ -245,8 +245,8 @@ public class EmlTimeline extends AbstractWindow {
 			// FunctionCategory über dataManager laden
 			if (jsonItem.hasKey("functionCategoryId")) {
 				functionCategoriesDs.refresh();
-				newItem.setFunctionCategory(
-						functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
+//				newItem.setFunctionCategory(
+//						functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
 			} else {
 				itemIncomplete = true;
 			}

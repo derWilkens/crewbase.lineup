@@ -25,9 +25,6 @@ public class FunctionCategory extends StandardClientEntity {
 	@JoinColumn(name = "PARENT_TYPE_ID")
 	protected FunctionCategory parentType;
 
-	@Column(name = "PERIOD_SUB_CLASS")
-	protected String periodSubClass;
-
 	public FunctionCategory getParentType() {
 		return parentType;
 	}
@@ -42,14 +39,6 @@ public class FunctionCategory extends StandardClientEntity {
 
 	public String getCategoryName() {
 		return categoryName;
-	}
-
-	public PeriodSubClass getPeriodSubClass() {
-		return periodSubClass == null ? null : PeriodSubClass.fromId(periodSubClass);
-	}
-
-	public void setPeriodSubClass(PeriodSubClass periodSubClass) {
-		this.periodSubClass = periodSubClass == null ? null : periodSubClass.getId();
 	}
 
 }

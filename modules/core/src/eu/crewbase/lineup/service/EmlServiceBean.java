@@ -14,7 +14,6 @@ import com.haulmont.cuba.core.Transaction;
 
 import eu.crewbase.lineup.entity.UserPreference;
 import eu.crewbase.lineup.entity.UserPreferencesContext;
-import eu.crewbase.lineup.entity.coredata.PeriodSubClass;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.coredata.SiteRoleRule;
 import eu.crewbase.lineup.entity.dto.TimelineConfig;
@@ -110,7 +109,7 @@ public class EmlServiceBean extends PreferencesService implements EmlService {
 					//dummy.setSite(dutyPeriod.getSite());
 					dummy.setStart(dutyPeriod.getStart());
 					dummy.setEnd(dutyPeriod.getEnd());
-					dummy.setFunctionCategory(siteRoleRule.getFunctionCategory());
+					//dummy.setFunctionCategory(siteRoleRule.getFunctionCategory());
 					requiredRoleDutyPeriods.add(dummy);
 				}
 			}
@@ -119,29 +118,30 @@ public class EmlServiceBean extends PreferencesService implements EmlService {
 	}
 
 	private List<AttendencePeriod> getComingModeOfOperationPeriods(Site site) {
-		return getComingPeriods(site, PeriodSubClass.ModeOfOperation);
+		return getComingPeriods(site);
 	}
 
 	private List<AttendencePeriod> getAvailableRoleDutyPeriods(Site site) {
-		return getComingPeriods(site, PeriodSubClass.DutyPeriod);
+		return getComingPeriods(site);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<AttendencePeriod> getComingPeriods(Site site, PeriodSubClass subClass) {
+	private List<AttendencePeriod> getComingPeriods(Site site) {
 		return (List<AttendencePeriod>) persistence.getEntityManager()
 				.createQuery("SELECT e from lineup$AttendencePeriod e "
 						+ "where e.site.id = :siteId and e.functionCategory.periodSubClass = :subClass "
 						+ "and e.end >= :today")
-				.setParameter("siteId", site.getId()).setParameter("subClass", subClass)
+				.setParameter("siteId", site.getId())
+				//.setParameter("subClass", subClass)
 				.setParameter("today", new Date()).getResultList();
 	}
 	
 	
 	private TimelineConfig getEmlRoleDutyConfig(String parentGroupLabel) {
 		TimelineConfig config = new TimelineConfig();
-		config.setGroupIdFunction((AttendencePeriod e) -> e.getFunctionCategory().getUuid().toString()); // die
+		//config.setGroupIdFunction((AttendencePeriod e) -> e.getFunctionCategory().getUuid().toString()); // die
 																									// Eml-Rolle-ID
-		config.setGroupLabelFunction((AttendencePeriod e) -> e.getFunctionCategory().getCategoryName()); //
+		//config.setGroupLabelFunction((AttendencePeriod e) -> e.getFunctionCategory().getCategoryName()); //
 		config.setParentGroupIdFunction((AttendencePeriod e) -> parentGroupLabel);// entweder
 																			// avail
 																			// oder
@@ -149,7 +149,7 @@ public class EmlServiceBean extends PreferencesService implements EmlService {
 		config.setItemLabelFunction((AttendencePeriod e) -> e.getPersonOnDuty().getInstanceName());
 		config.setStyleFunction((AttendencePeriod e) -> {
 			if (null != e.getOperationPeriod().getSite()) {
-				String colorHex = userPreferenceSerivce.getRoleColorPreference(e.getFunctionCategory().getUuid());
+				String colorHex = null;//userPreferenceSerivce.getRoleColorPreference(e.getFunctionCategory().getUuid());
 				if (colorHex != null) {
 					Color c = Color.decode("0x" + colorHex);
 					String rgb = c.getRed() + "," + c.getGreen() + "," + c.getBlue();

@@ -97,10 +97,10 @@ public class RotaplanComponent extends AbstractJavaScriptComponent {
 	public void setTimelineItems(List<TimelineItem> timelineItems) {
 		getState().timelineItems = timelineItems;
 	}
-	public Collection<DutyPeriodDTO> getDutyPeriodTemplate() {
+	public Collection<DutyPeriodDTO> getPeriodTemplate() {
 		return getState().dutyPeriodTemplates;
 	}
-	public void setDutyPeriodTemplate(List<DutyPeriodDTO> dutyPeriodTemplates) {
+	public void setPeriodTemplate(List<DutyPeriodDTO> dutyPeriodTemplates) {
 		getState().dutyPeriodTemplates = dutyPeriodTemplates;
 	}	
     public RotaplandChangeListener getListener() {
@@ -120,7 +120,7 @@ public class RotaplanComponent extends AbstractJavaScriptComponent {
 		for (TimelineDTO timelineDTO : dtoList.values()) {
 			getState().timelineItems.addAll(timelineDTO.getTimelineItemList());
 			getState().timelineGroups.addAll(timelineDTO.getGroupList());
-			getState().dutyPeriodTemplates.addAll(timelineDTO.getDutyPeriodTemplates());
+			getState().dutyPeriodTemplates.addAll(timelineDTO.getPeriodTemplates());
 		}
 	}
 

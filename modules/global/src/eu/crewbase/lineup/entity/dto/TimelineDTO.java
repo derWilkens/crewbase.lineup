@@ -55,11 +55,11 @@ public class TimelineDTO extends BaseUuidEntity {
 	public List<TimelineItem> getTimelineItemList() {
 		return timelineItemList;
 	}
-	public List<DutyPeriodDTO> getDutyPeriodTemplates() {
+	public List<DutyPeriodDTO> getPeriodTemplates() {
 		return dutyPeriodTemplates;
 	}
 
-	public void setDutyPeriodTemplates(List<DutyPeriodDTO> dutyPeriodTemplates) {
+	public void setPeriodTemplates(List<DutyPeriodDTO> dutyPeriodTemplates) {
 		this.dutyPeriodTemplates = dutyPeriodTemplates;
 	}
 

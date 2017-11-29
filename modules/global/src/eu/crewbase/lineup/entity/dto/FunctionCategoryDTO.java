@@ -7,8 +7,6 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
-import eu.crewbase.lineup.entity.coredata.PeriodSubClass;
-
 @NamePattern("%s|categoryName")
 @MetaClass(name = "lineup$FunctionCategoryDTO")
 public class FunctionCategoryDTO extends BaseUuidEntity {
@@ -20,11 +18,11 @@ public class FunctionCategoryDTO extends BaseUuidEntity {
     @MetaProperty
     protected String periodSubClass;
 
-    public FunctionCategoryDTO(UUID id, String categoryName, PeriodSubClass periodSubClass) {
+    public FunctionCategoryDTO(UUID id, String categoryName ) {
 		super();
 		super.id = id;
 		this.categoryName = categoryName;
-		this.periodSubClass = periodSubClass == null ? null : periodSubClass.getId();
+		
 	}
 
 	public void setCategoryName(String categoryName) {
@@ -35,13 +33,6 @@ public class FunctionCategoryDTO extends BaseUuidEntity {
         return categoryName;
     }
 
-    public void setPeriodSubClass(PeriodSubClass periodSubClass) {
-        this.periodSubClass = periodSubClass == null ? null : periodSubClass.getId();
-    }
-
-    public PeriodSubClass getPeriodSubClass() {
-        return periodSubClass == null ? null : PeriodSubClass.fromId(periodSubClass);
-    }
 
 
 }

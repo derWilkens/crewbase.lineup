@@ -33,15 +33,9 @@
             template="eu/crewbase/lineup/gui/screens/importUsers.xml"/>
     <screen id="lineup$UserImportStage.browse"
             template="eu/crewbase/lineup/web/userimportstage/user-import-stage-browse.xml"/>
-    <screen id="lineup$FunctionCategory.choose"
-            template="eu/crewbase/lineup/web/functioncategory/function-category-choose.xml"/>
-    <screen id="lineup$FunctionCategory.edit"
-            template="eu/crewbase/lineup/web/functioncategory/function-category-edit.xml"/>
-    <screen id="lineup$FunctionCategory.browse"
-            template="eu/crewbase/lineup/web/functioncategory/function-category-browse.xml"/>
-    <screen id="lineup$DutyPeriodTemplate.browse"
+    <screen id="lineup$PeriodTemplate.browse"
             template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-browse.xml"/>
-    <screen id="lineup$DutyPeriodTemplate.edit"
+    <screen id="lineup$PeriodTemplate.edit"
             template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-edit.xml"/>
     <screen id="lineup$RoleQualificationType.browse"
             template="eu/crewbase/lineup/web/rolequalificationtype/role-qualification-type-browse.xml"/>

@@ -251,7 +251,6 @@ create table LINEUP_FUNCTION_CATEGORY (
     --
     CATEGORY_NAME varchar(50),
     PARENT_TYPE_ID varchar(32),
-    PERIOD_SUB_CLASS varchar(50),
     --
     primary key (ID)
 )^
@@ -390,26 +389,7 @@ create table LINEUP_USER_IMPORT_STAGE (
     primary key (ID)
 )^
 -- end LINEUP_USER_IMPORT_STAGE
--- begin LINEUP_DUTY_PERIOD_TEMPLATE
-create table LINEUP_DUTY_PERIOD_TEMPLATE (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    CLIENT integer not null,
-    --
-    FUNCTION_CATEGORY_ID varchar(32),
-    DEFAULT_DURATION integer,
-    SITE_ID varchar(32),
-    USER_ID varchar(32),
-    --
-    primary key (ID)
-)^
--- end LINEUP_DUTY_PERIOD_TEMPLATE
+
 -- begin LINEUP_ROLE_QUALIFICATION_TYPE
 create table LINEUP_ROLE_QUALIFICATION_TYPE (
     ID varchar(32),
@@ -567,3 +547,23 @@ create table LINEUP_SITE_PERIOD (
     primary key (ID)
 )^
 -- end LINEUP_SITE_PERIOD
+-- begin LINEUP_PERIOD_TEMPLATE
+create table LINEUP_PERIOD_TEMPLATE (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    --
+    FUNCTION_CATEGORY_ID varchar(32),
+    DEFAULT_DURATION integer,
+    SITE_ID varchar(32),
+    USER_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_PERIOD_TEMPLATE

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://editorCaption"
-        class="eu.crewbase.lineup.web.dutyperiodtemplate.DutyPeriodTemplateEdit"
+        class="eu.crewbase.lineup.web.dutyperiodtemplate.PeriodTemplateEdit"
         datasource="dutyPeriodTemplateDs"
         focusComponent="fieldGroup"
         messagesPack="eu.crewbase.lineup.web.dutyperiodtemplate">
     <dsContext>
         <datasource id="dutyPeriodTemplateDs"
-                    class="eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate"
+                    class="eu.crewbase.lineup.entity.period.PeriodTemplate"
                     view="dutyPeriodTemplate-view"/>
         <collectionDatasource id="sitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"

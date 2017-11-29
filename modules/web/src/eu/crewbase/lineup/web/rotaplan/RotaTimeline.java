@@ -197,8 +197,8 @@ public class RotaTimeline extends AbstractWindow {
 			// FunctionCategory über dataManager laden
 			if (jsonItem.hasKey("functionCategoryId")) {
 				functionCategoriesDs.refresh();
-				newItem.setFunctionCategory(
-						functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
+//				newItem.setFunctionCategory(
+//						functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
 			} else {
 				itemIncomplete = true;
 			}

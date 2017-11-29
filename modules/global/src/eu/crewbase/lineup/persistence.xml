@@ -19,7 +19,7 @@
         <class>eu.crewbase.lineup.entity.period.MaintenanceCampaign</class>
         <class>eu.crewbase.lineup.entity.period.Period</class>
         <class>eu.crewbase.lineup.entity.UserPreference</class>
-        <class>eu.crewbase.lineup.entity.coredata.PeriodType</class>
+        <class>eu.crewbase.lineup.entity.period.PeriodType</class>
         <class>eu.crewbase.lineup.entity.coredata.FunctionCategory</class>
         <class>eu.crewbase.lineup.entity.coredata.Department</class>
         <class>eu.crewbase.lineup.entity.batchimport.PeriodImportStage</class>
@@ -28,7 +28,7 @@
         <class>eu.crewbase.lineup.entity.cap.coredata.Jobfunction</class>
         <class>eu.crewbase.lineup.entity.cap.Certificate</class>
         <class>eu.crewbase.lineup.entity.batchimport.UserImportStage</class>
-        <class>eu.crewbase.lineup.entity.coredata.DutyPeriodTemplate</class>
+        <class>eu.crewbase.lineup.entity.period.PeriodTemplate</class>
         <class>eu.crewbase.lineup.entity.cap.coredata.RoleQualificationType</class>
         <class>eu.crewbase.lineup.entity.coredata.SiteCategory</class>
         <class>eu.crewbase.lineup.entity.coredata.SiteRoleRule</class>
