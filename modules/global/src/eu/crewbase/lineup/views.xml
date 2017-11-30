@@ -39,14 +39,6 @@
         <property name="siteName"/>
         <property name="itemDesignation"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.period.ShiftPeriod"
-          extends="_local"
-          name="dutyPeriod-edit-view">
-        <property name="personOnDuty"
-                  view="_minimal"/>
-        <property name="functionCategory"
-                  view="_minimal"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.Waypoint"
           extends="_local"
           name="waypoint-browser-view">
@@ -150,8 +142,6 @@
           name="dutyPeriod-view">
         <property name="personOnDuty"
                   view="_minimal"/>
-        <property name="functionCategory"
-                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           name="preferred-site-view">
@@ -186,9 +176,6 @@
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           name="dutyPeriodTemplate-view">
-        <property name="functionCategory">
-            <property name="categoryName"/>
-        </property>
         <property name="defaultDuration"/>
         <property name="site">
             <property name="siteName"/>
@@ -237,8 +224,6 @@
         <property name="rangeRule"
                   view="_local"/>
         <property name="role"
-                  view="_minimal"/>
-        <property name="functionCategory"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.NumberRangeRule"

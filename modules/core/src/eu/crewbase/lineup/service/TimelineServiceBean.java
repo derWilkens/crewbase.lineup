@@ -38,6 +38,7 @@ import eu.crewbase.lineup.entity.period.AttendencePeriod;
 import eu.crewbase.lineup.entity.period.MaintenanceCampaign;
 import eu.crewbase.lineup.entity.period.Period;
 import eu.crewbase.lineup.entity.period.PeriodTemplate;
+import eu.crewbase.lineup.entity.period.ShiftPeriod;
 import eu.crewbase.lineup.entity.period.SitePeriod;
 
 @Service(TimelineService.NAME)
@@ -110,7 +111,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 			// Periods der preferred User holen
 			List<AppUser> preferredPersons = getPersonsByPreferredDepartment(persistence.getEntityManager(),
 					UserPreferencesContext.RotaplanDepartments);
-			List<AttendencePeriod> dutyPeriods = getDutyPeriods(preferredPersons, null, null);
+			List<ShiftPeriod> dutyPeriods = getDutyPeriods(preferredPersons, null, null);
 			dto.addItems(dutyPeriods, rotaplanConfig);
 
 			//Kampagnen als Hintergrund anzeigen?
@@ -341,9 +342,9 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 	}
 
 	// drei Kriterien: (implizit Type), Site, ServiceUser;
-	private List<AttendencePeriod> getDutyPeriods(List<AppUser> personOnDutyList, List<Site> siteList,
+	private List<ShiftPeriod> getDutyPeriods(List<AppUser> personOnDutyList, List<Site> siteList,
 			List<FunctionCategory> preferredFunctionCategories) {
-		List<AttendencePeriod> dutyPeriods;
+		List<ShiftPeriod> dutyPeriods;
 
 		String queryString;
 		String queryConcatenator = "where ";
@@ -363,7 +364,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 			queryConcatenator = "AND ";
 		}
 
-		TypedQuery<AttendencePeriod> query = persistence.getEntityManager().createQuery(queryString, AttendencePeriod.class);
+		TypedQuery<ShiftPeriod> query = persistence.getEntityManager().createQuery(queryString, ShiftPeriod.class);
 		if (personOnDutyList != null && personOnDutyList.size() > 0) {
 			query.setParameter("personsIdList", getUUIDList(personOnDutyList));
 		}
