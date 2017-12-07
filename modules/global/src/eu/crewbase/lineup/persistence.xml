@@ -37,5 +37,6 @@
         <class>eu.crewbase.lineup.entity.period.OperationPeriod</class>
         <class>eu.crewbase.lineup.entity.period.AttendencePeriod</class>
         <class>eu.crewbase.lineup.entity.period.AbsencePeriod</class>
+        <class>eu.crewbase.lineup.entity.period.OutagePeriod</class>
     </persistence-unit>
 </persistence>

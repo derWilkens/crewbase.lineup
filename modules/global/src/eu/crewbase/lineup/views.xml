@@ -46,12 +46,22 @@
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
-          extends="_local"
           name="campaign-view">
+        <property name="campaignNumber"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+        <property name="site"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
-          extends="_local"
+          extends="_minimal"
           name="campaignOverview">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+        <property name="site"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           extends="_local"
@@ -65,7 +75,6 @@
     <view class="eu.crewbase.lineup.entity.period.PeriodType"
           extends="_local"
           name="periodType-view">
-        <property name="parentType"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           extends="_local"
@@ -84,10 +93,10 @@
         <property name="site">
             <property name="itemDesignation"/>
         </property>
-        <property name="start"/>
-        <property name="end"/>
         <property name="campaignNumber"/>
         <property name="remark"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
     </view>
     <view class="eu.crewbase.lineup.entity.UserPreference"
           name="userPreference-SiteColors">
@@ -178,13 +187,10 @@
           name="dutyPeriodTemplate-view">
         <property name="defaultDuration"/>
         <property name="site">
+            <property name="itemDesignation"/>
             <property name="siteName"/>
         </property>
-        <property name="user">
-            <property name="login"/>
-            <property name="name"/>
-        </property>
-        <property name="color"/>
+        <property name="periodKind"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           name="site-period-choose">
@@ -264,5 +270,67 @@
           name="sitePeriodChoose">
         <property name="siteName"/>
         <property name="itemDesignation"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
+          extends="dutyPeriodTemplate-view"
+          name="periodTemplate-dto-view">
+        <property name="color"/>
+        <property name="periodKind"/>
+        <property name="user">
+            <property name="firstName"/>
+            <property name="lastName"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
+          extends="_local"
+          name="periodTemplate-view">
+        <property name="site"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.OperationPeriod"
+          name="operationPeriod-view">
+        <property name="site"
+                  view="_minimal">
+        </property>
+        <property name="remark"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.AttendencePeriod"
+          name="attendencePeriod-view">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+        <property name="personOnDuty"
+                  view="_minimal"/>
+        <property name="operationPeriod"
+                  view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="site"
+                      view="_minimal"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.AttendencePeriod"
+          name="attendencePeriod-list-view">
+        <property name="operationPeriod"
+                  view="_minimal">
+            <property name="site">
+                <property name="itemDesignation"/>
+            </property>
+        </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+        <property name="personOnDuty"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.AbsencePeriod"
+          name="absencePeriod-view">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+        <property name="personOnDuty"
+                  view="_minimal"/>
     </view>
 </views>

@@ -40,8 +40,6 @@ import com.vaadin.ui.Layout;
 
 import elemental.json.JsonObject;
 import eu.crewbase.lineup.Utils;
-import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent;
-import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent.RotaplandChangeListener;
 import eu.crewbase.lineup.entity.UserPreference;
 import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.coredata.FunctionCategory;
@@ -53,6 +51,8 @@ import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.AttendencePeriod;
 import eu.crewbase.lineup.service.TimelineService;
 import eu.crewbase.lineup.service.UserpreferencesService;
+import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent;
+import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent.RotaplandChangeListener;
 
 public class EmlTimeline extends AbstractWindow {
 
@@ -200,9 +200,9 @@ public class EmlTimeline extends AbstractWindow {
 			// Datum
 			try {
 				if (jsonItem.hasKey("start")) {
-					newItem.setStart(jsonDateToDateWoTime(jsonItem.getString("start")));
+					newItem.setStartDate(jsonDateToDateWoTime(jsonItem.getString("start")));
 				} else {
-					newItem.setStart(Utils.clearDate(new Date()));
+					newItem.setStartDate(Utils.clearDate(new Date()));
 					itemIncomplete = true;
 				}
 
@@ -217,9 +217,9 @@ public class EmlTimeline extends AbstractWindow {
 				}
 
 				Calendar c = Calendar.getInstance();
-				c.setTime(newItem.getStart());
+				c.setTime(newItem.getStartDate());
 				c.add(Calendar.DAY_OF_YEAR, duration);
-				newItem.setEnd(c.getTime());
+				newItem.setEndDate(c.getTime());
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -292,8 +292,8 @@ public class EmlTimeline extends AbstractWindow {
 				}
 			}
 			try {
-				dutyPeriod.setStart(jsonDateToDate(jsonItem.getString("start")));
-				dutyPeriod.setEnd(jsonDateToDate(jsonItem.getString("end")));
+				dutyPeriod.setStartDate(jsonDateToDate(jsonItem.getString("start")));
+				dutyPeriod.setEndDate(jsonDateToDate(jsonItem.getString("end")));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
@@ -91,8 +90,8 @@ public class TimelineDTOServiceTest extends LineupTestContainer {
 
 		op.setClient(1);
 		op.setSite(site);
-		op.setStart(new Date());
-		op.setEnd(new Date());
+		op.setStartDate(new Date());
+		op.setEndDate(new Date());
 		dataManager.commit(op);
 
 		periodList = new ArrayList<AttendencePeriod>();
@@ -100,8 +99,8 @@ public class TimelineDTOServiceTest extends LineupTestContainer {
 		AttendencePeriod p = metadata.create(AttendencePeriod.class);
 		p.setOperationPeriod(op);
 		p.setClient(1);
-		p.setStart(new Date());
-		p.setEnd(new Date());
+		p.setStartDate(new Date());
+		p.setEndDate(new Date());
 		p.getOperationPeriod().setSite(site);
 		p.setPersonOnDuty(personOnDuty);
 		dataManager.commit(p);

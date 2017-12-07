@@ -6,7 +6,7 @@ import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 public enum PeriodKind implements EnumClass<String> {
 
-	OperationPeriod("1"), MaintenanceCampaign("2"), OutageCampaign("3"), Absence("4"), Attendence("5");
+	OperationPeriod("eu.crewbase.lineup.entity.period.OperationPeriod"), MaintenanceCampaign("eu.crewbase.lineup.entity.period.MaintenanceCampaign"), OutageCampaign("eu.crewbase.lineup.entity.period.OutageCampaign"), Absence("eu.crewbase.lineup.entity.period.AbsencePeriod"), Attendence("eu.crewbase.lineup.entity.period.AttendencePeriod");
 
 	private String id;
 

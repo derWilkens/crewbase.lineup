@@ -107,8 +107,8 @@ public class EmlServiceBean extends PreferencesService implements EmlService {
 				for (int i = 0; i < siteRoleRule.getRequiredNumberOfRoles(maxPob); i++) {
 					AttendencePeriod dummy = new AttendencePeriod();
 					//dummy.setSite(dutyPeriod.getSite());
-					dummy.setStart(dutyPeriod.getStart());
-					dummy.setEnd(dutyPeriod.getEnd());
+					dummy.setStartDate(dutyPeriod.getStartDate());
+					dummy.setEndDate(dutyPeriod.getEndDate());
 					//dummy.setFunctionCategory(siteRoleRule.getFunctionCategory());
 					requiredRoleDutyPeriods.add(dummy);
 				}

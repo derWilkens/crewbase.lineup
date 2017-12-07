@@ -12,7 +12,10 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 import eu.crewbase.lineup.entity.coredata.PeriodKind;
+import javax.persistence.InheritanceType;
+import javax.persistence.Inheritance;
 
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamePattern("%s|typeName")
 @Table(name = "LINEUP_PERIOD_TYPE")
 @Entity(name = "lineup$PeriodType")

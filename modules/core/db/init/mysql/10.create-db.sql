@@ -474,9 +474,8 @@ create table LINEUP_ATTENDENCE_PERIOD (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     CLIENT integer not null,
-    START_ datetime(3),
-    END_ datetime(3),
-    FUNCTION_CATEGORY_ID varchar(32),
+    START_DATE datetime(3),
+    END_DATE datetime(3),
     REMARK varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
     --
@@ -496,9 +495,8 @@ create table LINEUP_ABSENCE_PERIOD (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     CLIENT integer not null,
-    START_ datetime(3),
-    END_ datetime(3),
-    FUNCTION_CATEGORY_ID varchar(32),
+    START_DATE datetime(3),
+    END_DATE datetime(3),
     REMARK varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
     --
@@ -530,19 +528,11 @@ create table LINEUP_SITE_PERIOD (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     CLIENT integer not null,
-    START_ datetime(3),
-    END_ datetime(3),
-    FUNCTION_CATEGORY_ID varchar(32),
+    START_DATE datetime(3),
+    END_DATE datetime(3),
     REMARK varchar(255),
-    DTYPE varchar(100),
     --
     SITE_ID varchar(32),
-    --
-    -- from lineup$MaintenanceCampaign
-    CAMPAIGN_NUMBER varchar(10),
-    --
-    -- from lineup$OperationPeriod
-    PARENT_PERIOD_ID varchar(32),
     --
     primary key (ID)
 )^
@@ -559,11 +549,94 @@ create table LINEUP_PERIOD_TEMPLATE (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     --
-    FUNCTION_CATEGORY_ID varchar(32),
     DEFAULT_DURATION integer,
     SITE_ID varchar(32),
     USER_ID varchar(32),
+    PERIOD_KIND varchar(70),
     --
     primary key (ID)
 )^
 -- end LINEUP_PERIOD_TEMPLATE
+-- begin LINEUP_SHIFT_PERIOD
+create table LINEUP_SHIFT_PERIOD (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    START_DATE datetime(3),
+    END_DATE datetime(3),
+    REMARK varchar(255),
+    --
+    PERSON_ON_DUTY_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_SHIFT_PERIOD
+-- begin LINEUP_MAINTENANCE_CAMPAIGN
+create table LINEUP_MAINTENANCE_CAMPAIGN (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    START_DATE datetime(3),
+    END_DATE datetime(3),
+    REMARK varchar(255),
+    SITE_ID varchar(32),
+    --
+    CAMPAIGN_NUMBER varchar(10),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_MAINTENANCE_CAMPAIGN
+-- begin LINEUP_OPERATION_PERIOD
+create table LINEUP_OPERATION_PERIOD (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    START_DATE datetime(3),
+    END_DATE datetime(3),
+    REMARK varchar(255),
+    SITE_ID varchar(32),
+    --
+    PARENT_PERIOD_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_OPERATION_PERIOD
+-- begin LINEUP_OUTAGE_PERIOD
+create table LINEUP_OUTAGE_PERIOD (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    START_DATE datetime(3),
+    END_DATE datetime(3),
+    REMARK varchar(255),
+    SITE_ID varchar(32),
+    --
+    CAMPAIGN_NUMBER varchar(10),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_OUTAGE_PERIOD

@@ -163,8 +163,8 @@ public class CapServiceBeanTest extends LineupTestContainer {
 			periodList.add(persistence.createTransaction().execute(em -> {
 				AttendencePeriod p = new AttendencePeriod();
 				p.setClient(1);
-				p.setStart(new Date());
-				p.setEnd(new Date());
+				p.setStartDate(new Date());
+				p.setEndDate(new Date());
 				p.getOperationPeriod().setSite(site);
 				p.setPersonOnDuty(personOnDuty);
 				em.persist(p);

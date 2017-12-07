@@ -33,8 +33,6 @@
             template="eu/crewbase/lineup/gui/screens/importUsers.xml"/>
     <screen id="lineup$UserImportStage.browse"
             template="eu/crewbase/lineup/web/userimportstage/user-import-stage-browse.xml"/>
-    <screen id="lineup$PeriodTemplate.browse"
-            template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-browse.xml"/>
     <screen id="lineup$PeriodTemplate.edit"
             template="eu/crewbase/lineup/web/dutyperiodtemplate/duty-period-template-edit.xml"/>
     <screen id="lineup$RoleQualificationType.browse"
@@ -57,4 +55,10 @@
             template="eu/crewbase/lineup/web/site/site-browse.xml"/>
     <screen id="lineup$SitePeriod.choose"
             template="eu/crewbase/lineup/web/site/site-period-choose.xml"/>
+    <screen id="lineup$AttendencePeriod.browse"
+            template="eu/crewbase/lineup/web/attendenceperiod/attendence-period-browse.xml"/>
+    <screen id="lineup$OperationPeriod.browse"
+            template="eu/crewbase/lineup/web/operationperiod/operation-period-browse.xml"/>
+    <screen id="lineup$PeriodTemplate.browse"
+            template="eu/crewbase/lineup/web/periodtemplate/period-template-browse.xml"/>
 </screen-config>

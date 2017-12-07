@@ -74,7 +74,6 @@ public abstract class PreferencesService {
 		query.setParameter("entityUUIDs", entityUUIDs);
 		query.setParameter("loadAll", loadAll?1:0);
 		entityList = query.getResultList();
-
 		return entityList;
 	}
 	

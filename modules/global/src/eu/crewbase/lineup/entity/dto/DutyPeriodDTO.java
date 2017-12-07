@@ -8,110 +8,105 @@ import com.haulmont.cuba.core.entity.BaseUuidEntity;
 
 @MetaClass(name = "lineup$DutyPeriodDTO")
 public class DutyPeriodDTO extends BaseUuidEntity {
-    private static final long serialVersionUID = -7791200629921336685L;
+	private static final long serialVersionUID = -7791200629921336685L;
 
-    @MetaProperty
-    protected String personId;
+	@MetaProperty
+	protected String personId;
 
-    @MetaProperty
-    protected String siteId;
+	@MetaProperty
+	protected String siteId;
 
-    @MetaProperty
-    protected String itemDesignation;
+	@MetaProperty
+	protected String itemDesignation;
 
-    @MetaProperty
-    protected String functionCategoryId;
+	@MetaProperty
+	protected String className;
 
-    @MetaProperty
-    protected Date startDate;
+	@MetaProperty
+	protected Date startDate;
 
-    @MetaProperty
-    protected String categoryName;
+	@MetaProperty
+	protected String categoryName;
 
-    @MetaProperty
-    protected Date endDate;
+	@MetaProperty
+	protected Date endDate;
 
-    @MetaProperty
-    protected Integer duration;
+	@MetaProperty
+	protected Integer duration;
 
-    @MetaProperty
-    protected String color;
+	@MetaProperty
+	protected String color;
 
-    public void setItemDesignation(String itemDesignation) {
-        this.itemDesignation = itemDesignation;
-    }
+	public void setClassName(String className) {
+		this.className = className;
+	}
 
-    public String getItemDesignation() {
-        return itemDesignation;
-    }
+	public String getClassName() {
+		return className;
+	}
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+	public void setItemDesignation(String itemDesignation) {
+		this.itemDesignation = itemDesignation;
+	}
 
-    public String getCategoryName() {
-        return categoryName;
-    }
+	public String getItemDesignation() {
+		return itemDesignation;
+	}
 
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+	public String getCategoryName() {
+		return categoryName;
+	}
 
-    public String getColor() {
-        return color;
-    }
+	public void setColor(String color) {
+		this.color = color;
+	}
 
+	public String getColor() {
+		return color;
+	}
 
-    public void setPersonId(String personId) {
-        this.personId = personId;
-    }
+	public void setPersonId(String personId) {
+		this.personId = personId;
+	}
 
-    public String getPersonId() {
-        return personId;
-    }
+	public String getPersonId() {
+		return personId;
+	}
 
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
-    }
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
+	}
 
-    public String getSiteId() {
-        return siteId;
-    }
+	public String getSiteId() {
+		return siteId;
+	}
 
-    public void setFunctionCategoryId(String functionCategoryId) {
-        this.functionCategoryId = functionCategoryId;
-    }
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
 
-    public String getFunctionCategoryId() {
-        return functionCategoryId;
-    }
+	public Integer getDuration() {
+		return duration;
+	}
 
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-    public Integer getDuration() {
-        return duration;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
+	public Date getEndDate() {
+		return endDate;
+	}
 
 }

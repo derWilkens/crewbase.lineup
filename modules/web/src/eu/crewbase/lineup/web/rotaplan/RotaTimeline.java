@@ -10,6 +10,10 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.haulmont.cuba.core.global.CommitContext;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowManager.OpenType;
 import com.haulmont.cuba.gui.components.AbstractWindow;
@@ -17,15 +21,11 @@ import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.gui.components.ScrollBoxLayout;
 import com.haulmont.cuba.gui.components.Window;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.gui.data.DataSupplier;
-import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.Layout;
 
 import elemental.json.JsonObject;
 import eu.crewbase.lineup.Utils;
-import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent;
-import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent.RotaplandChangeListener;
 import eu.crewbase.lineup.entity.UserPreference;
 import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.coredata.AppUser;
@@ -33,14 +33,22 @@ import eu.crewbase.lineup.entity.coredata.FunctionCategory;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.TimelineDTO;
 import eu.crewbase.lineup.entity.dto.TimelineItem;
+import eu.crewbase.lineup.entity.period.AbsencePeriod;
 import eu.crewbase.lineup.entity.period.AttendencePeriod;
+import eu.crewbase.lineup.entity.period.OperationPeriod;
+import eu.crewbase.lineup.entity.period.Period;
 import eu.crewbase.lineup.entity.period.ShiftPeriod;
 import eu.crewbase.lineup.service.EntityService;
 import eu.crewbase.lineup.service.TimelineService;
 import eu.crewbase.lineup.service.UserpreferencesService;
+import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent;
+import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent.RotaplandChangeListener;
 
 public class RotaTimeline extends AbstractWindow {
-
+	@Inject
+	private DataManager dataManager;
+	@Inject
+	private Metadata metadata;
 	private RotaplanComponent rotaplan;
 	private TimelineDTO dto;
 
@@ -59,8 +67,8 @@ public class RotaTimeline extends AbstractWindow {
 	private EntityService entityService;
 
 	/* Datasources */
-	@Inject
-	private Datasource<ShiftPeriod> shiftPeriodDs;
+	// @Inject
+	// private Datasource<ShiftPeriod> shiftPeriodDs;
 	@Inject
 	private CollectionDatasource<ShiftPeriod, UUID> shiftPeriodsDs;
 	@Inject
@@ -128,12 +136,11 @@ public class RotaTimeline extends AbstractWindow {
 		});
 	}
 
-
 	class InnerListener implements RotaplandChangeListener {
 		boolean isCalledAlready;
 
 		@Override
-		public void itemAdded(JsonObject jsonItem) {
+		public void itemAdded(JsonObject jsonItem){
 			// hier belassen
 			// wie wird im Backend aus einem DetachedObject ein AttachedObject?
 			// Wenn es unvollständig ist, muss der editor geöffnet werden und es
@@ -146,69 +153,90 @@ public class RotaTimeline extends AbstractWindow {
 			boolean itemIncomplete = false;
 
 			// Neues Objekt erzeugen im dem DS hinzufügen
-			DataSupplier dataservice = shiftPeriodDs.getDataSupplier();
-			AttendencePeriod newItem = dataservice.newInstance(shiftPeriodDs.getMetaClass());
+			// DataSupplier dataservice = shiftPeriodDs.getDataSupplier();
+			// AttendencePeriod newItem =
+			// dataservice.newInstance(shiftPeriodDs.getMetaClass());
+			// AttendencePeriod newItem =
+			// metadata.create(AttendencePeriod.class);
 
-			// Datum
+			// hier können sowohl Attendence als auch Absence kommen
+			Period newItem = null;
 			try {
-				if (jsonItem.hasKey("start")) {
-					newItem.setStart(jsonDateToDateWoTime(jsonItem.getString("start")));
-				} else {
-					newItem.setStart(Utils.clearDate(new Date()));
-					itemIncomplete = true;
-				}
-
-				int duration = 1; // entweder das gelieferte Endedatum nehmen,
-									// oder die Duration oder 1
-				// if (jsonItem.hasKey("end")) {
-				// newItem.setEnd(jsonDateToDate(jsonItem.getString("end")));
-				// }
-				// else
-				if (jsonItem.hasKey("duration") && !jsonItem.getString("duration").equals("null")) {
-					duration = Integer.parseInt(jsonItem.getString("duration"));
-				}
-
-				Calendar c = Calendar.getInstance();
-				c.setTime(newItem.getStart());
-				c.add(Calendar.DAY_OF_YEAR, duration);
-				newItem.setEnd(c.getTime());
-
-			} catch (Exception e) {
+				newItem = (Period)metadata.create(Class.forName(jsonItem.getString("className")));
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-				itemIncomplete = true;
 			}
+			PeriodJsonParser dto = new PeriodJsonParser();
+			newItem.readDto(dto.parse(jsonItem));
+			
+			//newItem.parseJsonDto(dto);
+			// Datum
+//			try {
+//				if (jsonItem.hasKey("start")) {
+//					newItem.setStartDate(jsonDateToDateWoTime(jsonItem.getString("start")));
+//				} else {
+//					newItem.setStartDate(Utils.clearDate(new Date()));
+//					itemIncomplete = true;
+//				}
+
+//				int duration = 1; // entweder das gelieferte Endedatum nehmen,
+//									// oder die Duration oder 1
+//				// if (jsonItem.hasKey("end")) {
+//				// newItem.setEnd(jsonDateToDate(jsonItem.getString("end")));
+//				// }
+//				// else
+//				if (jsonItem.hasKey("duration") && !jsonItem.getString("duration").equals("null")) {
+//					duration = Integer.parseInt(jsonItem.getString("duration"));
+//				}
+//
+//				Calendar c = Calendar.getInstance();
+//				c.setTime(newItem.getStartDate());
+//				c.add(Calendar.DAY_OF_YEAR, duration);
+//				newItem.setEndDate(c.getTime());
+
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				itemIncomplete = true;
+//			}
 
 			// Person über dataManager laden
-			if (jsonItem.hasKey("userId")) {
-				newItem.setPersonOnDuty(entityService.getById(AppUser.class, UUID.fromString(jsonItem.getString("userId"))));
-			} else {
-				itemIncomplete = true;
-			}
+//			if (jsonItem.hasKey("userId")) {
+//				newItem.setPersonOnDuty(
+//						entityService.getById(AppUser.class, UUID.fromString(jsonItem.getString("userId"))));
+//			} else {
+//				itemIncomplete = true;
+//			}
 
 			// Site über dataManager laden
-			if (jsonItem.hasKey("siteId") && !jsonItem.getString("siteId").equals("null")) {
-				sitesDs.refresh();
-				newItem.getOperationPeriod().setSite(sitesDs.getItem(UUID.fromString(jsonItem.getString("siteId"))));
-			} else {
-				// itemIncomplete = true; nicht jeder Dienst braucht eine Site,
-				// wenn doch kann manuell nachgepflegt werden.
-			}
+//			if (jsonItem.hasKey("siteId") && !jsonItem.getString("siteId").equals("null")) {
+//				sitesDs.refresh();
+//				UUID siteId = UUID.fromString(jsonItem.getString("siteId"));
+//				OperationPeriod operationPeriod = timelineDTOService.getOperationPeriod(siteId, newItem.getStartDate(),
+//						newItem.getEndDate());
+//				AttendencePeriod ap = (AttendencePeriod) newItem;
+//				ap.setOperationPeriod(operationPeriod);
+//			} else {
+//				// itemIncomplete = true; nicht jeder Dienst braucht eine Site,
+//				// wenn doch kann manuell nachgepflegt werden.
+//			}
 
 			// FunctionCategory über dataManager laden
-			if (jsonItem.hasKey("functionCategoryId")) {
-				functionCategoriesDs.refresh();
-//				newItem.setFunctionCategory(
-//						functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
-			} else {
-				itemIncomplete = true;
-			}
+//			if (jsonItem.hasKey("functionCategoryId")) {
+//				functionCategoriesDs.refresh();
+//				// newItem.setFunctionCategory(
+//				// functionCategoriesDs.getItem(UUID.fromString(jsonItem.getString("functionCategoryId"))));
+//			} else {
+//				itemIncomplete = true;
+//			}
 
 			if (itemIncomplete) {
-				openEditor(newItem, OpenType.DIALOG).addCloseListener(new CloseListener() {
+				final Period item = newItem;
+				openEditor(item, OpenType.DIALOG).addCloseListener(new CloseListener() {
 
 					@Override
 					public void windowClosed(String actionId) {
-						TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,
+						TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(item,
 								UserPreferencesContext.Rotaplan);
 						rotaplan.addTimelineItem(timelineItem);
 						isCalledAlready = false;
@@ -217,9 +245,10 @@ public class RotaTimeline extends AbstractWindow {
 				;
 			} else {
 
-				shiftPeriodDs.setItem((AttendencePeriod) newItem);
-				shiftPeriodsDs.updateItem(newItem);
-				getDsContext().commit();
+				// shiftPeriodDs.setItem((AttendencePeriod) newItem);
+				// shiftPeriodsDs.updateItem(newItem);
+				// getDsContext().commit();
+				dataManager.commit(newItem);
 				TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,
 						UserPreferencesContext.Rotaplan);
 				rotaplan.addTimelineItem(timelineItem);
@@ -227,20 +256,34 @@ public class RotaTimeline extends AbstractWindow {
 			}
 		}
 
-
 		@Override
 		public void itemMoved(JsonObject jsonItem) {
-			shiftPeriodsDs.refresh();
-			ShiftPeriod dutyPeriod = shiftPeriodsDs.getItem(UUID.fromString(jsonItem.getString("id")));
+
+			// hier können sowohl Attendence als auch Absence kommen
+			
+			ShiftPeriod shiftPeriod = loadPeriod(jsonItem);
+			// ShiftPeriod shiftPeriod=
+			// entityService.getShiftPeriod(cls,UUID.fromString(jsonItem.getString("id")
+			// ));
+
 			if (jsonItem.hasKey("group")) {
 				// wenn die Person geändert wurde
-				if (!dutyPeriod.getPersonOnDuty().getId().toString().equals(jsonItem.getString("group"))) {
-					dutyPeriod.setPersonOnDuty(entityService.getById(AppUser.class, UUID.fromString(jsonItem.getString("group"))));
+				if (!shiftPeriod.getPersonOnDuty().getId().toString().equals(jsonItem.getString("group"))) {
+					shiftPeriod.setPersonOnDuty(
+							entityService.getById(AppUser.class, UUID.fromString(jsonItem.getString("group"))));
 				}
 			}
 			try {
-				dutyPeriod.setStart(jsonDateToDate(jsonItem.getString("start")));
-				dutyPeriod.setEnd(jsonDateToDate(jsonItem.getString("end")));
+				shiftPeriod.setStartDate(jsonDateToDate(jsonItem.getString("start")));
+				shiftPeriod.setEndDate(jsonDateToDate(jsonItem.getString("end")));
+				if (shiftPeriod instanceof AttendencePeriod) {
+					AttendencePeriod p = ((AttendencePeriod) shiftPeriod);
+					if (p.getOperationPeriod() != null) {
+						OperationPeriod operationPeriod = timelineDTOService.getOperationPeriod(
+								p.getOperationPeriod().getSite().getId(), p.getStartDate(), p.getEndDate());
+						((AttendencePeriod) shiftPeriod).setOperationPeriod(operationPeriod);
+					}
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -248,13 +291,47 @@ public class RotaTimeline extends AbstractWindow {
 
 			// getDsContext().commit();//den Context vorher committen, sonst
 			// wird beim schließen gefragt.
-			shiftPeriodDs.setItem(dutyPeriod);
+			// shiftPeriodDs.setItem(shiftPeriod);
 			// dutyPeriodDs.commit();
-			getDsContext().commit();
-			dutyPeriod = shiftPeriodsDs.getItem(dutyPeriod.getId());
-			TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(dutyPeriod,
+			// getDsContext().commit();
+			// shiftPeriod = shiftPeriodsDs.getItem(shiftPeriod.getId());
+			TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(shiftPeriod,
 					UserPreferencesContext.Rotaplan);
+
+			CommitContext commitContext = new CommitContext(shiftPeriod);
+			dataManager.commit(commitContext);
 			rotaplan.addTimelineItem(timelineItem);
+
+		}
+
+		private ShiftPeriod loadPeriod(JsonObject jsonItem) {
+			ShiftPeriod shiftPeriod = null;
+			Class<?> cls = null;
+			try {
+				cls = Class.forName(jsonItem.getString("className"));
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			if (cls.equals(AttendencePeriod.class)) {
+				shiftPeriod = loadAttendencePeriod(UUID.fromString(jsonItem.getString("id")));
+			} else if (cls.equals(AbsencePeriod.class)) {
+				shiftPeriod = loadAbsencePeriod(UUID.fromString(jsonItem.getString("id")));
+			}
+			return shiftPeriod;
+		}
+
+		private ShiftPeriod loadAttendencePeriod(UUID uuid) {
+			LoadContext<AttendencePeriod> loadContext = LoadContext.create(AttendencePeriod.class).setId(uuid)
+					.setView("attendencePeriod-view");
+			return dataManager.load(loadContext);
+		}
+
+		private ShiftPeriod loadAbsencePeriod(UUID uuid) {
+			LoadContext<AbsencePeriod> loadContext = LoadContext.create(AbsencePeriod.class).setId(uuid)
+					.setView("absencePeriod-view");
+			return dataManager.load(loadContext);
 		}
 
 		@Override

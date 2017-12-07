@@ -93,12 +93,12 @@ public class PersistenceTools {
                     result.add(property.getName());
             }
         } else {
-//            PropertyChangeListener propertyChangeListener = ((ChangeTracker) entity)._persistence_getPropertyChangeListener();
-//            if (propertyChangeListener == null)
-//                throw new IllegalStateException("Entity '" + entity + "' is a ChangeTracker but has no PropertyChangeListener");
-//            ObjectChangeSet objectChanges = ((AttributeChangeListener) propertyChangeListener).getObjectChangeSet();
-//            if (objectChanges != null) // can be null for example in AFTER_DELETE entity listener
-//                result.addAll(objectChanges.getChangedAttributeNames());
+            PropertyChangeListener propertyChangeListener = ((ChangeTracker) entity)._persistence_getPropertyChangeListener();
+            if (propertyChangeListener == null)
+                throw new IllegalStateException("Entity '" + entity + "' is a ChangeTracker but has no PropertyChangeListener");
+            ObjectChangeSet objectChanges = ((AttributeChangeListener) propertyChangeListener).getObjectChangeSet();
+            if (objectChanges != null) // can be null for example in AFTER_DELETE entity listener
+                result.addAll(objectChanges.getChangedAttributeNames());
         }
         return result;
     }

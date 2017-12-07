@@ -13,6 +13,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import javax.persistence.PrimaryKeyJoinColumn;
 import com.haulmont.cuba.core.entity.AppFolder;
 
+@Table(name = "LINEUP_OPERATION_PERIOD")
 @Entity(name = "lineup$OperationPeriod")
 @NamePattern(" - , |")
 public class OperationPeriod extends SitePeriod {
@@ -24,7 +25,9 @@ public class OperationPeriod extends SitePeriod {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PARENT_PERIOD_ID")
 	protected OperationPeriod parentPeriod;
-
+	public void readDto(PeriodJsonDTO dto) {
+		super.readDto(dto);
+	}
 	public void setAttendencePeriods(List<AttendencePeriod> attendencePeriods) {
 		this.attendencePeriods = attendencePeriods;
 	}

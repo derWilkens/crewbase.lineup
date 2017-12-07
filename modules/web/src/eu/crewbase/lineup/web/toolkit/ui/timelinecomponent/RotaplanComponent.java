@@ -1,5 +1,6 @@
 package eu.crewbase.lineup.web.toolkit.ui.timelinecomponent;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,106 +17,124 @@ import eu.crewbase.lineup.entity.dto.TimelineGroup;
 import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.Period;
 
-
-@JavaScript({"rotaplan-connector.js", "vis.js"})
-@StyleSheet({"vis.css", "timeline.css"})
+@JavaScript({ "rotaplan-connector.js", "vis.js" })
+@StyleSheet({ "vis.css", "timeline.css" })
 public class RotaplanComponent extends AbstractJavaScriptComponent {
-	   
+
 	private static final long serialVersionUID = -1963421147896570853L;
-	
+
 	private HashMap<String, TimelineDTO> dtoList;
-	
-    public interface RotaplandChangeListener {
-		void itemAdded(JsonObject jsonItem);
+
+	public interface RotaplandChangeListener {
+		void itemAdded(JsonObject jsonItem) throws RuntimeException;
 		void itemMoved(JsonObject jsonItem);
 		void itemDeleted(JsonObject jsonItem);
 		void editItem(String id);
 		void addSubItem(JsonObject jsonItem);
-    }
+	}
 
-    private RotaplandChangeListener listener;
-	
+	private RotaplandChangeListener listener;
+
 	public RotaplanComponent() {
 		getState().timelineItems = new ArrayList<TimelineItem>();
 		getState().timelineGroups = new ArrayList<TimelineGroup>();
 		getState().dutyPeriodTemplates = new ArrayList<DutyPeriodDTO>();
-		
-		dtoList = new HashMap<String,TimelineDTO>();
-		
+
+		dtoList = new HashMap<String, TimelineDTO>();
+
 		addFunction("itemAdded", arguments -> {
-            listener.itemAdded(arguments.getObject(0));
-        });
+			try {
+				listener.itemAdded(arguments.getObject(0));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 		addFunction("itemMoved", arguments -> {
-            listener.itemMoved(arguments.getObject(0));
-        });
+			listener.itemMoved(arguments.getObject(0));
+		});
 		addFunction("itemDeleted", arguments -> {
-            listener.itemDeleted(arguments.getObject(0));
-        });
+			listener.itemDeleted(arguments.getObject(0));
+		});
 		addFunction("editItem", arguments -> {
-            listener.editItem(arguments.getString(0));
-        });
+			listener.editItem(arguments.getString(0));
+		});
 	}
 
-    @Override
-    protected TimelineComponentState getState() {
-        return (TimelineComponentState) super.getState();
-    }
-    
+	@Override
+	protected TimelineComponentState getState() {
+		return (TimelineComponentState) super.getState();
+	}
+
 	public String getStart() {
 		return getState().start;
 	}
+
 	public void setStart(String start) {
 		getState().start = start;
 	}
+
 	public String getEnd() {
 		return getState().end;
 	}
+
 	public void setEnd(String end) {
 		getState().end = end;
 	}
+
 	public String getFormat() {
 		return getState().format;
 	}
+
 	public void setFormat(String format) {
 		getState().format = format;
 	}
+
 	public String getDataAttributes() {
 		return getState().dataAttributes;
 	}
+
 	public void setDataAttributes(String dataAttributes) {
 		getState().dataAttributes = dataAttributes;
 	}
+
 	public Collection<TimelineGroup> getTimelineGroups() {
 		return getState().timelineGroups;
 	}
+
 	public void setTimelineGroups(List<TimelineGroup> timelineGroups) {
 		getState().timelineGroups = timelineGroups;
 	}
+
 	public Collection<TimelineItem> getTimelineItems() {
 		return getState().timelineItems;
 	}
+
 	public void setTimelineItems(List<TimelineItem> timelineItems) {
 		getState().timelineItems = timelineItems;
 	}
+
 	public Collection<DutyPeriodDTO> getPeriodTemplate() {
 		return getState().dutyPeriodTemplates;
 	}
+
 	public void setPeriodTemplate(List<DutyPeriodDTO> dutyPeriodTemplates) {
 		getState().dutyPeriodTemplates = dutyPeriodTemplates;
-	}	
-    public RotaplandChangeListener getListener() {
-        return listener;
-    }
-    public void setListener(RotaplandChangeListener listener) {
-        this.listener = listener;
-    }
+	}
+
+	public RotaplandChangeListener getListener() {
+		return listener;
+	}
+
+	public void setListener(RotaplandChangeListener listener) {
+		this.listener = listener;
+	}
 
 	public void addDTO(String key, TimelineDTO dto) {
 		getState().timelineItems.clear();
-		getState().timelineGroups.clear(); 
+		getState().timelineGroups.clear();
 		getState().dutyPeriodTemplates.clear();
 
-		
 		dtoList.put(key, dto);
 		for (TimelineDTO timelineDTO : dtoList.values()) {
 			getState().timelineItems.addAll(timelineDTO.getTimelineItemList());
@@ -131,14 +150,14 @@ public class RotaplanComponent extends AbstractJavaScriptComponent {
 
 	public void removeItem(Period period) {
 		boolean removed = getState().timelineItems.removeIf(i -> i.getId().equals(period.getId().toString()));
-		if(!removed){
-		TimelineItem removeItem = null;
-		for(TimelineItem item:getState().timelineItems){
-			if(item.getId().equals(period.getId().toString())){
-				removeItem = item;
+		if (!removed) {
+			TimelineItem removeItem = null;
+			for (TimelineItem item : getState().timelineItems) {
+				if (item.getId().equals(period.getId().toString())) {
+					removeItem = item;
+				}
 			}
 		}
-		}
-		
+
 	}
 }

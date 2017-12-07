@@ -11,6 +11,9 @@ import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.Entity;
 
 import eu.crewbase.lineup.entity.coredata.AppUser;
+import eu.crewbase.lineup.entity.period.AbsencePeriod;
+import eu.crewbase.lineup.entity.period.AttendencePeriod;
+import eu.crewbase.lineup.entity.period.ShiftPeriod;
 
 @Service(EntityService.NAME)
 public class EntityServiceBean implements EntityService {
@@ -19,19 +22,10 @@ public class EntityServiceBean implements EntityService {
 	private Persistence persistence;
 
 	@Override
-	public AppUser getAppUser(UUID appUserId) {
-		try (Transaction tx = persistence.createTransaction()) {
-			return persistence.getEntityManager().find(AppUser.class, appUserId);
-
-		}
-	}
-	
-	@Override
 	public <T extends Entity<K>, K> T getById(Class<T> entityClass, K id){
 		try (Transaction tx = persistence.createTransaction()) {
 			return persistence.getEntityManager().find(entityClass, id);
 
 		}
 	}
-	
 }

@@ -167,8 +167,8 @@ public class PeriodImportServiceBean implements PeriodImportService {
 //						tmpCampaign.setFunctionCategory(kampagne);
 //					}
 				}
-				tmpCampaign.setStart(importItem.getStartDate());
-				tmpCampaign.setEnd(importItem.getEndDate());
+				tmpCampaign.setStartDate(importItem.getStartDate());
+				tmpCampaign.setEndDate(importItem.getEndDate());
 
 				if (!error) {
 					persistence.getEntityManager().persist(tmpCampaign);

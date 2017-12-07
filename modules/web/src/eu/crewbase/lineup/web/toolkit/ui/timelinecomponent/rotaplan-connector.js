@@ -53,6 +53,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 				newItem.functionCategoryId = item.functionCategoryId;
 				newItem.duration = item.defaultDuration;
 				newItem.userId = item.group;
+				newItem.className = item.className;
 				connector.itemAdded(newItem);
 				//callback(item); // send back adjusted new item 0918 RotaplanComponent
 			} else {
@@ -84,6 +85,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 				newItem.functionCategoryId = objectData.functionCategoryId;
 				newItem.duration = objectData.duration;
 				newItem.userId = objectData.group;
+				newItem.className = objectData.className;
 				connector.itemAdded(newItem);
 			} 
 		}
@@ -110,7 +112,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 
 	timeline.on('doubleClick', function(props) {
 		if (props.what = "item" && props.item) {
-			connector.editItem(props.item);
+			connector.editItem(props.item, props.className);
 		} else if (props.what = "background" && props.group) {
 			var newItem = {};
 			newItem.start = props.time;
@@ -140,10 +142,10 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 			node.setAttribute("style", "background-color: "
 					+ templateItems[i].color);
 			
-			node.setAttribute("data-functionCategoryId", templateItems[i].functionCategoryId);
+			//node.setAttribute("data-functionCategoryId", templateItems[i].functionCategoryId);
 			node.setAttribute("data-siteId", templateItems[i].siteId);
 			node.setAttribute("data-defaultDuration", templateItems[i].duration);
-			
+			node.setAttribute("data-className", templateItems[i].className);
 			node.addEventListener('dragstart', handleDragStart.bind(this),
 					false);
 			
@@ -169,9 +171,11 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 			type : 'range',
 			//target:'item',
 			functionCategoryId:event.target.getAttribute('data-functionCategoryId'),
+			className : event.target.getAttribute('data-className'),
 			siteId:event.target.getAttribute('data-siteid'),
 			defaultDuration:event.target.getAttribute('data-defaultDuration'),
 			content : event.target.innerHTML.trim()
+			
 		};
 		event.dataTransfer.setData("text", JSON.stringify(item));
 	}

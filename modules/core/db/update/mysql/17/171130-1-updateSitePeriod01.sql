@@ -1,0 +1,1 @@
+alter table LINEUP_SITE_PERIOD drop foreign key FK_LINEUP_SITE_PERIOD_PARENT_PERIOD ;

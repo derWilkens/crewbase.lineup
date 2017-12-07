@@ -21,23 +21,22 @@ import com.haulmont.cuba.security.entity.User;
 import eu.crewbase.lineup.entity.coredata.FunctionCategory;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import javax.persistence.InheritanceType;
+import javax.persistence.Inheritance;
+import eu.crewbase.lineup.entity.coredata.PeriodKind;
 
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Listeners("LINEUP_PeriodTemplateListener")
-@NamePattern("%s %s|functionCategory,site")
+@NamePattern(" %s|site")
 @Table(name = "LINEUP_PERIOD_TEMPLATE")
 @Entity(name = "lineup$PeriodTemplate")
 public class PeriodTemplate extends StandardClientEntity {
 	private static final long serialVersionUID = 7361455352235329343L;
 
-	@Lookup(type = LookupType.SCREEN)
-	@OnDeleteInverse(DeletePolicy.CASCADE)
-	@OnDelete(DeletePolicy.UNLINK)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "FUNCTION_CATEGORY_ID")
-	protected FunctionCategory functionCategory;
+	
 
 	@Column(name = "DEFAULT_DURATION")
-	protected Integer defaultDuration;
+    protected Integer defaultDuration;
 
 	@Lookup(type = LookupType.DROPDOWN)
 	@OnDeleteInverse(DeletePolicy.CASCADE)
@@ -56,6 +55,18 @@ public class PeriodTemplate extends StandardClientEntity {
 	@MetaProperty
 	protected String color;
 
+    @Column(name = "PERIOD_KIND", columnDefinition = "varchar(70)")
+    protected String periodKind;
+
+    public void setPeriodKind(PeriodKind periodKind) {
+        this.periodKind = periodKind == null ? null : periodKind.getId();
+    }
+
+    public PeriodKind getPeriodKind() {
+        return periodKind == null ? null : PeriodKind.fromId(periodKind);
+    }
+
+
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -72,13 +83,9 @@ public class PeriodTemplate extends StandardClientEntity {
 		return defaultDuration;
 	}
 
-	public void setFunctionCategory(FunctionCategory functionCategory) {
-		this.functionCategory = functionCategory;
-	}
+	
 
-	public FunctionCategory getFunctionCategory() {
-		return functionCategory;
-	}
+	
 
 	public void setSite(Site site) {
 		this.site = site;

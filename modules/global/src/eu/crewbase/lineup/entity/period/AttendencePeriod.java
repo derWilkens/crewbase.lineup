@@ -17,7 +17,10 @@ public class AttendencePeriod extends ShiftPeriod {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATION_PERIOD_ID")
 	protected OperationPeriod operationPeriod;
-
+	public void readDto(PeriodJsonDTO dto) {
+		super.readDto(dto);
+		this.operationPeriod = dto.getOperationPeriod();
+	}
 	public OperationPeriod getOperationPeriod() {
 		return operationPeriod;
 	}

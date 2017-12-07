@@ -39,18 +39,20 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
     
     @MetaProperty
     protected Boolean stack;
-    
 
 	@MetaProperty
     protected String subgroupId;
+	
+	@MetaProperty
+	protected String className;
 
 	public TimelineItem(Period entity, String content, String groupId, String subgroupId, String style) {
     	super();
     	this.id = entity.getId().toString();
 		this.content = content;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		this.start = entity.getStart() != null ? formatter.format(entity.getStart()):null;
-		this.end = entity.getEnd()!=null ? formatter.format(entity.getEnd()):null;
+		this.start = entity.getStartDate() != null ? formatter.format(entity.getStartDate()):null;
+		this.end = entity.getEndDate()!=null ? formatter.format(entity.getEndDate()):null;
 		this.group = groupId;
 		this.subgroupId = subgroupId;
 		this.style = style;
@@ -66,13 +68,14 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
     	this.id = entity.getId().toString();
 		this.content = ((Function<Period, String>) timelineConfig.getItemLabelFunction()).apply(entity);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		this.start = entity.getStart() != null ? formatter.format(entity.getStart()):null;
-		this.end = entity.getEnd()!=null ? formatter.format(entity.getEnd()):null;
+		this.start = entity.getStartDate() != null ? formatter.format(entity.getStartDate()):null;
+		this.end = entity.getEndDate()!=null ? formatter.format(entity.getEndDate()):null;
 		this.group = ((Function<Period, String>) timelineConfig.getGroupIdFunction()).apply(entity);
 		this.subgroupId = ((Function<Period, String>) timelineConfig.getParentGroupIdFunction()).apply(entity);
 		this.style = ((Function<Period, String>)timelineConfig.getStyleFunction()).apply(entity);
 		this.type = ((Function<Period, String>)timelineConfig.getTypeFunction()).apply(entity);
 		this.editable = ((Function<Period, Boolean>) timelineConfig.getEditableFunction()).apply(entity);
+		this.className = entity.getClass().getName();
 	}
 
 	public TimelineItem(Object array) {
@@ -156,6 +159,14 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
 
 	public void setStack(Boolean stacked) {
 		this.stack = stacked;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 }

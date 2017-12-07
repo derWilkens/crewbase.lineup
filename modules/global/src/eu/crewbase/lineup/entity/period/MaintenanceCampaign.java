@@ -6,6 +6,7 @@ import javax.persistence.Table;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 
+@Table(name = "LINEUP_MAINTENANCE_CAMPAIGN")
 @NamePattern("%s |campaignNumber")
 @Entity(name = "lineup$MaintenanceCampaign")
 public class MaintenanceCampaign extends SitePeriod {
@@ -13,7 +14,11 @@ public class MaintenanceCampaign extends SitePeriod {
 
 	@Column(name = "CAMPAIGN_NUMBER", length = 10)
 	protected String campaignNumber;
-
+	
+	public void readDto(PeriodJsonDTO dto) {
+		super.readDto(dto);
+	}
+	
 	public void setCampaignNumber(String campaignNumber) {
 		this.campaignNumber = campaignNumber;
 	}

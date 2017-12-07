@@ -85,7 +85,7 @@ public class CapServiceBean implements CapService {
 		return persistence.getEntityManager()
 				.createQuery(
 						"SELECT c from lineup$Certificate c where c.expirationDate >= :endDate and c.appUser = :appUser and c.qualificationType = :qualificationType")
-				.setParameter("endDate", dutyPeriod.getEnd()).setParameter("appUser", dutyPeriod.getPersonOnDuty())
+				.setParameter("endDate", dutyPeriod.getEndDate()).setParameter("appUser", dutyPeriod.getPersonOnDuty())
 				.setParameter("qualificationType", qualificationType).getResultList();
 	}
 
@@ -94,7 +94,7 @@ public class CapServiceBean implements CapService {
 		return persistence.getEntityManager()
 				.createQuery(
 						"SELECT c from lineup$Certificate c where c.expirationDate >= :endDate and c.appUser.id = :appUser")
-				.setParameter("endDate", dutyPeriod.getEnd()).setParameter("appUser", dutyPeriod.getPersonOnDuty())
+				.setParameter("endDate", dutyPeriod.getEndDate()).setParameter("appUser", dutyPeriod.getPersonOnDuty())
 				.getResultList();
 	}
 

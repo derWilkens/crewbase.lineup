@@ -24,10 +24,11 @@
         <fieldGroup id="fieldGroup"
                     datasource="dutyPeriodTemplateDs">
             <column width="250px">
-                <field property="functionCategory"/>
                 <field property="defaultDuration"/>
                 <field optionsDatasource="sitesDs"
                        property="site"/>
+                <field property="type"/>
+                <field property="periodKind"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
