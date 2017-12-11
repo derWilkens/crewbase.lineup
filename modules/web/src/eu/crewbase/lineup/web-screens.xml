@@ -61,4 +61,8 @@
             template="eu/crewbase/lineup/web/operationperiod/operation-period-browse.xml"/>
     <screen id="lineup$PeriodTemplate.browse"
             template="eu/crewbase/lineup/web/periodtemplate/period-template-browse.xml"/>
+    <screen id="screen"
+            template="eu/crewbase/lineup/gui/screens/screen.xml"/>
+    <screen id="ShiftPeriodChooser"
+            template="eu/crewbase/lineup/web/rotaplan/shift-period-chooser.xml"/>
 </screen-config>

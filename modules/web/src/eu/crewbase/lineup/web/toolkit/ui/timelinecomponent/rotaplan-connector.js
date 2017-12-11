@@ -16,8 +16,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 
 	// specify options
 	var options = {
-
-			locale: 'de',
+		locale: 'de',
 		stack: false,
 		start: new Date(),
 		end: new Date(1000 * 60 * 60 * 24 * 14 + (new Date()).valueOf()),
@@ -43,23 +42,23 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 			else
 				return 1;
 		},
-		onAdd : function(item, callback) {
-			if (item) {
-				// item.content = value;
-				var newItem = {};
-				newItem.start = item.start;
-				newItem.end = item.end;
-				newItem.siteId = item.siteId;
-				newItem.functionCategoryId = item.functionCategoryId;
-				newItem.duration = item.defaultDuration;
-				newItem.userId = item.group;
-				newItem.className = item.className;
-				connector.itemAdded(newItem);
-				//callback(item); // send back adjusted new item 0918 RotaplanComponent
-			} else {
-				callback(null); // cancel item creation
-			}
-		},
+//		onAdd : function(item, callback) {
+//			if (item) {
+//				var newItem = {};
+//				newItem.start = item.start;
+//				newItem.end = item.end;
+//				newItem.siteId = item.siteId;
+//				//newItem.functionCategoryId = item.functionCategoryId;
+//				newItem.duration = item.defaultDuration;
+//				newItem.userId = item.group;
+//				newItem.clazzName = item.clazzName;
+//				connector.itemAdded(newItem);
+//				callback(item); // 1938 send back adjusted new item
+//				
+//			} else {
+//				callback(null); // cancel item creation
+//			}
+//		},
 
 		onMove : function(item, callback) {
 			connector.itemMoved(item);
@@ -74,20 +73,20 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 			} else {
 				callback(null);
 			}
-		},
-
-		onDropObjectOnItem : function(objectData, item) {
-			if (objectData) {
-				var newItem = {};
-				newItem.start = objectData.start;
-				newItem.end = objectData.end;
-				newItem.siteId = objectData.siteId;
-				newItem.functionCategoryId = objectData.functionCategoryId;
-				newItem.duration = objectData.duration;
-				newItem.userId = objectData.group;
-				newItem.className = objectData.className;
-				connector.itemAdded(newItem);
-			} 
+//		},
+//
+//		onDropObjectOnItem : function(objectData, item) {
+//			if (objectData) {
+//				var newItem = {};
+//				newItem.start = objectData.start;
+//				newItem.end = objectData.end;
+//				newItem.siteId = objectData.siteId;
+//				//newItem.functionCategoryId = objectData.functionCategoryId;
+//				newItem.duration = objectData.duration;
+//				newItem.userId = objectData.group;
+//				newItem.clazzName = objectData.clazzName;
+//				connector.itemAdded(newItem);
+//			} 
 		}
 	
 		
@@ -112,7 +111,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 
 	timeline.on('doubleClick', function(props) {
 		if (props.what = "item" && props.item) {
-			connector.editItem(props.item, props.className);
+			connector.editItem(props.item, props.clazzName);
 		} else if (props.what = "background" && props.group) {
 			var newItem = {};
 			newItem.start = props.time;
@@ -143,9 +142,9 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 					+ templateItems[i].color);
 			
 			//node.setAttribute("data-functionCategoryId", templateItems[i].functionCategoryId);
-			node.setAttribute("data-siteId", templateItems[i].siteId);
-			node.setAttribute("data-defaultDuration", templateItems[i].duration);
-			node.setAttribute("data-className", templateItems[i].className);
+//			node.setAttribute("data-siteId", templateItems[i].siteId);
+//			node.setAttribute("data-defaultDuration", templateItems[i].duration);
+//			node.setAttribute("data-clazzName", templateItems[i].clazzName);
 			node.addEventListener('dragstart', handleDragStart.bind(this),
 					false);
 			
@@ -164,16 +163,16 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 	
 	function handleDragStart(event) {
 		dragSrcEl = event.target;
+		//target:'item',
+//			functionCategoryId:event.target.getAttribute('data-functionCategoryId'),
 
 		event.dataTransfer.effectAllowed = 'move';
 		var item = {
 			id : new Date(),
 			type : 'range',
-			//target:'item',
-			functionCategoryId:event.target.getAttribute('data-functionCategoryId'),
-			className : event.target.getAttribute('data-className'),
-			siteId:event.target.getAttribute('data-siteid'),
-			defaultDuration:event.target.getAttribute('data-defaultDuration'),
+			//clazzName : event.target.getAttribute('data-clazzName'),
+			//siteId:event.target.getAttribute('data-siteid'),
+			//defaultDuration:event.target.getAttribute('data-defaultDuration'),
 			content : event.target.innerHTML.trim()
 			
 		};

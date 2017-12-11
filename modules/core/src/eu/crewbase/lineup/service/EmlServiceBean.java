@@ -95,7 +95,7 @@ public class EmlServiceBean extends PreferencesService implements EmlService {
 	private List<AttendencePeriod> getRequiredRoleDutyPeriods(Site site) {
 		List<AttendencePeriod> comingModeOfOperationPeriods = getComingModeOfOperationPeriods(site);
 		if (comingModeOfOperationPeriods.size() == 0) {
-			throw new RuntimeException("Bitte zuerst die Bemannungsphasen eintragen. (Stammdaten - Bemannung");
+			throw new RuntimeException("Bitte zuerst die Bemannungsphasen eintragen. (Stammdaten -> Bemannung");
 		}
 		
 		List<AttendencePeriod> requiredRoleDutyPeriods = new ArrayList<AttendencePeriod>();

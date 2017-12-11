@@ -2,10 +2,10 @@ package eu.crewbase.lineup.service;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.UUID;
 
 import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.coredata.AppUser;
+import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.TimelineDTO;
 import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.OperationPeriod;
@@ -17,5 +17,5 @@ public interface TimelineService {
     TimelineDTO getRotoplanDto();
     Collection<AppUser> getPersonsOnDuty();
     TimelineItem periodToTimelineItem(Period period, UserPreferencesContext context);
-	OperationPeriod getOperationPeriod(UUID siteId, Date start, Date end);
+	OperationPeriod getOperationPeriod(Site site, Date start, Date end);
 }

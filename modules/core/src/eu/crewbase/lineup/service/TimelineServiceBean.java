@@ -158,21 +158,18 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 				}
 			}
 			if (template.getPeriodKind() != null) {
-				templateDTO.setClassName(template.getPeriodKind().getId());
+				templateDTO.setClazzName(template.getPeriodKind().getId());
 			}
-//			TODO: irgendwie in der Template-Pflege den Klassennamen auswählbar machen
-//			vielleicht aus der AppConfig? Eigentlich genauso kompliziert wie im SourceCode
-					
-			templateDTO.setClassName(MaintenanceCampaign.class.getName());
-			// templateDTO.setCategoryName(template.getFunctionCategory().getCategoryName());
 			templateDTO.setDuration(template.getDefaultDuration());
 			dutyPeriodTemplates.add(templateDTO);
 		}
-		DutyPeriodDTO templateDTO = new DutyPeriodDTO();
-		templateDTO.setClassName(AbsencePeriod.class.getName());
-		templateDTO.setDuration(7);
-		templateDTO.setCategoryName("Abwesend");
-		dutyPeriodTemplates.add(templateDTO);
+		
+		DutyPeriodDTO absenceTemplate = new DutyPeriodDTO();
+		absenceTemplate.setClazzName(AbsencePeriod.class.getName());
+		absenceTemplate.setDuration(7);
+		absenceTemplate.setCategoryName("Abwesend");
+		dutyPeriodTemplates.add(absenceTemplate);
+		
 		return dutyPeriodTemplates;
 	}
 
@@ -523,12 +520,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		}
 
 		try (Transaction tx = persistence.createTransaction()) {
-			//period = persistence.getEntityManager().find(AttendencePeriod.class, period.getId()); 
-			// war
-			// mal
-			// merge,
-			// aber
-			// warum?
+			period = persistence.getEntityManager().find(period.getClass(), period.getId()); 
 			item = new TimelineItem(period, timelineConfig);
 			tx.commit();
 		}
@@ -596,19 +588,18 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 	}
 
 	@Override
-	public OperationPeriod getOperationPeriod(UUID siteId, Date start, Date end) {
+	public OperationPeriod getOperationPeriod(Site site, Date start, Date end) {
 		try (Transaction tx = persistence.createTransaction()) {
 			return (OperationPeriod) persistence.getEntityManager()
 					.createQuery(
-							"SELECT e from lineup$OperationPeriod e where e.site.id = :siteId and e.startDate <= :start and e.endDate >= :end")
-					.setParameter("siteId", siteId).setParameter("start", start).setParameter("end", end)
+							"SELECT e from lineup$OperationPeriod e where e.site = :site and e.startDate <= :start and e.endDate >= :end")
+					.setParameter("site", site).setParameter("start", start).setParameter("end", end)
 					.getSingleResult();
 
 		} catch (Exception e) {
-			System.out.println("refresh!");
 			System.out.println("_______________________Keine OperationPeriod gefunden");
+			throw new RuntimeException("Keine OperationPeriod gefunden");
 		}
-		return null;
 	}
 
 }

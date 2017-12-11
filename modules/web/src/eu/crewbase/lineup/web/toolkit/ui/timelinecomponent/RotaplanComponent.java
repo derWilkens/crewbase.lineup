@@ -1,6 +1,5 @@
 package eu.crewbase.lineup.web.toolkit.ui.timelinecomponent;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class RotaplanComponent extends AbstractJavaScriptComponent {
 	private HashMap<String, TimelineDTO> dtoList;
 
 	public interface RotaplandChangeListener {
-		void itemAdded(JsonObject jsonItem) throws RuntimeException;
+		void itemAdded(JsonObject jsonItem);
 		void itemMoved(JsonObject jsonItem);
 		void itemDeleted(JsonObject jsonItem);
 		void editItem(String id);
@@ -43,12 +42,7 @@ public class RotaplanComponent extends AbstractJavaScriptComponent {
 		dtoList = new HashMap<String, TimelineDTO>();
 
 		addFunction("itemAdded", arguments -> {
-			try {
-				listener.itemAdded(arguments.getObject(0));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			listener.itemAdded(arguments.getObject(0));
 		});
 		addFunction("itemMoved", arguments -> {
 			listener.itemMoved(arguments.getObject(0));

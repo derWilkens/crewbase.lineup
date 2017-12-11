@@ -20,7 +20,7 @@ public class DutyPeriodDTO extends BaseUuidEntity {
 	protected String itemDesignation;
 
 	@MetaProperty
-	protected String className;
+	protected String clazzName;
 
 	@MetaProperty
 	protected Date startDate;
@@ -37,12 +37,12 @@ public class DutyPeriodDTO extends BaseUuidEntity {
 	@MetaProperty
 	protected String color;
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setClazzName(String className) {
+		this.clazzName = className;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getClazzName() {
+		return clazzName;
 	}
 
 	public void setItemDesignation(String itemDesignation) {

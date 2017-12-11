@@ -122,6 +122,7 @@ public class EmlTimeline extends AbstractWindow {
 			} catch (Exception e1) {
 				// die displayed Site ist nicht bei den prefered Sites, macht
 				// aber nix. Wir machen weiter
+				e1.printStackTrace();
 			}
 		}
 

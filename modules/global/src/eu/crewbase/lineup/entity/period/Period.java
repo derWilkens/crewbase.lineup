@@ -26,12 +26,15 @@ public class Period extends StandardClientEntity {
 
 	@Column(name = "REMARK")
 	protected String remark;
-	
+
 	public void readDto(PeriodJsonDTO dto) {
+		if (dto.getEntityId() != null) {
+			this.id = dto.getEntityId();
+		}
 		this.endDate = dto.getEndDate();
 		this.startDate = dto.getStartDate();
 	}
-	
+
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}

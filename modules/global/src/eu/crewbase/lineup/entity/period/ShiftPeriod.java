@@ -33,6 +33,7 @@ public class ShiftPeriod extends Period {
 
 	public void readDto(PeriodJsonDTO dto) {
 		super.readDto(dto);
+		setPersonOnDuty(dto.getPersonOnDuty());
 	}
 	
 	public AppUser getPersonOnDuty() {

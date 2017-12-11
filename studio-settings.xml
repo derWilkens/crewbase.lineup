@@ -5,4 +5,14 @@
                 previewMode="true"
                 reference="eu/crewbase/lineup/web/site/site-period-choose.xml"/>
     </screenDesigner>
+    <dbScripts>
+        <excludes>
+            <mysql>
+                <item name="171208-2-updatePeriodTemplate.sql">
+                    <![CDATA[alter table LINEUP_PERIOD_TEMPLATE drop column PERIOD_KIND cascade ;
+alter table LINEUP_PERIOD_TEMPLATE add column PERIOD_KIND varchar(70) ;]]>
+                </item>
+            </mysql>
+        </excludes>
+    </dbScripts>
 </studio>

@@ -9,6 +9,8 @@
         <item screen="lineup$AttendencePeriod.browse"/>
         <item screen="lineup$OperationPeriod.browse"/>
         <item screen="lineup$PeriodTemplate.browse"/>
+        <item screen="screen"/>
+        <item screen="ShiftPeriodChooser"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"

@@ -44,7 +44,7 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
     protected String subgroupId;
 	
 	@MetaProperty
-	protected String className;
+	protected String clazzName;
 
 	public TimelineItem(Period entity, String content, String groupId, String subgroupId, String style) {
     	super();
@@ -75,7 +75,7 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
 		this.style = ((Function<Period, String>)timelineConfig.getStyleFunction()).apply(entity);
 		this.type = ((Function<Period, String>)timelineConfig.getTypeFunction()).apply(entity);
 		this.editable = ((Function<Period, Boolean>) timelineConfig.getEditableFunction()).apply(entity);
-		this.className = entity.getClass().getName();
+		this.clazzName = entity.getClass().getName();
 	}
 
 	public TimelineItem(Object array) {
@@ -161,12 +161,12 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
 		this.stack = stacked;
 	}
 
-	public String getClassName() {
-		return className;
+	public String getClazzName() {
+		return clazzName;
 	}
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setClazzName(String className) {
+		this.clazzName = className;
 	}
 
 }
