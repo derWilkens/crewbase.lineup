@@ -333,4 +333,10 @@
         <property name="personOnDuty"
                   view="_minimal"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.period.AttendencePeriod"
+          name="attendencePeriod-edit-view">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+    </view>
 </views>

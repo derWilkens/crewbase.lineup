@@ -34,6 +34,9 @@ public class Period extends StandardClientEntity {
 		this.endDate = dto.getEndDate();
 		this.startDate = dto.getStartDate();
 	}
+	public Boolean isValid(){
+		return (endDate != null && startDate != null);
+	}
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;

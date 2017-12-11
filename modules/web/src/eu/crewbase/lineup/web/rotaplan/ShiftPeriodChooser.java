@@ -17,7 +17,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 	private String clazzName;
 	
 	public void r1c1(){
-		site = service.getSiteByItemDesignation("BWAL");
+		site = service.getSiteByItemDesignation("SWAL");
 		duration = 7;
 		clazzName = AttendencePeriod.class.getName();
 		this.close(CLOSE_ACTION_ID);

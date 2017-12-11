@@ -19,6 +19,7 @@ import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.UserSessionSource;
 
+import eu.crewbase.lineup.DateFormatter;
 import eu.crewbase.lineup.entity.UserPreference;
 import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.cap.coredata.Role;
@@ -42,6 +43,7 @@ import eu.crewbase.lineup.entity.period.Period;
 import eu.crewbase.lineup.entity.period.PeriodTemplate;
 import eu.crewbase.lineup.entity.period.ShiftPeriod;
 import eu.crewbase.lineup.entity.period.SitePeriod;
+import eu.crewbase.lineup.exception.OperationNotFoundException;
 
 @Service(TimelineService.NAME)
 public class TimelineServiceBean extends PreferencesService implements TimelineService {
@@ -588,7 +590,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 	}
 
 	@Override
-	public OperationPeriod getOperationPeriod(Site site, Date start, Date end) {
+	public OperationPeriod getOperationPeriod(Site site, Date start, Date end) throws OperationNotFoundException {
 		try (Transaction tx = persistence.createTransaction()) {
 			return (OperationPeriod) persistence.getEntityManager()
 					.createQuery(
@@ -598,7 +600,8 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 
 		} catch (Exception e) {
 			System.out.println("_______________________Keine OperationPeriod gefunden");
-			throw new RuntimeException("Keine OperationPeriod gefunden");
+			String errMsg = "Für den Zeitraum vom " + DateFormatter.toDDMMJJJJ(start) + " und " + DateFormatter.toDDMMJJJJ(end) + " wurde für " + site.getInstanceName() + " keine Bemannungsphase gefunden.";
+			throw new OperationNotFoundException(errMsg);
 		}
 	}
 

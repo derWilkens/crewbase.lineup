@@ -15,7 +15,9 @@ private static final long serialVersionUID = 848103393103367871L;
 	public void readDto(PeriodJsonDTO dto) {
 		super.readDto(dto);
 	}
-    
+	public Boolean isValid(){
+		return super.isValid();
+	}
 	
 
 

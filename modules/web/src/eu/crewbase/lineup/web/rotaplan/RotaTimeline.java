@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import com.haulmont.cuba.core.global.CommitContext;
@@ -39,6 +40,7 @@ import eu.crewbase.lineup.entity.period.OperationPeriod;
 import eu.crewbase.lineup.entity.period.Period;
 import eu.crewbase.lineup.entity.period.PeriodJsonDTO;
 import eu.crewbase.lineup.entity.period.ShiftPeriod;
+import eu.crewbase.lineup.exception.OperationNotFoundException;
 import eu.crewbase.lineup.service.EntityService;
 import eu.crewbase.lineup.service.TimelineService;
 import eu.crewbase.lineup.service.UserpreferencesService;
@@ -73,7 +75,8 @@ public class RotaTimeline extends AbstractWindow {
 	private CollectionDatasource<FunctionCategory, UUID> functionCategoriesDs;
 	@Inject
 	private CollectionDatasource<Site, UUID> sitesDs;
-
+	
+	
 	@Override
 	public void init(Map<String, Object> params) {
 
@@ -167,13 +170,18 @@ public class RotaTimeline extends AbstractWindow {
 								parsedItem.setSite(dialog.getSite());
 								parsedItem.setDuration(dialog.getDuration());
 								parsedItem.setClazzName(dialog.getClazzName());
+								
+								OperationPeriod operationPeriod = timelineDTOService.getOperationPeriod(parsedItem.getSite(),
+										parsedItem.getStartDate(), parsedItem.getEndDate());
 
+								parsedItem.setOperationPeriod(operationPeriod);
+								
 								Period newItem = null;
 								newItem = (Period) metadata.create(Class.forName(parsedItem.getClazzName()));
 								newItem.readDto(parsedItem);
 
 								// immer noch unvollständig und weiter detailieren
-								if (parsedItem.getItemIncomplete()) {
+								if (!newItem.isValid()) {
 									// anschließend richtigen ClassType erzeugen
 
 									final Period item = newItem;
@@ -188,10 +196,18 @@ public class RotaTimeline extends AbstractWindow {
 											isCalledAlready = false;
 										}
 									});
+								}else{
+									TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,
+											UserPreferencesContext.Rotaplan);
+									rotaplan.addTimelineItem(timelineItem);
+									isCalledAlready = false;
+									dataManager.commit(newItem);
 								}
 							} catch (ClassNotFoundException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
+							} catch (OperationNotFoundException e) {
+								showNotification("Der gewählte Zeitraum liegt außerhalb einer Bemannungsphase.");
 							}
 						}
 					});
@@ -210,7 +226,8 @@ public class RotaTimeline extends AbstractWindow {
 
 			Exception e) {
 				// TODO Auto-generated catch block
-				showNotification("Error: " + e.getLocalizedMessage());
+				//showNotification("Error: " + e.getLocalizedMessage());
+				showNotification("<code>Fehlermeldung</code>", e.getLocalizedMessage(), NotificationType.ERROR_HTML);
 				e.printStackTrace();
 			}
 		}

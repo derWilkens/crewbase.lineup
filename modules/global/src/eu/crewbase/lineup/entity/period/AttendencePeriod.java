@@ -21,6 +21,9 @@ public class AttendencePeriod extends ShiftPeriod {
 		super.readDto(dto);
 		this.operationPeriod = dto.getOperationPeriod();
 	}
+	public Boolean isValid(){
+		return (super.isValid() && operationPeriod != null);
+	}
 	public OperationPeriod getOperationPeriod() {
 		return operationPeriod;
 	}

@@ -35,7 +35,9 @@ public class ShiftPeriod extends Period {
 		super.readDto(dto);
 		setPersonOnDuty(dto.getPersonOnDuty());
 	}
-	
+	public Boolean isValid(){
+		return (super.isValid() && personOnDuty != null);
+	}
 	public AppUser getPersonOnDuty() {
 		return personOnDuty;
 	}

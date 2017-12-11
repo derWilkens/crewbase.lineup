@@ -1,5 +1,6 @@
 package eu.crewbase.lineup.entity.period;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,6 +32,12 @@ public class PeriodJsonDTO {
 
 	public void setDuration(int duration) {
 		this.duration = duration;
+		if (this.getEndDate() == null && duration > 0) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(this.getStartDate());
+			c.add(Calendar.DAY_OF_YEAR, duration);
+			this.setEndDate(c.getTime());
+		}
 	}
 
 	public UUID getEntityId() {
@@ -66,6 +73,7 @@ public class PeriodJsonDTO {
 	}
 
 	public Boolean getItemIncomplete() {
+		
 		return itemIncomplete;
 	}
 

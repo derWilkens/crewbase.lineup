@@ -12,4 +12,9 @@ public class DateFormatter {
 		return dateFormatter.format(date);
 		
 	}
+	public static String toDDMMJJJJ(Date date){
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("DD.MM.JJJJ");
+		return dateFormatter.format(date);
+		
+	}
 }
