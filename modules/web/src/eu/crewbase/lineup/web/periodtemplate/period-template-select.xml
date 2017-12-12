@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.periodtemplate.PeriodTemplateSelect"
+        focusComponent="periodTemplatesTable"
+        lookupComponent="periodTemplatesTable"
+        messagesPack="eu.crewbase.lineup.web.periodtemplate">
+    <dsContext>
+        <collectionDatasource id="periodTemplatesDs"
+                              class="eu.crewbase.lineup.entity.period.PeriodTemplate"
+                              view="periodTemplate-choose">
+            <query>
+                <![CDATA[select e from lineup$PeriodTemplate e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="periodTemplatesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="periodTemplatesTable"
+                datasource="periodTemplatesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="periodTemplatesTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="site"/>
+                <column id="periodKind"/>
+                <column id="duration1"/>
+                <column id="duration2"/>
+                <column id="duration3"/>
+            </columns>
+            <rows datasource="periodTemplatesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="periodTemplatesTable.create"/>
+                <button id="editBtn"
+                        action="periodTemplatesTable.edit"/>
+                <button id="removeBtn"
+                        action="periodTemplatesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

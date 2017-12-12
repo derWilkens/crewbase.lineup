@@ -549,10 +549,12 @@ create table LINEUP_PERIOD_TEMPLATE (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     --
-    DEFAULT_DURATION integer,
     SITE_ID varchar(32),
     USER_ID varchar(32),
     PERIOD_KIND varchar(70),
+    DURATION1 integer,
+    DURATION2 integer,
+    DURATION3 integer,
     --
     primary key (ID)
 )^

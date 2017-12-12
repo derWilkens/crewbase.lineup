@@ -27,7 +27,7 @@ import eu.crewbase.lineup.entity.coredata.PeriodKind;
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Listeners("LINEUP_PeriodTemplateListener")
-@NamePattern(" %s|site")
+@NamePattern(" %s|site,periodKind")
 @Table(name = "LINEUP_PERIOD_TEMPLATE")
 @Entity(name = "lineup$PeriodTemplate")
 public class PeriodTemplate extends StandardClientEntity {
@@ -35,8 +35,7 @@ public class PeriodTemplate extends StandardClientEntity {
 
 	
 
-	@Column(name = "DEFAULT_DURATION")
-    protected Integer defaultDuration;
+	
 
 	@Lookup(type = LookupType.DROPDOWN)
 	@OnDeleteInverse(DeletePolicy.CASCADE)
@@ -58,6 +57,40 @@ public class PeriodTemplate extends StandardClientEntity {
     @Column(name = "PERIOD_KIND", columnDefinition = "varchar(70)")
     protected String periodKind;
 
+    @Column(name = "DURATION1")
+    protected Integer duration1;
+
+    @Column(name = "DURATION2")
+    protected Integer duration2;
+
+    @Column(name = "DURATION3")
+    protected Integer duration3;
+
+    public void setDuration1(Integer duration1) {
+        this.duration1 = duration1;
+    }
+
+    public Integer getDuration1() {
+        return duration1;
+    }
+
+    public void setDuration2(Integer duration2) {
+        this.duration2 = duration2;
+    }
+
+    public Integer getDuration2() {
+        return duration2;
+    }
+
+    public void setDuration3(Integer duration3) {
+        this.duration3 = duration3;
+    }
+
+    public Integer getDuration3() {
+        return duration3;
+    }
+
+
     public void setPeriodKind(PeriodKind periodKind) {
         this.periodKind = periodKind == null ? null : periodKind.getId();
     }
@@ -75,13 +108,9 @@ public class PeriodTemplate extends StandardClientEntity {
 		return user;
 	}
 
-	public void setDefaultDuration(Integer defaultDuration) {
-		this.defaultDuration = defaultDuration;
-	}
+	
 
-	public Integer getDefaultDuration() {
-		return defaultDuration;
-	}
+	
 
 	
 

@@ -185,12 +185,14 @@
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           name="dutyPeriodTemplate-view">
-        <property name="defaultDuration"/>
         <property name="site">
             <property name="itemDesignation"/>
             <property name="siteName"/>
         </property>
         <property name="periodKind"/>
+        <property name="duration1"/>
+        <property name="duration2"/>
+        <property name="duration3"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           name="site-period-choose">
@@ -338,5 +340,14 @@
         <property name="startDate"/>
         <property name="endDate"/>
         <property name="remark"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
+          name="periodTemplate-choose">
+        <property name="site"
+                  view="_minimal"/>
+        <property name="periodKind"/>
+        <property name="duration1"/>
+        <property name="duration2"/>
+        <property name="duration3"/>
     </view>
 </views>

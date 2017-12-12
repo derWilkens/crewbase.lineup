@@ -29,6 +29,8 @@
                        property="site"/>
                 <field property="type"/>
                 <field property="periodKind"/>
+                <field property="duration2"/>
+                <field property="duration3"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

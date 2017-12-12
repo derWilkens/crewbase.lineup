@@ -67,4 +67,6 @@
             template="eu/crewbase/lineup/web/rotaplan/shift-period-chooser.xml"/>
     <screen id="lineup$AttendencePeriod.edit"
             template="eu/crewbase/lineup/web/attendenceperiod/attendence-period-edit.xml"/>
+    <screen id="lineup$PeriodTemplate.select"
+            template="eu/crewbase/lineup/web/periodtemplate/period-template-select.xml"/>
 </screen-config>

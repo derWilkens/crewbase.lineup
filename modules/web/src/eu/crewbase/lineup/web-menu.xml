@@ -11,6 +11,7 @@
         <item screen="lineup$PeriodTemplate.browse"/>
         <item screen="screen"/>
         <item screen="ShiftPeriodChooser"/>
+        <item screen="lineup$PeriodTemplate.select"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
