@@ -9,6 +9,11 @@
         <datasource id="attendencePeriodDs"
                     class="eu.crewbase.lineup.entity.period.AttendencePeriod"
                     view="attendencePeriod-edit-view"/>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <![CDATA[select e from lineup$Site e]]>
+        </collectionDatasource>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -21,6 +26,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="remark"/>
+                <field optionsDatasource="sitesDs"
+                       property="site"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

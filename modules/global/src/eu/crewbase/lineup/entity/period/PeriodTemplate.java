@@ -44,17 +44,16 @@ public class PeriodTemplate extends StandardClientEntity {
 	@JoinColumn(name = "SITE_ID")
 	protected Site site;
 
-	@OnDeleteInverse(DeletePolicy.CASCADE)
+	    @Column(name = "REMARK")
+    protected String remark;
+
+@OnDeleteInverse(DeletePolicy.CASCADE)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_ID")
 	protected User user;
 
-	@Transient
-	@MetaProperty
-	protected String color;
-
-    @Column(name = "PERIOD_KIND", columnDefinition = "varchar(70)")
+	    @Column(name = "PERIOD_KIND", columnDefinition = "varchar(70)")
     protected String periodKind;
 
     @Column(name = "DURATION1")
@@ -65,6 +64,18 @@ public class PeriodTemplate extends StandardClientEntity {
 
     @Column(name = "DURATION3")
     protected Integer duration3;
+
+@Column(name = "COLOR")
+    protected String color;
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
 
     public void setDuration1(Integer duration1) {
         this.duration1 = duration1;

@@ -13,7 +13,7 @@ public class DateFormatter {
 		
 	}
 	public static String toDDMMJJJJ(Date date){
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("DD.MM.JJJJ");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.YYYY");
 		return dateFormatter.format(date);
 		
 	}

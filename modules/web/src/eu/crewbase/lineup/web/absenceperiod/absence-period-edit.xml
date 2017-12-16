@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.absenceperiod.AbsencePeriodAdjustEdit"
+        datasource="absencePeriodDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.absenceperiod">
+    <dsContext>
+        <datasource id="absencePeriodDs"
+                    class="eu.crewbase.lineup.entity.period.AbsencePeriod"
+                    view="absencePeriod-adjust"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="absencePeriodDs">
+            <column width="250px">
+                <field property="startDate"/>
+                <field property="color"/>
+                <field property="endDate"/>
+                <field property="remark"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

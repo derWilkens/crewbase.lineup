@@ -17,6 +17,8 @@ public class PeriodJsonDTO {
 	private OperationPeriod operationPeriod;
 	private Site site;
 	private int duration;
+	private String color;
+	private String remark;
 
 	public Site getSite() {
 		return site;
@@ -95,6 +97,22 @@ public class PeriodJsonDTO {
 
 	public void setOperationPeriod(OperationPeriod operationPeriod) {
 		this.operationPeriod = operationPeriod;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }

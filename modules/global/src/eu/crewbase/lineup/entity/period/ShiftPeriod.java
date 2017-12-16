@@ -42,8 +42,8 @@ public class ShiftPeriod extends Period {
 		return personOnDuty;
 	}
 
-	public void setPersonOnDuty(AppUser personOnDuty) {
-		this.personOnDuty = personOnDuty;
+	public void setPersonOnDuty(AppUser person) {
+		this.personOnDuty = person;
 	}
 
 }

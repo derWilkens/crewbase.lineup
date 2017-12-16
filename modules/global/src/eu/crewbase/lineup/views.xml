@@ -193,6 +193,7 @@
         <property name="duration1"/>
         <property name="duration2"/>
         <property name="duration3"/>
+        <property name="remark"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           name="site-period-choose">
@@ -284,10 +285,15 @@
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
-          extends="_local"
-          name="periodTemplate-view">
+          name="periodTemplate-adm">
         <property name="site"
                   view="_minimal"/>
+        <property name="remark"/>
+        <property name="color"/>
+        <property name="periodKind"/>
+        <property name="duration1"/>
+        <property name="duration2"/>
+        <property name="duration3"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.OperationPeriod"
           name="operationPeriod-view">
@@ -312,6 +318,8 @@
             <property name="site"
                       view="_minimal"/>
         </property>
+        <property name="site"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.AttendencePeriod"
           name="attendencePeriod-list-view">
@@ -325,6 +333,8 @@
         <property name="endDate"/>
         <property name="remark"/>
         <property name="personOnDuty"
+                  view="_minimal"/>
+        <property name="site"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.AbsencePeriod"
@@ -340,6 +350,8 @@
         <property name="startDate"/>
         <property name="endDate"/>
         <property name="remark"/>
+        <property name="site"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           name="periodTemplate-choose">
@@ -349,5 +361,14 @@
         <property name="duration1"/>
         <property name="duration2"/>
         <property name="duration3"/>
+        <property name="remark"/>
+        <property name="color"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.period.AbsencePeriod"
+          name="absencePeriod-adjust">
+        <property name="startDate"/>
+        <property name="color"/>
+        <property name="endDate"/>
+        <property name="remark"/>
     </view>
 </views>

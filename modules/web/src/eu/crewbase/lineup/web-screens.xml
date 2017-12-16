@@ -59,14 +59,16 @@
             template="eu/crewbase/lineup/web/attendenceperiod/attendence-period-browse.xml"/>
     <screen id="lineup$OperationPeriod.browse"
             template="eu/crewbase/lineup/web/operationperiod/operation-period-browse.xml"/>
-    <screen id="lineup$PeriodTemplate.browse"
-            template="eu/crewbase/lineup/web/periodtemplate/period-template-browse.xml"/>
     <screen id="screen"
             template="eu/crewbase/lineup/gui/screens/screen.xml"/>
-    <screen id="ShiftPeriodChooser"
-            template="eu/crewbase/lineup/web/rotaplan/shift-period-chooser.xml"/>
     <screen id="lineup$AttendencePeriod.edit"
             template="eu/crewbase/lineup/web/attendenceperiod/attendence-period-edit.xml"/>
     <screen id="lineup$PeriodTemplate.select"
             template="eu/crewbase/lineup/web/periodtemplate/period-template-select.xml"/>
+    <screen id="lineup$ShiftPeriod.choose"
+            template="eu/crewbase/lineup/web/rotaplan/shift-period-chooser.xml"/>
+    <screen id="lineup$PeriodTemplate.browse"
+            template="eu/crewbase/lineup/web/periodtemplate/period-template-browse.xml"/>
+    <screen id="lineup$AbsencePeriod.edit"
+            template="eu/crewbase/lineup/web/absenceperiod/absence-period-edit.xml"/>
 </screen-config>

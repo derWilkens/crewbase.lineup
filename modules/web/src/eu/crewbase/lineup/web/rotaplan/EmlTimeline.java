@@ -1,16 +1,4 @@
 package eu.crewbase.lineup.web.rotaplan;
-/**
- * Fachliche Funktion
- * In einem Zeitraum verfügbare Mitarbeiter mit ihren Rollen werden im oberen Bereich der Timeline angezeigt
- * Die maximal notwendigen Rollen werden in der Timeline als "Group" dargestellt
- * Aus den Bemannungszeiträumen (und der POB im Zeitraum ergeben sich Dummy-EML-DutyPeriods
- * Werden nun die verfügbaren Rollen der MA auf die Dummy-Periods gezogen, erfolgt die Verknüpfung
- * von User zu Period und die entsprechende Period wird farbig dargestellt (in der Farbe der Rolle)
- * Beim Löschen der Period wird nicht die Period sondern nur die Zuordnung gelöscht.
- * 
- * Timeline wird angezeigt
- * 
- */
 
 import java.text.DateFormat;
 import java.text.ParseException;

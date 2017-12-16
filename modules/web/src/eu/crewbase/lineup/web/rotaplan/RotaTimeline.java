@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import com.haulmont.cuba.core.global.CommitContext;
@@ -75,8 +74,7 @@ public class RotaTimeline extends AbstractWindow {
 	private CollectionDatasource<FunctionCategory, UUID> functionCategoriesDs;
 	@Inject
 	private CollectionDatasource<Site, UUID> sitesDs;
-	
-	
+
 	@Override
 	public void init(Map<String, Object> params) {
 
@@ -142,99 +140,126 @@ public class RotaTimeline extends AbstractWindow {
 
 		@Override
 		public void itemAdded(JsonObject jsonItem) {
-			// hier belassen
-			// wie wird im Backend aus einem DetachedObject ein AttachedObject?
-			// Wenn es unvollständig ist, muss der editor geöffnet werden und es
-			// darf vorher nicht gespeichert sein
-			// das TimelineItem muss auch zurückgegeben werden
+
 			if (isCalledAlready)
 				return;
 			isCalledAlready = true;
+
+			PeriodJsonDTO parsedItem = parse(jsonItem);// json auslesen, in DTO
+														// packen
+			Period period = null;
+
+			if (parsedItem.getItemIncomplete()) {
+				ShiftPeriodChooser dialog = openTemplateChooser(parsedItem);
+				dialog.addCloseListener(new CloseListener() {
+					
+					@Override
+					public void windowClosed(String actionId) {
+						isCalledAlready = false;
+						
+					}
+				});
+			} else {
+				period = createAndSavePeriod(parsedItem);
+				addToJsState(period); // dem State hinzufügen
+				isCalledAlready = true;
+			}
+
+		}
+
+		private Period createPeriod(PeriodJsonDTO parsedItem) {
+			Period period = null;
 			try {
-
-				PeriodJsonDTO parsedItem = parse(jsonItem);
-
-				// wenn nicht vollständig Dialog zum auswählen von Type, Site,
-				// Duration öffnen
-				if (parsedItem.getItemIncomplete()) {
-
-					String clazzName = "eu.crewbase.lineup.entity.period.AttendencePeriod";
-					parsedItem.setClazzName(clazzName);
-
-					ShiftPeriodChooser dialog = (ShiftPeriodChooser) openWindow("ShiftPeriodChooser", OpenType.DIALOG);
-					dialog.addCloseListener(new CloseListener() {
-
-						@Override
-						public void windowClosed(String actionId) {
-							try {
-								parsedItem.setSite(dialog.getSite());
-								parsedItem.setDuration(dialog.getDuration());
-								parsedItem.setClazzName(dialog.getClazzName());
-								
-								OperationPeriod operationPeriod = timelineDTOService.getOperationPeriod(parsedItem.getSite(),
-										parsedItem.getStartDate(), parsedItem.getEndDate());
-
-								parsedItem.setOperationPeriod(operationPeriod);
-								
-								Period newItem = null;
-								newItem = (Period) metadata.create(Class.forName(parsedItem.getClazzName()));
-								newItem.readDto(parsedItem);
-
-								// immer noch unvollständig und weiter detailieren
-								if (!newItem.isValid()) {
-									// anschließend richtigen ClassType erzeugen
-
-									final Period item = newItem;
-
-									openEditor(item, OpenType.DIALOG).addCloseListener(new CloseListener() {
-
-										@Override
-										public void windowClosed(String actionId) {
-											TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(item,
-													UserPreferencesContext.Rotaplan);
-											rotaplan.addTimelineItem(timelineItem);
-											isCalledAlready = false;
-										}
-									});
-								}else{
-									TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,
-											UserPreferencesContext.Rotaplan);
-									rotaplan.addTimelineItem(timelineItem);
-									isCalledAlready = false;
-									dataManager.commit(newItem);
-								}
-							} catch (ClassNotFoundException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (OperationNotFoundException e) {
-								showNotification("Der gewählte Zeitraum liegt außerhalb einer Bemannungsphase.");
-							}
-						}
-					});
-				} else {
-					Period newItem = null;
-					newItem = (Period) metadata.create(Class.forName(jsonItem.getString("clazzName")));
-					newItem.readDto(parsedItem);
-					dataManager.commit(newItem);
-					TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,
-							UserPreferencesContext.Rotaplan);
-					rotaplan.addTimelineItem(timelineItem);
-					isCalledAlready = false;
-				}
-
-			} catch (
-
-			Exception e) {
+				period = (Period) metadata.create(Class.forName(parsedItem.getClazzName()));
+				period.readDto(parsedItem);
+			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
-				//showNotification("Error: " + e.getLocalizedMessage());
-				showNotification("<code>Fehlermeldung</code>", e.getLocalizedMessage(), NotificationType.ERROR_HTML);
 				e.printStackTrace();
 			}
+			return period;
+		}
+
+		private Period createAndSavePeriod(PeriodJsonDTO parsedItem) {
+			return dataManager.commit(createPeriod(parsedItem));
+		}
+
+		// } catch (
+		// catch (OperationNotFoundException e) {
+		// showNotification("Der gewählte Zeitraum liegt außerhalb einer
+		// Bemannungsphase.");
+		// }
+		//
+		// Exception e) {
+		// // TODO Auto-generated catch block
+		// //showNotification("Error: " + e.getLocalizedMessage());
+		// showNotification("<code>Fehlermeldung</code>",
+		// e.getLocalizedMessage(),
+		// NotificationType.ERROR_HTML);
+		// e.printStackTrace();
+		// }
+
+		private void addToJsState(Period item) {
+			// nur gespeichert items annehmen
+			TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(item, UserPreferencesContext.Rotaplan);
+			rotaplan.addTimelineItem(timelineItem);
+		}
+
+		private void openPeriodEditor(Period period) {
+
+			openEditor(period, OpenType.DIALOG).addCloseListener(new CloseListener() {
+
+				@Override
+				public void windowClosed(String actionId) {
+					
+					// dataManager.commit(period); offensichtlich wird die
+					// Period schon im Editor gespeichert
+					TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(period,
+							UserPreferencesContext.Rotaplan);
+					rotaplan.addTimelineItem(timelineItem);
+
+				}
+			});
+		}
+
+		private ShiftPeriodChooser openTemplateChooser(PeriodJsonDTO parsedItem) {
+			ShiftPeriodChooser dialog = (ShiftPeriodChooser) openWindow("lineup$ShiftPeriod.choose", OpenType.DIALOG);
+			dialog.addCloseListener(new CloseListener() {
+
+				@Override
+				public void windowClosed(String actionId) {
+
+					parsedItem.setSite(dialog.getSite());
+					parsedItem.setDuration(dialog.getDuration());
+					parsedItem.setClazzName(dialog.getClazzName());
+					parsedItem.setColor(dialog.getColor());
+					parsedItem.setRemark(dialog.getRemark());
+					if (actionId.equals("OK")) {
+						OperationPeriod operationPeriod = null;
+						try {
+							if(parsedItem.getSite()!=null){
+							operationPeriod = timelineDTOService.getOperationPeriod(parsedItem.getSite(),
+									parsedItem.getStartDate(), parsedItem.getEndDate());
+							parsedItem.setOperationPeriod(operationPeriod);
+							}							
+							addToJsState(createAndSavePeriod(parsedItem)); // dem State hinzufügen
+
+						} catch (OperationNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if (actionId.equals("OPEN_INDIVIDUAL")) {
+						openPeriodEditor(createPeriod(parsedItem));
+						parsedItem.setItemIncomplete(true);
+					}
+				}
+			});
+			return dialog;
 		}
 
 		@Override
 		public void itemMoved(JsonObject jsonItem) {
-
+			//verschieben testen
 			ShiftPeriod newPeriod = null;
 
 			try {
@@ -296,7 +321,8 @@ public class RotaTimeline extends AbstractWindow {
 
 		@Override
 		public void editItem(String id) {
-
+			//doppelKlick auf Item sollte Editor öffenen
+			
 			ShiftPeriod dutyPeriod = shiftPeriodsDs.getItem(UUID.fromString(id));
 
 			if (dutyPeriod != null) {

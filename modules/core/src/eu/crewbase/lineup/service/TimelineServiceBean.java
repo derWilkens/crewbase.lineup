@@ -162,7 +162,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 			if (template.getPeriodKind() != null) {
 				templateDTO.setClazzName(template.getPeriodKind().getId());
 			}
-			templateDTO.setDuration(template.getDefaultDuration());
+			templateDTO.setDuration(template.getDuration1());
 			dutyPeriodTemplates.add(templateDTO);
 		}
 		
@@ -263,14 +263,16 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		dutyPeriodConfig.setParentGroupIdFunction((ShiftPeriod e) -> null);
 		dutyPeriodConfig.setItemLabelFunction((ShiftPeriod e) -> {
 			String result = "";
+			String separator = "";
 			if (e instanceof AttendencePeriod) {
 				AttendencePeriod period = (AttendencePeriod) e;
 				if (period.getOperationPeriod() != null && period.getOperationPeriod().getSite() != null) {
 					result = period.getOperationPeriod().getSite().getItemDesignation();
+					separator = " - ";
 				}
 			}
 			if (e.getRemark() != null) {
-				result = result + " - " + e.getRemark();
+				result = result + separator + e.getRemark();
 			} 
 			if(result.equals("")){
 				result = "Abwesend";
@@ -290,6 +292,11 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 						return "background-color: rgba(" + rgb + ", 0.6);";
 					}
 				}
+			}
+			if(e.getColor()!=null&&e.getColor()!=""){
+				Color c = Color.decode("0x" + e.getColor());
+				String rgb = c.getRed() + "," + c.getGreen() + "," + c.getBlue();
+				return "background-color: rgba(" + rgb + ", 0.6);";
 			}
 			return "";
 		});
@@ -594,8 +601,8 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		try (Transaction tx = persistence.createTransaction()) {
 			return (OperationPeriod) persistence.getEntityManager()
 					.createQuery(
-							"SELECT e from lineup$OperationPeriod e where e.site = :site and e.startDate <= :start and e.endDate >= :end")
-					.setParameter("site", site).setParameter("start", start).setParameter("end", end)
+							"SELECT e from lineup$OperationPeriod e where e.site.id = :site and e.startDate <= :start and e.endDate >= :end")
+					.setParameter("site", site.getId()).setParameter("start", start).setParameter("end", end)
 					.getSingleResult();
 
 		} catch (Exception e) {

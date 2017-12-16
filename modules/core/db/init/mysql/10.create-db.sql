@@ -475,6 +475,7 @@ create table LINEUP_ATTENDENCE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
@@ -496,6 +497,7 @@ create table LINEUP_ABSENCE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
@@ -529,6 +531,7 @@ create table LINEUP_SITE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     --
@@ -550,11 +553,13 @@ create table LINEUP_PERIOD_TEMPLATE (
     CLIENT integer not null,
     --
     SITE_ID varchar(32),
+    REMARK varchar(255),
     USER_ID varchar(32),
     PERIOD_KIND varchar(70),
     DURATION1 integer,
     DURATION2 integer,
     DURATION3 integer,
+    COLOR varchar(255),
     --
     primary key (ID)
 )^
@@ -571,6 +576,7 @@ create table LINEUP_SHIFT_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     --
@@ -591,6 +597,7 @@ create table LINEUP_MAINTENANCE_CAMPAIGN (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     SITE_ID varchar(32),
@@ -612,6 +619,7 @@ create table LINEUP_OPERATION_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     SITE_ID varchar(32),
@@ -633,6 +641,7 @@ create table LINEUP_OUTAGE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
+    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
     SITE_ID varchar(32),

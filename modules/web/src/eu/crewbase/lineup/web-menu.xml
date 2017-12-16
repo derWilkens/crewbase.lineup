@@ -8,10 +8,8 @@
               screen="eml-timeline"/>
         <item screen="lineup$AttendencePeriod.browse"/>
         <item screen="lineup$OperationPeriod.browse"/>
+        <item screen="lineup$ShiftPeriod.choose"/>
         <item screen="lineup$PeriodTemplate.browse"/>
-        <item screen="screen"/>
-        <item screen="ShiftPeriodChooser"/>
-        <item screen="lineup$PeriodTemplate.select"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"

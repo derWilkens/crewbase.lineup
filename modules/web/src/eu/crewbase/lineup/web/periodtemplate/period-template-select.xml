@@ -36,6 +36,7 @@
                 <column id="duration1"/>
                 <column id="duration2"/>
                 <column id="duration3"/>
+                <column id="remark"/>
             </columns>
             <rows datasource="periodTemplatesDs"/>
             <rowsCount/>

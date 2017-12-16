@@ -3,6 +3,16 @@
         caption="msg://caption"
         class="eu.crewbase.lineup.web.rotaplan.ShiftPeriodChooser"
         messagesPack="eu.crewbase.lineup.web.rotaplan">
+    <dsContext>
+        <collectionDatasource id="periodTemplatesDs"
+                              class="eu.crewbase.lineup.entity.period.PeriodTemplate"
+                              view="periodTemplate-choose">
+            <query>
+                <![CDATA[select e from lineup$PeriodTemplate e order by e.periodKind desc, e.remark asc
+]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
     <actions>
         <action id="r1c1"
                 invoke="r1c1"/>
@@ -19,68 +29,22 @@
     <dialogMode height="600"
                 width="800"/>
     <layout>
-        <grid spacing="true">
-            <columns count="5"/>
-            <rows>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="&gt;BorWin alpha"/>
-                    <button action="r1c1"
-                            caption="Tageseinsatz"/>
-                    <button action="r1c2"
-                            caption="7 Tage"
-                            width="100%"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="BorWin beta"/>
-                    <button action="r2c1"
-                            caption="Tageseinsatz"/>
-                    <button action="r2c2"
-                            caption="7 Tage"
-                            width="100%"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="BARD Offshore 1"/>
-                    <button caption="Tageseinsatz"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="Global Tech I"/>
-                    <button caption="Tageseinsatz"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="Offshore-Frei"/>
-                    <button caption="5 Tage"
-                            width="100%"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="Krank"/>
-                    <button caption="1 Tag"
-                            width="100%"/>
-                    <button caption="2 Tage"
-                            width="100%"/>
-                    <button caption="3 Tage"
-                            width="100%"/>
-                </row>
-                <row>
-                    <label align="MIDDLE_CENTER"
-                           value="Abwesend"/>
-                    <button caption="1 Tag"
-                            width="100%"/>
-                    <button caption="2 Tage"
-                            width="100%"/>
-                    <button caption="3 Tage"
-                            width="100%"/>
-                </row>
-                <row/>
-                <row>
-                    <button caption="Abbrechen"/>
-                </row>
-            </rows>
-        </grid>
+        <dataGrid id="dataGrid"
+                  columnResizeMode="SIMPLE"
+                  columnsCollapsingAllowed="false"
+                  datasource="periodTemplatesDs"
+                  editorBuffered="false"
+                  reorderingAllowed="false"
+                  selectionMode="NONE"
+                  settingsEnabled="false"
+                  sortable="false"
+                  width="100%">
+            <columns>
+                <column property="periodKind"/>
+                <column property="duration1"/>
+                <column property="duration2"/>
+                <column property="duration3"/>
+            </columns>
+        </dataGrid>
     </layout>
 </window>

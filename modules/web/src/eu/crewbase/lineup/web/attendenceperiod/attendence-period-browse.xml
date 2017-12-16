@@ -21,6 +21,11 @@
                 <![CDATA[select e from lineup$AttendencePeriod e]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <![CDATA[select e from lineup$Site e]]>
+        </collectionDatasource>
     </dsContext>
     <actions>
         <action id="save"
@@ -65,6 +70,7 @@
                         <column id="remark"/>
                         <column id="personOnDuty"/>
                         <column id="operationPeriod"/>
+                        <column id="site"/>
                     </columns>
                     <rows datasource="attendencePeriodsDs"/>
                     <rowsCount/>
@@ -91,6 +97,8 @@
                             <field property="startDate"/>
                             <field property="endDate"/>
                             <field property="remark"/>
+                            <field optionsDatasource="sitesDs"
+                                   property="site"/>
                         </column>
                     </fieldGroup>
                 </vbox>
