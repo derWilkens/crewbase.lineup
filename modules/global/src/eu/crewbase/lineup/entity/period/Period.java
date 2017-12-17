@@ -20,17 +20,17 @@ public class Period extends StandardClientEntity {
 	@Column(name = "START_DATE")
 	protected Date startDate;
 
-	@Column(name = "COLOR")
-	protected String color;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "END_DATE")
 	protected Date endDate;
 
-	@Column(name = "REMARK")
+@Column(name = "REMARK")
 	protected String remark;
 
-	public void setColor(String color) {
+@Column(name = "COLOR")
+	protected String color;
+
+			public void setColor(String color) {
 		if(color!=null&&color!=""){
 		this.color = color;
 		}

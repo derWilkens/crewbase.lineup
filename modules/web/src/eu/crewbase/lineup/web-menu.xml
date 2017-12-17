@@ -6,10 +6,6 @@
         <item screen="rota-timeline"/>
         <item id="emlTime"
               screen="eml-timeline"/>
-        <item screen="lineup$AttendencePeriod.browse"/>
-        <item screen="lineup$OperationPeriod.browse"/>
-        <item screen="lineup$ShiftPeriod.choose"/>
-        <item screen="lineup$PeriodTemplate.browse"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
@@ -25,6 +21,7 @@
     <menu id="favorites"
           icon="font-icon:STAR"
           insertBefore="administration">
+        <item screen="lineup$PeriodTemplate.browse"/>
         <item screen="lineup$DepartmentUser.choose"/>
         <item screen="userpreference-sitecolors"/>
         <item id="lineup$UserPreference.browse"/>
@@ -42,9 +39,14 @@
     <menu id="masterdata"
           icon="font-icon:TABLE"
           insertBefore="administration">
+        <item screen="lineup$AttendencePeriod.browse"/>
+        <item screen="lineup$OperationPeriod.browse"/>
         <item screen="lineup$Site.browse"/>
         <item id="lineup$Company.browse"/>
         <item screen="lineup$Department.browse"/>
         <item screen="lineup$AppUser.browse"/>
+        <menu id="TEMP Dialoge">
+            <item screen="lineup$ShiftPeriod.choose"/>
+        </menu>
     </menu>
 </menu-config>

@@ -45,24 +45,6 @@
         <property name="site"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
-          name="campaign-view">
-        <property name="campaignNumber"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="remark"/>
-        <property name="site"
-                  view="_minimal"/>
-    </view>
-    <view class="eu.crewbase.lineup.entity.period.MaintenanceCampaign"
-          extends="_minimal"
-          name="campaignOverview">
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="remark"/>
-        <property name="site"
-                  view="_minimal"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           extends="_local"
           name="siteSelect">
