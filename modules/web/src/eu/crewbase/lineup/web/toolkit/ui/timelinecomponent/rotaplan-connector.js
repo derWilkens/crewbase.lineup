@@ -57,6 +57,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 
 		onMove : function(item, callback) {
 			item.userId = item.group;
+			
 			connector.itemMoved(item);
 			callback(item); // send back item as confirmation (can be
 			// changed)
@@ -81,7 +82,7 @@ eu_crewbase_lineup_web_toolkit_ui_timelinecomponent_RotaplanComponent = function
 
 		timeline.setGroups(new vis.DataSet(this.getState().timelineGroups));
 		timeline.setItems(new vis.DataSet(this.getState().timelineItems));
-		createItemList();
+		
 	}
 
 	// Create a Timeline

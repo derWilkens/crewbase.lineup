@@ -1,16 +1,11 @@
 package eu.crewbase.lineup.web.rotaplan;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
-import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
@@ -25,22 +20,20 @@ import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.Layout;
 
 import elemental.json.JsonObject;
-import eu.crewbase.lineup.Utils;
+import elemental.json.impl.JreJsonNull;
 import eu.crewbase.lineup.entity.UserPreference;
 import eu.crewbase.lineup.entity.UserPreferencesContext;
-import eu.crewbase.lineup.entity.coredata.AppUser;
 import eu.crewbase.lineup.entity.coredata.FunctionCategory;
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 import eu.crewbase.lineup.entity.dto.TimelineDTO;
 import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.AbsencePeriod;
 import eu.crewbase.lineup.entity.period.AttendencePeriod;
-import eu.crewbase.lineup.entity.period.OperationPeriod;
 import eu.crewbase.lineup.entity.period.Period;
-import eu.crewbase.lineup.entity.period.PeriodJsonDTO;
 import eu.crewbase.lineup.entity.period.ShiftPeriod;
-import eu.crewbase.lineup.exception.OperationNotFoundException;
 import eu.crewbase.lineup.service.EntityService;
+import eu.crewbase.lineup.service.RotaplanService;
 import eu.crewbase.lineup.service.TimelineService;
 import eu.crewbase.lineup.service.UserpreferencesService;
 import eu.crewbase.lineup.web.toolkit.ui.timelinecomponent.RotaplanComponent;
@@ -67,6 +60,8 @@ public class RotaTimeline extends AbstractWindow {
 	private UserpreferencesService preferencesService;
 	@Inject
 	private EntityService entityService;
+	@Inject
+	private RotaplanService rotaplanService;
 
 	@Inject
 	private CollectionDatasource<ShiftPeriod, UUID> shiftPeriodsDs;
@@ -145,58 +140,38 @@ public class RotaTimeline extends AbstractWindow {
 				return;
 			isCalledAlready = true;
 
-			PeriodJsonDTO parsedItem = parse(jsonItem);// json auslesen, in DTO
-														// packen
-			Period period = null;
+			ShiftPeriodChooser dialog = (ShiftPeriodChooser) openWindow("lineup$ShiftPeriod.choose", OpenType.DIALOG);
+			dialog.addCloseListener(new CloseListener() {
+				PeriodDTO parsedItem = parse(jsonItem);
 
-			if (parsedItem.getItemIncomplete()) {
-				ShiftPeriodChooser dialog = openTemplateChooser(parsedItem);
-				dialog.addCloseListener(new CloseListener() {
-					
-					@Override
-					public void windowClosed(String actionId) {
-						isCalledAlready = false;
-						
+				@Override
+				public void windowClosed(String actionId) {
+					if (!actionId.equals(CLOSE_ACTION_ID)) {
+						parsedItem.setSiteId(dialog.getSiteId());
+						parsedItem.setDuration(dialog.getDuration());
+						parsedItem.setClazzName(dialog.getClazzName());
+						parsedItem.setColor(dialog.getColor());
+						parsedItem.setRemark(dialog.getRemark());
+
+						try {
+							Period period = rotaplanService.createPeriod(parsedItem);
+
+							isCalledAlready = false;
+							if (actionId.equals("OK")) {
+								addToJsState(period);
+							}
+
+							if (actionId.equals("OPEN_INDIVIDUAL")) {
+								openPeriodEditor(period);
+							}
+						} catch (ClassNotFoundException | ParseException e) {
+							e.printStackTrace();
+							throw new RuntimeException(e);
+						}
 					}
-				});
-			} else {
-				period = createAndSavePeriod(parsedItem);
-				addToJsState(period); // dem State hinzufügen
-				isCalledAlready = true;
-			}
-
+				}
+			});
 		}
-
-		private Period createPeriod(PeriodJsonDTO parsedItem) {
-			Period period = null;
-			try {
-				period = (Period) metadata.create(Class.forName(parsedItem.getClazzName()));
-				period.readDto(parsedItem);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return period;
-		}
-
-		private Period createAndSavePeriod(PeriodJsonDTO parsedItem) {
-			return dataManager.commit(createPeriod(parsedItem));
-		}
-
-		// } catch (
-		// catch (OperationNotFoundException e) {
-		// showNotification("Der gewählte Zeitraum liegt außerhalb einer
-		// Bemannungsphase.");
-		// }
-		//
-		// Exception e) {
-		// // TODO Auto-generated catch block
-		// //showNotification("Error: " + e.getLocalizedMessage());
-		// showNotification("<code>Fehlermeldung</code>",
-		// e.getLocalizedMessage(),
-		// NotificationType.ERROR_HTML);
-		// e.printStackTrace();
-		// }
 
 		private void addToJsState(Period item) {
 			// nur gespeichert items annehmen
@@ -210,82 +185,49 @@ public class RotaTimeline extends AbstractWindow {
 
 				@Override
 				public void windowClosed(String actionId) {
-					
-					// dataManager.commit(period); offensichtlich wird die
-					// Period schon im Editor gespeichert
-					TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(period,
-							UserPreferencesContext.Rotaplan);
-					rotaplan.addTimelineItem(timelineItem);
-
+					addToJsState(period);
 				}
 			});
-		}
-
-		private ShiftPeriodChooser openTemplateChooser(PeriodJsonDTO parsedItem) {
-			ShiftPeriodChooser dialog = (ShiftPeriodChooser) openWindow("lineup$ShiftPeriod.choose", OpenType.DIALOG);
-			dialog.addCloseListener(new CloseListener() {
-
-				@Override
-				public void windowClosed(String actionId) {
-
-					parsedItem.setSite(dialog.getSite());
-					parsedItem.setDuration(dialog.getDuration());
-					parsedItem.setClazzName(dialog.getClazzName());
-					parsedItem.setColor(dialog.getColor());
-					parsedItem.setRemark(dialog.getRemark());
-					if (actionId.equals("OK")) {
-						OperationPeriod operationPeriod = null;
-						try {
-							if(parsedItem.getSite()!=null){
-							operationPeriod = timelineDTOService.getOperationPeriod(parsedItem.getSite(),
-									parsedItem.getStartDate(), parsedItem.getEndDate());
-							parsedItem.setOperationPeriod(operationPeriod);
-							}							
-							addToJsState(createAndSavePeriod(parsedItem)); // dem State hinzufügen
-
-						} catch (OperationNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					if (actionId.equals("OPEN_INDIVIDUAL")) {
-						openPeriodEditor(createPeriod(parsedItem));
-						parsedItem.setItemIncomplete(true);
-					}
-				}
-			});
-			return dialog;
 		}
 
 		@Override
 		public void itemMoved(JsonObject jsonItem) {
-			//verschieben testen
-			ShiftPeriod newPeriod = null;
+			Period period = rotaplanService.updatePeriod(parse(jsonItem));
+			addToJsState(period);
 
-			try {
-				PeriodJsonDTO parsedItem = parse(jsonItem);
-				newPeriod = (ShiftPeriod) metadata.create(Class.forName(jsonItem.getString("clazzName")));
-				String className = jsonItem.getString("clazzName");
-
-				if (className.equals(AbsencePeriod.class.getName())) {
-					newPeriod = entityService.getById(AbsencePeriod.class, parsedItem.getEntityId());
-				}
-				if (className.equals(AttendencePeriod.class.getName())) {
-					newPeriod = entityService.getById(AttendencePeriod.class, parsedItem.getEntityId());
-				}
-
-				newPeriod.readDto(parsedItem);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newPeriod,
-					UserPreferencesContext.Rotaplan);
-
-			CommitContext commitContext = new CommitContext(newPeriod);
-			dataManager.commit(commitContext);
-			// rotaplan.addTimelineItem(timelineItem);
+			// //verschieben testen
+			// ShiftPeriod newPeriod = null;
+			// //umbauen, in das DTO nur die Strings aus dem JSON-Object, dann
+			// in Backend-Function die Entitäten befüllen
+			// //ist das nicht eigentlich ein TimelineItem was da zurück kommt?
+			// try {
+			// PeriodJsonDTO parsedItem = parse(jsonItem);
+			// newPeriod = (ShiftPeriod)
+			// metadata.create(Class.forName(jsonItem.getString("clazzName")));
+			// String className = jsonItem.getString("clazzName");
+			//
+			// if (className.equals(AbsencePeriod.class.getName())) {
+			// newPeriod = entityService.getById(AbsencePeriod.class,
+			// parsedItem.getEntityId());
+			// }
+			// if (className.equals(AttendencePeriod.class.getName())) {
+			// newPeriod = entityService.getById(AttendencePeriod.class,
+			// parsedItem.getEntityId());
+			// }
+			//
+			// newPeriod.readDto(parsedItem);
+			//
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// }
+			//
+			// TimelineItem timelineItem =
+			// timelineDTOService.periodToTimelineItem(newPeriod,
+			// UserPreferencesContext.Rotaplan);
+			//
+			// CommitContext commitContext = new CommitContext(newPeriod);
+			// dataManager.commit(commitContext);
+			// // rotaplan.addTimelineItem(timelineItem);
 
 		}
 
@@ -321,8 +263,8 @@ public class RotaTimeline extends AbstractWindow {
 
 		@Override
 		public void editItem(String id) {
-			//doppelKlick auf Item sollte Editor öffenen
-			
+			// doppelKlick auf Item sollte Editor öffenen
+
 			ShiftPeriod dutyPeriod = shiftPeriodsDs.getItem(UUID.fromString(id));
 
 			if (dutyPeriod != null) {
@@ -351,86 +293,39 @@ public class RotaTimeline extends AbstractWindow {
 				entityService.remove(newItem);
 				rotaplan.removeItem(newItem);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				showNotification("<code>Error notification</code>", "<u>with description</u>",
-						NotificationType.ERROR_HTML);
+				throw new RuntimeException(e);
 			}
-
 		}
 
-		private PeriodJsonDTO parse(JsonObject jsonItem) {
-			PeriodJsonDTO newItem = new PeriodJsonDTO();
-			try {
-				if (jsonItem.hasKey("id")) {
-					newItem.setEntityId(UUID.fromString(jsonItem.getString("id")));
-				}
-				if (jsonItem.hasKey("start")) {
-					newItem.setStartDate(jsonDateToDateWoTime(jsonItem.getString("start")));
+		private PeriodDTO parse(JsonObject jsonItem) {
+			PeriodDTO newItem = new PeriodDTO();
+			
+			if (jsonItem.hasKey("clazzName")) {
+				newItem.setClazzName(jsonItem.getString("clazzName"));
+			}
+			if (jsonItem.hasKey("id")) {
+				newItem.setEntityId(jsonItem.getString("id"));
+			}
+			if (jsonItem.hasKey("start")) {
+				newItem.setStartDate(jsonItem.getString("start"));
 
-				} else {
-					newItem.setStartDate(Utils.clearDate(new Date()));
-					newItem.setItemIncomplete(true);
-				}
-				// oder die Duration oder 1
-				if (jsonItem.hasKey("end")) {
-					newItem.setEndDate(jsonDateToDate(jsonItem.getString("end")));
-				}
-				if (jsonItem.hasKey("duration") && !jsonItem.getString("duration").equals("null")) {
-					newItem.setDuration(Integer.parseInt(jsonItem.getString("duration")));
-				}
+			}
+			if (jsonItem.hasKey("end")) {
+				newItem.setEndDate(jsonItem.getString("end"));
+			}
+			if (jsonItem.hasKey("duration") && !(jsonItem.get("duration") instanceof JreJsonNull)) {
+				newItem.setDuration(Integer.parseInt(jsonItem.getString("duration")));
+			}
+			if (jsonItem.hasKey("userId")) {
+				newItem.setUserId(jsonItem.getString("userId"));
+			}
 
-				if (newItem.getEndDate() == null && newItem.getDuration() > 0) {
-					Calendar c = Calendar.getInstance();
-					c.setTime(newItem.getStartDate());
-					c.add(Calendar.DAY_OF_YEAR, newItem.getDuration());
-					newItem.setEndDate(c.getTime());
-				}
-
-				if (jsonItem.hasKey("userId")) {
-					newItem.setPersonOnDuty(
-							entityService.getById(AppUser.class, UUID.fromString(jsonItem.getString("userId"))));
-				} else {
-					newItem.setItemIncomplete(true);
-				}
-
-				if (jsonItem.hasKey("siteId") && !jsonItem.getString("siteId").equals("null")
-						&& !jsonItem.getString("siteId").equals("")) {
-
-					UUID siteId = UUID.fromString(jsonItem.getString("siteId"));
-					newItem.setSite(entityService.getById(Site.class, siteId));
-				}
-				if (newItem.getSite() != null) {
-					OperationPeriod operationPeriod = timelineDTOService.getOperationPeriod(newItem.getSite(),
-							newItem.getStartDate(), newItem.getEndDate());
-
-					newItem.setOperationPeriod(operationPeriod);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e.getLocalizedMessage());
+			if (jsonItem.hasKey("siteId") && !(jsonItem.get("siteId") instanceof JreJsonNull)
+					&& !jsonItem.getString("siteId").equals("")) {
+				newItem.setSiteId(jsonItem.getString("siteId"));
 			}
 			return newItem;
-		}
-
-		private Date jsonDateToDate(String rawDate) throws ParseException {
-			DateFormat formatter = null;
-			if (rawDate.length() == 10) {
-				formatter = new SimpleDateFormat("yyyy-MM-dd");
-			} else {
-				formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-			}
-			return formatter.parse(rawDate);
-		}
-
-		private Date jsonDateToDateWoTime(String rawDate) throws ParseException {
-			return dateToDateWoTime(jsonDateToDate(rawDate));
-		}
-
-		private Date dateToDateWoTime(Date date) throws ParseException {
-			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			return formatter.parse(formatter.format(date));
 		}
 
 		@Override

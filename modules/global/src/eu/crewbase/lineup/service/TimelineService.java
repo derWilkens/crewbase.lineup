@@ -10,7 +10,7 @@ import eu.crewbase.lineup.entity.dto.TimelineDTO;
 import eu.crewbase.lineup.entity.dto.TimelineItem;
 import eu.crewbase.lineup.entity.period.OperationPeriod;
 import eu.crewbase.lineup.entity.period.Period;
-import eu.crewbase.lineup.exception.OperationNotFoundException;
+import eu.crewbase.lineup.exception.OperationPeriodNotFoundException;
 
 public interface TimelineService {
     String NAME = "lineup_TimelineService";
@@ -18,5 +18,5 @@ public interface TimelineService {
     TimelineDTO getRotoplanDto();
     Collection<AppUser> getPersonsOnDuty();
     TimelineItem periodToTimelineItem(Period period, UserPreferencesContext context);
-	OperationPeriod getOperationPeriod(Site site, Date start, Date end) throws OperationNotFoundException;
+	OperationPeriod getOperationPeriod(Site site, Date start, Date end) throws OperationPeriodNotFoundException;
 }

@@ -10,8 +10,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import javax.persistence.PrimaryKeyJoinColumn;
-import com.haulmont.cuba.core.entity.AppFolder;
+
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 
 @Table(name = "LINEUP_OPERATION_PERIOD")
 @Entity(name = "lineup$OperationPeriod")
@@ -25,9 +25,11 @@ public class OperationPeriod extends SitePeriod {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PARENT_PERIOD_ID")
 	protected OperationPeriod parentPeriod;
-	public void readDto(PeriodJsonDTO dto) {
+
+	public void readDto(PeriodDTO dto) {
 		super.readDto(dto);
 	}
+
 	public void setAttendencePeriods(List<AttendencePeriod> attendencePeriods) {
 		this.attendencePeriods = attendencePeriods;
 	}

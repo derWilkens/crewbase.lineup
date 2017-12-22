@@ -43,7 +43,7 @@ import eu.crewbase.lineup.entity.period.Period;
 import eu.crewbase.lineup.entity.period.PeriodTemplate;
 import eu.crewbase.lineup.entity.period.ShiftPeriod;
 import eu.crewbase.lineup.entity.period.SitePeriod;
-import eu.crewbase.lineup.exception.OperationNotFoundException;
+import eu.crewbase.lineup.exception.OperationPeriodNotFoundException;
 
 @Service(TimelineService.NAME)
 public class TimelineServiceBean extends PreferencesService implements TimelineService {
@@ -121,7 +121,12 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 			List<AppUser> preferredPersons = getPersonsByPreferredDepartment(persistence.getEntityManager(),
 					UserPreferencesContext.RotaplanDepartments);
 			List<ShiftPeriod> dutyPeriods = getDutyPeriods(preferredPersons, null, null);
-			dto.addItems(dutyPeriods, rotaplanConfig);
+			for(Period p : dutyPeriods){
+				if(p.isValid()){
+					dto.addItem(p, rotaplanConfig);
+				}
+			}
+			//dto.addItems(dutyPeriods, rotaplanConfig);
 
 			// Kampagnen als Hintergrund anzeigen?
 			if (!getUserPreferences(persistence.getEntityManager(), UserPreferencesContext.RotaplanDisplayCampaigns)
@@ -597,7 +602,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 	}
 
 	@Override
-	public OperationPeriod getOperationPeriod(Site site, Date start, Date end) throws OperationNotFoundException {
+	public OperationPeriod getOperationPeriod(Site site, Date start, Date end) throws OperationPeriodNotFoundException {
 		try (Transaction tx = persistence.createTransaction()) {
 			return (OperationPeriod) persistence.getEntityManager()
 					.createQuery(
@@ -608,7 +613,7 @@ public class TimelineServiceBean extends PreferencesService implements TimelineS
 		} catch (Exception e) {
 			System.out.println("_______________________Keine OperationPeriod gefunden");
 			String errMsg = "Für den Zeitraum vom " + DateFormatter.toDDMMJJJJ(start) + " und " + DateFormatter.toDDMMJJJJ(end) + " wurde für " + site.getInstanceName() + " keine Bemannungsphase gefunden.";
-			throw new OperationNotFoundException(errMsg);
+			throw new OperationPeriodNotFoundException(errMsg);
 		}
 	}
 

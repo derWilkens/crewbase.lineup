@@ -16,6 +16,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "LINEUP_SITE_PERIOD")
@@ -30,9 +31,9 @@ public abstract class SitePeriod extends Period {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SITE_ID")
 	protected Site site;
-	public void readDto(PeriodJsonDTO dto) {
+	public void readDto(PeriodDTO dto) {
 		super.readDto(dto);
-		this.site = dto.getOperationPeriod().site;
+		this.site = dto.getSite();
 	}
 	public Site getSite() {
 		return site;

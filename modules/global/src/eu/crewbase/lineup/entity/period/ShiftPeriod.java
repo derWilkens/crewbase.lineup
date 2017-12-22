@@ -16,6 +16,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
 import eu.crewbase.lineup.entity.coredata.AppUser;
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "LINEUP_SHIFT_PERIOD")
@@ -31,7 +32,7 @@ public class ShiftPeriod extends Period {
 	@JoinColumn(name = "PERSON_ON_DUTY_ID")
 	protected AppUser personOnDuty;
 
-	public void readDto(PeriodJsonDTO dto) {
+	public void readDto(PeriodDTO dto) {
 		super.readDto(dto);
 		setPersonOnDuty(dto.getPersonOnDuty());
 	}

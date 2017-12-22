@@ -1,6 +1,9 @@
 package eu.crewbase.lineup.entity.period;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -9,7 +12,9 @@ import javax.persistence.TemporalType;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 
+import eu.crewbase.lineup.DateFormatter;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 
 @NamePattern("%s %s |startDate,endDate")
 @MappedSuperclass
@@ -40,12 +45,18 @@ public class Period extends StandardClientEntity {
 		return color;
 	}
 
-	public void readDto(PeriodJsonDTO dto) {
+	public void readDto(PeriodDTO dto){
 		if (dto.getEntityId() != null) {
-			this.id = dto.getEntityId();
+			this.id = UUID.fromString(dto.getEntityId());
 		}
-		this.endDate = dto.getEndDate();
-		this.startDate = dto.getStartDate();
+		this.startDate = DateFormatter.jsonDateToDate(dto.getStartDate());
+		this.endDate = DateFormatter.jsonDateToDate(dto.getEndDate());
+		if (this.getEndDate() == null && dto.getDuration() > 0) {
+			Calendar c = Calendar.getInstance();
+			c.setTime(this.getStartDate());
+			c.add(Calendar.DAY_OF_YEAR, dto.getDuration());
+			this.setEndDate(c.getTime());
+		}
 		this.setColor(dto.getColor());
 		this.setRemark(dto.getRemark());
 	}

@@ -3,9 +3,9 @@ package eu.crewbase.lineup.exception;
 import com.haulmont.cuba.core.global.SupportedByClient;
 
 @SupportedByClient
-public class OperationNotFoundException extends Exception {
+public class OperationPeriodNotFoundException extends Exception {
 
-	public OperationNotFoundException(String arg0) {
+	public OperationPeriodNotFoundException(String arg0) {
 		super(arg0);
 	}
 

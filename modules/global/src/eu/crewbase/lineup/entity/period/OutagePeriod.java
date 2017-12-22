@@ -6,6 +6,8 @@ import javax.persistence.Table;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
+
 @Table(name = "LINEUP_OUTAGE_PERIOD")
 @NamePattern("%s |site,campaignNumber")
 @Entity(name = "lineup$OutagePeriod")
@@ -14,7 +16,7 @@ public class OutagePeriod extends SitePeriod {
 
 	@Column(name = "CAMPAIGN_NUMBER", length = 10)
 	protected String campaignNumber;
-	public void readDto(PeriodJsonDTO dto) {
+	public void readDto(PeriodDTO dto) {
 		super.readDto(dto);
 	}
 	public void setCampaignNumber(String campaignNumber) {

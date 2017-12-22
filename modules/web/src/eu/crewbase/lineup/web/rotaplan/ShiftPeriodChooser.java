@@ -15,7 +15,6 @@ import com.haulmont.cuba.gui.components.DataGrid.RendererClickListener;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import eu.crewbase.lineup.entity.coredata.PeriodKind;
-import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.period.PeriodTemplate;
 import eu.crewbase.lineup.service.RotaplanService;
 
@@ -23,7 +22,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 
 	@Inject
 	public RotaplanService service;
-	private Site site;
+	private String siteId;
 	private int duration;
 	private String clazzName;
 	private String color;
@@ -68,7 +67,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 			public void onClick(RendererClickEvent event) {
 				event.getColumnId();
 				PeriodTemplate template = periodTemplatesDs.getItem((UUID) event.getItemId());
-				setSite(template.getSite());
+				setSiteId(template.getSite().getId().toString());
 				setClazzName(template.getPeriodKind().getId());
 
 				close("OPEN_INDIVIDUAL", true);
@@ -106,7 +105,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 				event.getColumnId();
 				PeriodTemplate template = periodTemplatesDs.getItem((UUID) event.getItemId());
 				Integer value = (Integer) template.getValue(event.getColumnId());
-				setSite(template.getSite());
+				setSiteId(template.getSiteId());
 				setDuration(value);
 				setColor(template.getColor());
 				setRemark(template.getRemark());
@@ -146,14 +145,6 @@ public class ShiftPeriodChooser extends AbstractWindow {
 		// close event feuern und weiteren listener bauen
 	}
 
-	public Site getSite() {
-		return site;
-	}
-
-	public void setSite(Site site) {
-		this.site = site;
-	}
-
 	public int getDuration() {
 		return duration;
 	}
@@ -184,6 +175,14 @@ public class ShiftPeriodChooser extends AbstractWindow {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
 	}
 
 }
