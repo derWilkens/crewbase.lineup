@@ -12,7 +12,6 @@ test-run
 /.project
 deploy/*
 modules/core/db/init/hsql/10.create-db.sql
-build.gradle
 modules/gui/.settings/org.eclipse.jdt.core.prefs
 modules/gui/.settings/org.eclipse.jdt.core.prefs
 *.prefs

@@ -353,4 +353,10 @@
         <property name="endDate"/>
         <property name="remark"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.period.ShiftPeriod"
+          name="shiftPeriod-mob-view">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="remark"/>
+    </view>
 </views>

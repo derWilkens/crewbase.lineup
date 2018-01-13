@@ -1,0 +1,14 @@
+<Context>
+    <!-- Database connection -->
+    <Resource driverClassName="com.mysql.jdbc.Driver"
+              maxIdle="2"
+              maxTotal="20"
+              maxWaitMillis="5000"
+              name="jdbc/CubaDS"
+              password="lineup"
+              type="javax.sql.DataSource"
+              url="jdbc:mysql://localhost/lineup"
+              username="lineup"/>
+    <!-- Switch off session serialization -->
+    <Manager pathname=""/>
+</Context>
