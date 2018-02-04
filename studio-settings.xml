@@ -15,4 +15,8 @@ alter table LINEUP_PERIOD_TEMPLATE add column PERIOD_KIND varchar(70) ;]]>
             </mysql>
         </excludes>
     </dbScripts>
+    <functionalitySettings>
+        <functionality id="oneToOneIndex"
+                       state="ENABLE"/>
+    </functionalitySettings>
 </studio>

@@ -475,9 +475,9 @@ create table LINEUP_ATTENDENCE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
-    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
+    COLOR varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
     --
     OPERATION_PERIOD_ID varchar(32),
@@ -497,9 +497,9 @@ create table LINEUP_ABSENCE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
-    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
+    COLOR varchar(255),
     PERSON_ON_DUTY_ID varchar(32),
     --
     primary key (ID)
