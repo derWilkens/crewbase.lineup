@@ -52,8 +52,8 @@ public class Certificate extends StandardClientEntity {
 	@JoinColumn(name = "QUALIFICATION_TYPE_ID")
 	protected QualificationType qualificationType;
 
-	@Lookup(type = LookupType.SCREEN, actions = { "lookup", "clear" })
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.SCREEN, actions = {"lookup", "clear"})
+    @OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "APP_USER_ID")
