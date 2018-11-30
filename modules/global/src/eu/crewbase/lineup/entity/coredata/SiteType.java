@@ -20,8 +20,8 @@ public class SiteType extends StandardClientEntity {
 	@Column(name = "TYPE_", length = 50)
 	protected String type;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
+    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PARENT_TYPE_ID")
 	protected SiteType parentType;
 

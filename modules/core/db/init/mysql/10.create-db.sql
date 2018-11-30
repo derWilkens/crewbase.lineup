@@ -231,8 +231,7 @@ create table LINEUP_PERIOD_TYPE (
     CLIENT integer not null,
     --
     TYPE_NAME varchar(20),
-    PARENT_TYPE_ID varchar(32),
-    PERIOD_SUB_CLASS varchar(50),
+    PARENT_TYPE varchar(50),
     --
     primary key (ID)
 )^

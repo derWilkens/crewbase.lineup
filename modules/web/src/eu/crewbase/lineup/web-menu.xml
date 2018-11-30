@@ -6,6 +6,7 @@
         <item screen="rota-timeline"/>
         <item id="emlTime"
               screen="eml-timeline"/>
+        <item screen="CampaignPlan"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"

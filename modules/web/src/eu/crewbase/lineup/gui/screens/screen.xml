@@ -3,9 +3,6 @@
         caption="msg://caption"
         class="eu.crewbase.lineup.gui.screens.Screen"
         messagesPack="eu.crewbase.lineup.gui.screens">
-    <dialogMode height="600"
-                width="800"/>
-
     <dsContext>
         <datasource id="shiftPeriodDs"
                     class="eu.crewbase.lineup.entity.period.ShiftPeriod"/>
@@ -25,6 +22,8 @@
             </query>
         </collectionDatasource>
     </dsContext>
+    <dialogMode height="600"
+                width="800"/>
     <actions>
         <action id="openSitePeriodChooser"
                 icon="font-icon:COGS"

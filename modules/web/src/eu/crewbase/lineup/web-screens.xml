@@ -71,4 +71,8 @@
             template="eu/crewbase/lineup/web/periodtemplate/period-template-browse.xml"/>
     <screen id="lineup$AbsencePeriod.edit"
             template="eu/crewbase/lineup/web/absenceperiod/absence-period-edit.xml"/>
+    <screen id="CampaignPlan"
+            template="eu/crewbase/lineup/web/campaign/campaignOverview.xml"/>
+    <screen id="CampaignPlanTemp"
+            template="eu/crewbase/lineup/web/campaign/CampaignPlan.xml"/>            
 </screen-config>

@@ -18,5 +18,9 @@ alter table LINEUP_PERIOD_TEMPLATE add column PERIOD_KIND varchar(70) ;]]>
     <functionalitySettings>
         <functionality id="oneToOneIndex"
                        state="ENABLE"/>
+        <functionality id="joinedInheritanceDeleteCascade"
+                       state="ENABLE"/>
+        <functionality id="newFkConstraintNaming"
+                       state="ENABLE"/>
     </functionalitySettings>
 </studio>

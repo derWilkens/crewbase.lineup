@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.8.5'
+    ext.cubaVersion = '6.9.5'
     repositories {
         
         maven {
@@ -21,9 +21,10 @@ def globalModule = project(':lineupapp-global')
 def coreModule = project(':lineupapp-core')
 def guiModule = project(':lineupapp-gui')
 def webModule = project(':lineupapp-web')
+def webThemesModule = project(':lineupapp-web-themes')
 
 
-def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
+def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 
 apply(plugin: 'java')
@@ -117,19 +118,19 @@ configure(coreModule) {
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'mysql'
-        host = 'localhost'
+        host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'lineup'
+        dbPassword = 'Wilkens:)1'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'mysql'
-        host = 'localhost'
+        host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'lineup'
+        dbPassword = 'Wilkens:)1'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 }
@@ -201,6 +202,30 @@ configure(webModule) {
         appName = 'lineupapp'
         appJars('lineupapp-global', 'lineupapp-gui', 'lineupapp-web')
     }
+    task buildScssThemes(type: CubaWebScssThemeCreation)
+    task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
+    assemble.dependsOn buildScssThemes
+}
+
+configure(webThemesModule) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'cuba')
+
+    appModuleType = 'web-themes'
+
+    buildDir = file('../build/scss-themes')
+
+    sourceSets {
+        main {
+            java {
+                srcDir '.'
+            }
+            resources {
+                srcDir '.'
+            }
+        }
+    }
 }
 
 
@@ -234,4 +259,12 @@ task buildWar(type: CubaWarBuilding) {
     includeContextXml = true
     includeJdbcDriver = true
     appHome = 'app_home'
+}
+
+task buildUberJar(type: CubaUberJarBuilding) {
+    singleJar = true
+    logbackConfigurationFile = 'etc/uber-jar-logback.xml'
+    webPort = 8080
+    coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
 }
