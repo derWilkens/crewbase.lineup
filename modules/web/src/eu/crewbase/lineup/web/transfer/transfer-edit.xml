@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.transfer.TransferEdit"
+        datasource="transferDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.transfer">
+    <dsContext>
+        <datasource id="transferDs"
+                    class="eu.crewbase.lineup.entity.Transfer"
+                    view="transfer-edit-view">
+            <collectionDatasource id="waypointListDs"
+                                  property="waypointList"/>
+        </datasource>
+        <collectionDatasource id="operatedBiesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Company"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Company e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="modeOfTransfersDs"
+                              class="eu.crewbase.lineup.entity.coredata.ModeOfTransfer"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$ModeOfTransfer e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="transferDs">
+            <column width="250px">
+                <field property="client"/>
+                <field property="transferOrderNo"/>
+                <field optionsDatasource="operatedBiesDs"
+                       property="operatedBy"/>
+                <field optionsDatasource="modeOfTransfersDs"
+                       property="modeOfTransfer"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="waypointListBox"
+                  caption="msg://eu.crewbase.lineup.entity/Transfer.waypointList">
+            <table id="waypointListTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="site"/>
+                    <column id="takeOff"/>
+                    <column id="transferDuration"/>
+                    <column id="orderNo"/>
+                    <column id="stopoverTime"/>
+                </columns>
+                <rows datasource="waypointListDs"/>
+                <buttonsPanel>
+                    <button action="waypointListTable.create"/>
+                    <button action="waypointListTable.edit"/>
+                    <button action="waypointListTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -34,7 +34,6 @@ create table LINEUP_COMPANY (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
-    CLIENT integer not null,
     --
     COMPANY_NAME varchar(100) not null,
     CONTACT_PERSON varchar(100),
@@ -115,10 +114,11 @@ create table LINEUP_WAYPOINT (
     CLIENT integer not null,
     --
     TAKE_OFF time(3) not null,
-    TRANSFER_DURATION time(3),
+    TRANSFER_DURATION integer,
     TRANSFER_ID varchar(32),
     SITE_ID varchar(32),
     ORDER_NO integer,
+    STOPOVER_TIME integer,
     --
     primary key (ID)
 )^
@@ -172,7 +172,6 @@ create table LINEUP_MODE_OF_TRANSFER (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
-    CLIENT integer not null,
     --
     MODE_ varchar(50),
     --
@@ -650,3 +649,53 @@ create table LINEUP_OUTAGE_PERIOD (
     primary key (ID)
 )^
 -- end LINEUP_OUTAGE_PERIOD
+-- begin LINEUP_FIRST_CLASS
+create table LINEUP_FIRST_CLASS (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    --
+    FIRST_ATTR varchar(255),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_FIRST_CLASS
+-- begin LINEUP_SECOND_CLASS
+create table LINEUP_SECOND_CLASS (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    --
+    SEC_ATTR varchar(255),
+    FIRST_CLASS_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_SECOND_CLASS
+-- begin LINEUP_THIRD_CLASS
+create table LINEUP_THIRD_CLASS (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    --
+    THIRD_ATTR varchar(255),
+    SECOND_CLASS_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_THIRD_CLASS

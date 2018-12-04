@@ -1,0 +1,6 @@
+@import "hover-ext-defaults";
+@import "hover-ext";
+
+.hover-ext {
+  @include hover-ext;
+}

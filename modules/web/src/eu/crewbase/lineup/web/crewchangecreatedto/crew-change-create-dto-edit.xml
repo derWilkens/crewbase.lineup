@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.crewchangecreatedto.CrewChangeCreateDTOEdit"
+        datasource="crewChangeCreateDTODs"
+        messagesPack="eu.crewbase.lineup.web.crewchangecreatedto">
+    <dsContext>
+        <datasource id="crewChangeCreateDTODs"
+                    class="eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO"/>
+        <datasource id="crewChangeDs"
+                    class="eu.crewbase.lineup.entity.CrewChange"
+                    view="crewChange-transfer-waypoint-edit-view"/>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="site-view-airport">
+            <query>
+                <![CDATA[select e from lineup$Site e where e.category.name = 'Airport']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="platformDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site">
+            <query>
+                <![CDATA[select e from lineup$Site e where e.category.name = 'Platform']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="craftTypesDs"
+                              class="eu.crewbase.lineup.entity.coredata.CraftType">
+            <query>
+                <![CDATA[select e from lineup$CraftType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode closeable="true"
+                forceDialog="true"
+                height="600"
+                resizable="true"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <vbox spacing="true">
+            <groupBox caption="Take Off"
+                      orientation="horizontal"
+                      spacing="true">
+                <dateField id="fligthDate"
+                           datasource="crewChangeCreateDTODs"
+                           property="crewChangeDate"
+                           required="true"
+                           resolution="DAY"
+                           responsive="true"/>
+                <timeField id="takeOff"
+                           datasource="crewChangeCreateDTODs"
+                           property="takeOff"/>
+            </groupBox>
+            <groupBox caption="Departure - Main Destination"
+                      orientation="horizontal"
+                      spacing="true">
+                <optionsGroup datasource="crewChangeCreateDTODs"
+                              optionsDatasource="sitesDs"
+                              orientation="horizontal"
+                              property="startSite"/>
+                <lookupField datasource="crewChangeCreateDTODs"
+                             inputPrompt="(start typing...)"
+                             nullOptionVisible="false"
+                             optionsDatasource="platformDs"
+                             property="destinationSite"/>
+            </groupBox>
+        </vbox>
+        <groupBox caption="Misc.">
+            <lookupField id="helikopterType"
+                         datasource="crewChangeCreateDTODs"
+                         inputPrompt="Helicopter Type"
+                         optionsDatasource="craftTypesDs"
+                         property="helicopterType"/>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

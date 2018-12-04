@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.tmp.secondclass.SecondClassBrowse"
+        focusComponent="secondClassesTable"
+        lookupComponent="secondClassesTable"
+        messagesPack="eu.crewbase.lineup.tmp.secondclass">
+    <dsContext>
+        <collectionDatasource id="secondClassesDs"
+                              class="eu.crewbase.lineup.entity.tmp.SecondClass"
+                              view="secondClass-view">
+            <query>
+                <![CDATA[select e from lineup$SecondClass e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="secondClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="secondClassesTable"
+                datasource="secondClassesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="secondClassesTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="secAttr"/>
+            </columns>
+            <rows datasource="secondClassesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="secondClassesTable.create"/>
+                <button id="editBtn"
+                        action="secondClassesTable.edit"/>
+                <button id="removeBtn"
+                        action="secondClassesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

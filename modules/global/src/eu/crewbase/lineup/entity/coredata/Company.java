@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
 
 /**
  * @author christian
@@ -15,7 +16,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 @NamePattern("%s|companyName")
 @Table(name = "LINEUP_COMPANY")
 @Entity(name = "lineup$Company")
-public class Company extends StandardClientEntity {
+public class Company extends StandardEntity {
 	private static final long serialVersionUID = -1802880052825458111L;
 
 	@Column(name = "COMPANY_NAME", nullable = false, length = 100)

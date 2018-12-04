@@ -13,7 +13,7 @@ import eu.crewbase.lineup.entity.batchimport.PeriodImportStage;
 import eu.crewbase.lineup.service.UserImportService;
 
 public class ImportUsers extends AbstractWindow {
-	
+
 	@Inject
 	private TextArea taImport;
 
@@ -23,14 +23,13 @@ public class ImportUsers extends AbstractWindow {
 	@Inject
 	private CollectionDatasource<PeriodImportStage, UUID> userImportStagesDs;
 
+	public void importRawData(Component source) {
 
-	public void importRawData(Component source){
-		
 		int result = importService.parseCsv(taImport.getRawValue());
 
 		userImportStagesDs.clear();
 		userImportStagesDs.refresh();
-		
+
 		if (result == 0) {
 			showNotification("Keine Zeilen gelesen", NotificationType.ERROR);
 		} else if (result == 1) {
@@ -39,22 +38,22 @@ public class ImportUsers extends AbstractWindow {
 			showNotification(result + " Zeilen gelesen", NotificationType.TRAY);
 		}
 	}
-	
-	public void createUsers(Component source){
-		
+
+	public void createUsers(Component source) {
+
 		int result = importService.createOrUpdateUser();
-		
+
 		showNotification(result + " Einträge wurden erstellt bzw. neu angelegt.", NotificationType.HUMANIZED);
 		userImportStagesDs.refresh();
 		taImport.setValue("");
 	}
-	
+
 	public void onClearStage(Component source) {
 		userImportStagesDs.clear();
 		userImportStagesDs.commit();
 	}
-	
-	public void clearRawDataTextArea(Component source){
+
+	public void clearRawDataTextArea(Component source) {
 		taImport.setValue("");
 	}
 }

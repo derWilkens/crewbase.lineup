@@ -35,9 +35,8 @@ public class Waypoint extends StandardClientEntity {
     @Column(name = "TAKE_OFF", nullable = false)
     protected Date takeOff;
 
-    @Temporal(TemporalType.TIME)
     @Column(name = "TRANSFER_DURATION")
-    protected Date transferDuration;
+    protected Integer transferDuration;
 
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @OnDelete(DeletePolicy.UNLINK)
@@ -53,6 +52,27 @@ public class Waypoint extends StandardClientEntity {
 
     @Column(name = "ORDER_NO")
     protected Integer orderNo;
+
+    @Column(name = "STOPOVER_TIME")
+    protected Integer stopoverTime;
+
+    public Integer getTransferDuration() {
+        return transferDuration;
+    }
+
+    public void setTransferDuration(Integer transferDuration) {
+        this.transferDuration = transferDuration;
+    }
+
+
+    public void setStopoverTime(Integer stopoverTime) {
+        this.stopoverTime = stopoverTime;
+    }
+
+    public Integer getStopoverTime() {
+        return stopoverTime;
+    }
+
 
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
@@ -74,13 +94,7 @@ public class Waypoint extends StandardClientEntity {
 
 
 
-    public Date getTransferDuration() {
-        return transferDuration;
-    }
 
-    public void setTransferDuration(Date transferDuration) {
-        this.transferDuration = transferDuration;
-    }
 
 
 

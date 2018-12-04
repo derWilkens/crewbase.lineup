@@ -2,32 +2,16 @@
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
     <view class="eu.crewbase.lineup.entity.Transfer"
           extends="_local"
-          name="transfer-browser-view">
-        <property name="modeOfTransfer"
-                  view="_minimal">
-            <property name="mode"/>
-        </property>
-    </view>
-    <view class="eu.crewbase.lineup.entity.Transfer"
-          extends="_local"
           name="transfer-edit-view">
-        <property name="waypointList"
-                  view="_minimal">
-            <property name="site">
-                <property name="client"/>
-                <property name="siteName"/>
-            </property>
-            <property name="client"/>
-        </property>
-        <property name="crewChange"
-                  view="_minimal">
-            <property name="flightDate"/>
-        </property>
         <property name="operatedBy"
                   view="_minimal"/>
         <property name="modeOfTransfer"
                   view="_minimal">
-            <property name="mode"/>
+        </property>
+        <property name="waypointList"
+                  view="_minimal">
+            <property name="orderNo"/>
+            <property name="stopoverTime"/>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
@@ -358,5 +342,68 @@
         <property name="startDate"/>
         <property name="endDate"/>
         <property name="remark"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.CrewChange"
+          extends="_local"
+          name="crewChange-transfer-waypoint-edit-view">
+        <property name="transfers"
+                  view="_minimal">
+            <property name="operatedBy"
+                      view="_minimal"/>
+            <property name="modeOfTransfer"
+                      view="_minimal"/>
+            <property name="transferOrderNo"/>
+            <property name="waypointList"
+                      view="_minimal">
+                <property name="orderNo"/>
+                <property name="stopoverTime"/>
+            </property>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
+          extends="_local"
+          name="functionCategory-edit">
+        <property name="parentType"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.Transfer"
+          extends="_local"
+          name="transfer-browse">
+        <property name="crewChange"
+                  view="_minimal">
+            <property name="flightDate"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.Waypoint"
+          extends="_local"
+          name="waypoint-view-edit">
+        <property name="site"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.tmp.FirstClass"
+          extends="_local"
+          name="firstClass-view">
+        <property name="secList"
+                  view="_minimal">
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.tmp.SecondClass"
+          extends="_local"
+          name="secondClass-view">
+        <property name="thirdList"
+                  view="_minimal">
+            <property name="thirdAttr"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.tmp.ThirdClass"
+          extends="_local"
+          name="thirdClass-view"/>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          extends="_local"
+          name="site-view-airport">
+        <property name="category"
+                  view="_minimal"/>
+        <property name="siteType"
+                  view="_minimal"/>
     </view>
 </views>

@@ -6,6 +6,7 @@ package eu.crewbase.lineup.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -25,7 +26,7 @@ import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 /**
  * @author christian
  */
-@Listeners("LINEUP_CrewChangeEntityListener")
+@Listeners("lineup_CrewChangeEntityListener")
 @Table(name = "LINEUP_CREW_CHANGE")
 @Entity(name = "lineup$CrewChange")
 public class CrewChange extends StandardClientEntity {
@@ -39,7 +40,7 @@ public class CrewChange extends StandardClientEntity {
     @Composition
     @OnDeleteInverse(DeletePolicy.UNLINK)
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "crewChange")
+    @OneToMany(mappedBy = "crewChange", cascade = CascadeType.PERSIST)
     protected List<Transfer> transfers;
 
     public List<Transfer> getTransfers() {

@@ -38,5 +38,8 @@
         <class>eu.crewbase.lineup.entity.period.AttendencePeriod</class>
         <class>eu.crewbase.lineup.entity.period.AbsencePeriod</class>
         <class>eu.crewbase.lineup.entity.period.OutagePeriod</class>
+        <class>eu.crewbase.lineup.entity.tmp.FirstClass</class>
+        <class>eu.crewbase.lineup.entity.tmp.SecondClass</class>
+        <class>eu.crewbase.lineup.entity.tmp.ThirdClass</class>
     </persistence-unit>
 </persistence>

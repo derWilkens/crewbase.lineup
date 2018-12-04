@@ -1,0 +1,2 @@
+alter table LINEUP_WAYPOINT change column TRANSFER_DURATION TRANSFER_DURATION__U79332 time^
+alter table LINEUP_WAYPOINT add column TRANSFER_DURATION integer ;

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.tmp.firstclass.FirstClassBrowse"
+        focusComponent="firstClassesTable"
+        lookupComponent="firstClassesTable"
+        messagesPack="eu.crewbase.lineup.tmp.firstclass">
+    <dsContext>
+        <collectionDatasource id="firstClassesDs"
+                              class="eu.crewbase.lineup.entity.tmp.FirstClass"
+                              view="firstClass-view">
+            <query>
+                <![CDATA[select e from lineup$FirstClass e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="firstClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="firstClassesTable"
+                datasource="firstClassesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="firstClassesTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="firstAttr"/>
+            </columns>
+            <rows datasource="firstClassesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="firstClassesTable.create"/>
+                <button id="editBtn"
+                        action="firstClassesTable.edit"/>
+                <button id="removeBtn"
+                        action="firstClassesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -14,7 +14,7 @@
                        value="eu.crewbase.lineup.service.TimelineService"/>
                 <entry key="lineup_PeriodImportService"
                        value="eu.crewbase.lineup.service.PeriodImportService"/>
-                <entry key="lineup_UserpreferencesService" 
+                <entry key="lineup_UserpreferencesService"
                        value="eu.crewbase.lineup.service.UserpreferencesService"/>
                 <entry key="lineup_RotaplanService"
                        value="eu.crewbase.lineup.service.RotaplanService"/>
@@ -28,6 +28,8 @@
                        value="eu.crewbase.lineup.service.EmlService"/>
                 <entry key="lineup_DemoService"
                        value="eu.crewbase.lineup.service.DemoService"/>
+                <entry key="lineup_CrewChangeService"
+                       value="eu.crewbase.lineup.service.CrewChangeService"/>
             </map>
         </property>
     </bean>

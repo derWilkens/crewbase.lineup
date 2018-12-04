@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.tmp.firstclass.FirstClassEdit"
+        datasource="firstClassDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.tmp.firstclass">
+    <dsContext>
+        <datasource id="firstClassDs"
+                    class="eu.crewbase.lineup.entity.tmp.FirstClass"
+                    view="firstClass-view">
+            <collectionDatasource id="secListDs"
+                                  property="secList"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="firstClassDs">
+            <column width="250px">
+                <field property="firstAttr"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="secListBox"
+                  caption="msg://eu.crewbase.lineup.entity.tmp/FirstClass.secList">
+            <table id="secListTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="secAttr"/>
+                </columns>
+                <rows datasource="secListDs"/>
+                <buttonsPanel>
+                    <button action="secListTable.create"/>
+                    <button action="secListTable.edit"/>
+                    <button action="secListTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

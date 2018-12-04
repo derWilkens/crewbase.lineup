@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.transfer.TransferBrowse"
+        focusComponent="transfersTable"
+        lookupComponent="transfersTable"
+        messagesPack="eu.crewbase.lineup.web.transfer">
+    <dsContext>
+        <groupDatasource id="transfersDs"
+                         class="eu.crewbase.lineup.entity.Transfer"
+                         view="transfer-edit-view">
+            <query>
+                <![CDATA[select e from lineup$Transfer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="transfersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="transfersTable"
+                datasource="transfersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="transfersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="client"/>
+                <column id="transferOrderNo"/>
+                <column id="operatedBy"/>
+                <column id="modeOfTransfer"/>
+            </columns>
+            <rows datasource="transfersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="transfersTable.create"/>
+                <button id="editBtn"
+                        action="transfersTable.edit"/>
+                <button id="removeBtn"
+                        action="transfersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

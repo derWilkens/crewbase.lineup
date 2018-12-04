@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.crewchange.CrewChangeEdit"
+        datasource="crewChangeDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.crewchange">
+    <dsContext>
+        <datasource id="crewChangeDs"
+                    class="eu.crewbase.lineup.entity.CrewChange"
+                    view="crewChange-transfer-waypoint-edit-view">
+            <collectionDatasource id="transfersDs"
+                                  property="transfers"/>
+        </datasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="crewChangeDs">
+            <column width="250px">
+                <field property="client"/>
+                <field property="flightDate"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="transfersBox"
+                  caption="msg://eu.crewbase.lineup.entity/CrewChange.transfers">
+            <table id="transfersTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="id"/>
+                    <column id="transferOrderNo"/>
+                    <column id="operatedBy"/>
+                    <column id="waypointList"/>
+                    <column id="modeOfTransfer"/>
+                </columns>
+                <rows datasource="transfersDs"/>
+                <buttonsPanel>
+                    <button action="transfersTable.create"/>
+                    <button action="transfersTable.edit"/>
+                    <button action="transfersTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

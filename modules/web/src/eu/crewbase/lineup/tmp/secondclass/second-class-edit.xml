@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.tmp.secondclass.SecondClassEdit"
+        datasource="secondClassDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.tmp.secondclass">
+    <dsContext>
+        <datasource id="secondClassDs"
+                    class="eu.crewbase.lineup.entity.tmp.SecondClass"
+                    view="secondClass-view">
+            <collectionDatasource id="thirdListDs"
+                                  property="thirdList"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="secondClassDs">
+            <column width="250px">
+                <field property="secAttr"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="thirdListBox"
+                  caption="msg://eu.crewbase.lineup.entity.tmp/SecondClass.thirdList">
+            <table id="thirdListTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="secondClass"/>
+                    <column id="thirdAttr"/>
+                </columns>
+                <rows datasource="thirdListDs"/>
+                <buttonsPanel>
+                    <button action="thirdListTable.create"/>
+                    <button action="thirdListTable.edit"/>
+                    <button action="thirdListTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

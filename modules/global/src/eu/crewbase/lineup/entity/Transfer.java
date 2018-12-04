@@ -3,8 +3,10 @@
  */
 package eu.crewbase.lineup.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +28,7 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
-
+import javax.validation.constraints.NotNull;
 
 /**
  * @author christian
@@ -40,12 +42,14 @@ public class Transfer extends StandardClientEntity {
     @Column(name = "TRANSFER_ORDER_NO", nullable = false)
     protected Integer transferOrderNo;
 
+    @NotNull
     @OnDeleteInverse(DeletePolicy.CASCADE)
-    @OnDelete(DeletePolicy.UNLINK)
+    @OnDelete(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CREW_CHANGE_ID")
     protected CrewChange crewChange;
 
+    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
     @OnDeleteInverse(DeletePolicy.UNLINK)
     @OnDelete(DeletePolicy.UNLINK)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,7 +60,7 @@ public class Transfer extends StandardClientEntity {
     @Composition
     @OnDeleteInverse(DeletePolicy.UNLINK)
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "transfer")
+    @OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
     protected List<Waypoint> waypointList;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
@@ -66,6 +70,10 @@ public class Transfer extends StandardClientEntity {
     @JoinColumn(name = "MODE_OF_TRANSFER_ID")
     protected ModeOfTransfer modeOfTransfer;
 
+    public Transfer() {
+		// TODO Auto-generated constructor stub
+    	this.waypointList = new ArrayList<Waypoint>();
+	}
 
     public Integer getTransferOrderNo() {
         return transferOrderNo;
@@ -119,8 +127,10 @@ public class Transfer extends StandardClientEntity {
 
 	public void addWaypoint(Site site, Integer position) {
 		Waypoint wp = new Waypoint();
-		//wp.setClient(1);
+		wp.setClient(1);
 		wp.setSite(site);
+		wp.setOrderNo(position);
+		this.waypointList.add(wp);
 	}
 
 

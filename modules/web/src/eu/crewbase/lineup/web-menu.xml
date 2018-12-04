@@ -7,12 +7,19 @@
         <item id="emlTime"
               screen="eml-timeline"/>
         <item screen="CampaignPlan"/>
+        <item screen="lineup$Company.browse"/>
+        <item screen="lineup$Transfer.browse"/>
+        <item screen="lineup$SiteCategory.browse"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
         <item screen="lineup$NumberRangeRule.browse"/>
         <item screen="lineup$SiteRoleRule.browse"/>
+        <item screen="lineup$CrewChange.browse"/>
+        <item screen="lineup$CrewChange.overview"/>
+        <item screen="lineup$CrewChangeCreateDTO.edit"/>
+        <item screen="lineup$Waypoint.browse"/>
     </menu>
     <menu id="capDB"
           icon="font-icon:GRADUATION_CAP"
@@ -43,11 +50,14 @@
         <item screen="lineup$AttendencePeriod.browse"/>
         <item screen="lineup$OperationPeriod.browse"/>
         <item screen="lineup$Site.browse"/>
-        <item id="lineup$Company.browse"/>
         <item screen="lineup$Department.browse"/>
         <item screen="lineup$AppUser.browse"/>
         <menu id="TEMP Dialoge">
             <item screen="lineup$ShiftPeriod.choose"/>
+            <item screen="lineup$FirstClass.browse"/>
+            <item screen="lineup$SecondClass.browse"/>
+            <item screen="lineup$ThirdClass.browse"/>
         </menu>
+        <item screen="lineup$FunctionCategory.browse"/>
     </menu>
 </menu-config>
