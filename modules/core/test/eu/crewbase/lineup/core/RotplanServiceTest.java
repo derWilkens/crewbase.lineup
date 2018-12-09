@@ -3,35 +3,25 @@ package eu.crewbase.lineup.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 
 import eu.crewbase.lineup.DateFormatter;
 import eu.crewbase.lineup.LineupTestContainer;
-import eu.crewbase.lineup.entity.UserPreference;
-import eu.crewbase.lineup.entity.UserPreferencesContext;
 import eu.crewbase.lineup.entity.coredata.AppUser;
 import eu.crewbase.lineup.entity.coredata.Department;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.PeriodDTO;
-import eu.crewbase.lineup.entity.dto.TimelineDTO;
 import eu.crewbase.lineup.entity.period.AttendencePeriod;
 import eu.crewbase.lineup.entity.period.OperationPeriod;
 import eu.crewbase.lineup.entity.period.Period;
@@ -40,16 +30,10 @@ import eu.crewbase.lineup.service.TimelineService;
 import eu.crewbase.lineup.service.UserpreferencesService;
 
 public class RotplanServiceTest extends LineupTestContainer {
-	@ClassRule
-	public static LineupTestContainer cont = new LineupTestContainer();
-
-	private TimelineService service;
-	private DataManager dataManager;
-	private Persistence persistence;
+	
 	private UserpreferencesService preferenceService;
 	private RotaplanService rotaplanService;
-	private Metadata metadata;
-
+	private TimelineService timelineService;
 	private Site site;
 	private List<AttendencePeriod> periodList;
 
@@ -70,7 +54,7 @@ public class RotplanServiceTest extends LineupTestContainer {
 	@Before
 	public void setUp() throws Exception {
 		dataManager = AppBeans.get(DataManager.class);
-		service = AppBeans.get(TimelineService.NAME);
+		timelineService = AppBeans.get(TimelineService.NAME);
 		preferenceService = AppBeans.get(UserpreferencesService.NAME);
 		rotaplanService = AppBeans.get(RotaplanService.NAME);
 		persistence = cont.persistence();

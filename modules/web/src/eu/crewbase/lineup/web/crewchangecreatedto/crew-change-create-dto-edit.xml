@@ -8,7 +8,7 @@
         <datasource id="crewChangeCreateDTODs"
                     class="eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO"/>
         <datasource id="crewChangeDs"
-                    class="eu.crewbase.lineup.entity.CrewChange"
+                    class="eu.crewbase.lineup.entity.wayfare.CrewChange"
                     view="crewChange-transfer-waypoint-edit-view"/>
         <collectionDatasource id="sitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
@@ -57,12 +57,12 @@
                 <optionsGroup datasource="crewChangeCreateDTODs"
                               optionsDatasource="sitesDs"
                               orientation="horizontal"
-                              property="startSite"/>
+                              property="departureSite"/>
                 <lookupField datasource="crewChangeCreateDTODs"
                              inputPrompt="(start typing...)"
                              nullOptionVisible="false"
                              optionsDatasource="platformDs"
-                             property="destinationSite"/>
+                             property="arrivalSite"/>
             </groupBox>
         </vbox>
         <groupBox caption="Misc.">
@@ -71,6 +71,15 @@
                          inputPrompt="Helicopter Type"
                          optionsDatasource="craftTypesDs"
                          property="helicopterType"/>
+            <textField id="occupiedSeatsOutbound"
+                       caption="Occupied Seats Outbound"
+                       datasource="crewChangeCreateDTODs"
+                       property="occupiedSeatsWay1"/>
+            <textField id="occupiedSeatsInbound"
+                       caption="Occupied Seats Inbound"
+                       datasource="crewChangeCreateDTODs"
+                       datatype="int"
+                       property="occupiedSeatsWay2"/>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>

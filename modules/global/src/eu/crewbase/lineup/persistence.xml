@@ -7,10 +7,10 @@
         <class>eu.crewbase.lineup.entity.coredata.OffshoreUser</class>
         <class>eu.crewbase.lineup.entity.coredata.AppUser</class>
         <class>eu.crewbase.lineup.entity.coredata.Company</class>
-        <class>eu.crewbase.lineup.entity.Transfer</class>
-        <class>eu.crewbase.lineup.entity.CrewChange</class>
+        <class>eu.crewbase.lineup.entity.wayfare.Transfer</class>
+        <class>eu.crewbase.lineup.entity.wayfare.CrewChange</class>
         <class>eu.crewbase.lineup.entity.coredata.Site</class>
-        <class>eu.crewbase.lineup.entity.Waypoint</class>
+        <class>eu.crewbase.lineup.entity.wayfare.Waypoint</class>
         <class>eu.crewbase.lineup.entity.coredata.CraftType</class>
         <class>eu.crewbase.lineup.entity.coredata.Payload</class>
         <class>eu.crewbase.lineup.entity.period.ShiftPeriod</class>
@@ -41,5 +41,6 @@
         <class>eu.crewbase.lineup.entity.tmp.FirstClass</class>
         <class>eu.crewbase.lineup.entity.tmp.SecondClass</class>
         <class>eu.crewbase.lineup.entity.tmp.ThirdClass</class>
+        <class>eu.crewbase.lineup.entity.wayfare.Way</class>
     </persistence-unit>
 </persistence>

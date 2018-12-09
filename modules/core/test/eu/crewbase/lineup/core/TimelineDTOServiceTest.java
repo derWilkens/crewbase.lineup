@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 
 import eu.crewbase.lineup.LineupTestContainer;
@@ -36,15 +34,9 @@ import eu.crewbase.lineup.service.UserpreferencesService;
 
 
 public class TimelineDTOServiceTest extends LineupTestContainer {
-	@ClassRule
-	public static LineupTestContainer cont = new LineupTestContainer();
-
-	private TimelineService service;
 	private DataManager dataManager;
 	private Persistence persistence;
 	private UserpreferencesService preferenceService;
-	private Metadata metadata;
-
 	private Site site;
 	private List<AttendencePeriod> periodList;
 

@@ -29,6 +29,9 @@ public class CraftType extends StandardClientEntity {
     @Column(name = "NAME", nullable = false, length = 50)
     protected String name;
 
+    @Column(name = "MAX_RANGE")
+    protected Integer maxRange;
+
     @Column(name = "SEATS", nullable = false)
     protected Integer seats;
 
@@ -38,6 +41,15 @@ public class CraftType extends StandardClientEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODE_OF_TRANSFER_ID")
     protected ModeOfTransfer modeOfTransfer;
+
+    public void setMaxRange(Integer maxRange) {
+        this.maxRange = maxRange;
+    }
+
+    public Integer getMaxRange() {
+        return maxRange;
+    }
+
 
     public void setModeOfTransfer(ModeOfTransfer modeOfTransfer) {
         this.modeOfTransfer = modeOfTransfer;

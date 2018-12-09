@@ -7,7 +7,7 @@
         messagesPack="eu.crewbase.lineup.web.transfer">
     <dsContext>
         <datasource id="transferDs"
-                    class="eu.crewbase.lineup.entity.Transfer"
+                    class="eu.crewbase.lineup.entity.wayfare.Transfer"
                     view="transfer-edit-view">
             <collectionDatasource id="waypointListDs"
                                   property="waypointList"/>
@@ -26,6 +26,11 @@
                 <![CDATA[select e from lineup$ModeOfTransfer e]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="craftTypesDs"
+                              class="eu.crewbase.lineup.entity.coredata.CraftType"
+                              view="_minimal">
+            <![CDATA[select e from lineup$CraftType e]]>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -40,6 +45,8 @@
                        property="operatedBy"/>
                 <field optionsDatasource="modeOfTransfersDs"
                        property="modeOfTransfer"/>
+                <field optionsDatasource="craftTypesDs"
+                       property="craftType"/>
             </column>
         </fieldGroup>
         <groupBox id="waypointListBox"
@@ -55,7 +62,6 @@
                 <columns>
                     <column id="site"/>
                     <column id="takeOff"/>
-                    <column id="transferDuration"/>
                     <column id="orderNo"/>
                     <column id="stopoverTime"/>
                 </columns>

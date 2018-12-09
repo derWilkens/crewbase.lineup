@@ -7,8 +7,8 @@
         messagesPack="eu.crewbase.lineup.web.crewchange">
     <dsContext>
         <groupDatasource id="crewChangesDs"
-                         class="eu.crewbase.lineup.entity.CrewChange"
-                         view="_local">
+                         class="eu.crewbase.lineup.entity.wayfare.CrewChange"
+                         view="crewChange-transfer-waypoint-edit-view">
             <query>
                 <![CDATA[select e from lineup$CrewChange e]]>
             </query>
@@ -16,9 +16,14 @@
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
-    <layout spacing="true">
+    <layout expand="crewChangesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="crewChangesTable"
+                datasource="crewChangesDs">
+            <properties include=".*"/>
+        </filter>
         <groupTable id="crewChangesTable"
-                    height="100%"
                     width="100%">
             <actions>
                 <action id="create"/>

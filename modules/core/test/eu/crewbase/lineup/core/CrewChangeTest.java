@@ -17,12 +17,12 @@ import com.haulmont.cuba.core.TypedQuery;
 import com.haulmont.cuba.security.entity.User;
 
 import eu.crewbase.lineup.LineupTestContainer;
-import eu.crewbase.lineup.entity.CrewChange;
-import eu.crewbase.lineup.entity.Transfer;
-import eu.crewbase.lineup.entity.Waypoint;
 import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.wayfare.CrewChange;
+import eu.crewbase.lineup.entity.wayfare.Transfer;
+import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 
 public class CrewChangeTest {
@@ -55,7 +55,7 @@ public class CrewChangeTest {
 		});
 		operatedBy = cont.persistence().createTransaction().execute(em ->{
 			Company comp = new Company();
-			comp.setClient(1);
+			//comp.setClient(1);
 			comp.setCompanyName("CompName");
 			comp.setContactPerson("SinglePointOfContactInComp");
 			comp.setEmail("operatorComp@derWilkens.de");
@@ -120,7 +120,7 @@ public class CrewChangeTest {
     	List<Transfer> transfers = crewChange.getTransfers();
     	assertTrue(transfers.size() == 1);
     	Transfer transfer1 = transfers.iterator().next();
-    	transfer1.addWaypoint(hus,null);
+    	//transfer1.addWaypoint(hus,null);
     	transfer1.getWaypointList();
     	
     		

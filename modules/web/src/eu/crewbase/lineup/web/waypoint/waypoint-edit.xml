@@ -7,12 +7,11 @@
         messagesPack="eu.crewbase.lineup.web.waypoint">
     <dsContext>
         <datasource id="waypointDs"
-                    class="eu.crewbase.lineup.entity.Waypoint"
-                    view="_local"/>
+                    class="eu.crewbase.lineup.entity.wayfare.Waypoint"
+                    view="waypoint-view-edit"/>
     </dsContext>
-    <dialogMode forceDialog="true"
-                height="AUTO"
-                width="600"/>
+    <dialogMode height="600"
+                width="800"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
@@ -20,7 +19,7 @@
             <column width="250px">
                 <field property="client"/>
                 <field property="takeOff"/>
-                <field property="transferDuration"/>
+                <field property="site"/>
                 <field property="orderNo"/>
                 <field property="stopoverTime"/>
             </column>

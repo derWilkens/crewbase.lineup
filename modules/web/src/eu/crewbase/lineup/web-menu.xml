@@ -10,16 +10,16 @@
         <item screen="lineup$Company.browse"/>
         <item screen="lineup$Transfer.browse"/>
         <item screen="lineup$SiteCategory.browse"/>
+        <item screen="lineup$Waypoint.browse"/>
+        <item screen="lineup$CrewChange.browse"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
         <item screen="lineup$NumberRangeRule.browse"/>
         <item screen="lineup$SiteRoleRule.browse"/>
-        <item screen="lineup$CrewChange.browse"/>
         <item screen="lineup$CrewChange.overview"/>
         <item screen="lineup$CrewChangeCreateDTO.edit"/>
-        <item screen="lineup$Waypoint.browse"/>
     </menu>
     <menu id="capDB"
           icon="font-icon:GRADUATION_CAP"

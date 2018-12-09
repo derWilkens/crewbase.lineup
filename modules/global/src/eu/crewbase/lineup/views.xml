@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <view class="eu.crewbase.lineup.entity.Transfer"
+    <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
           name="transfer-edit-view">
         <property name="operatedBy"
@@ -13,6 +13,8 @@
             <property name="orderNo"/>
             <property name="stopoverTime"/>
         </property>
+        <property name="craftType"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           name="site-browser-view">
@@ -23,7 +25,7 @@
         <property name="siteName"/>
         <property name="itemDesignation"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.Waypoint"
+    <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-browser-view">
         <property name="site"
@@ -343,7 +345,7 @@
         <property name="endDate"/>
         <property name="remark"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.CrewChange"
+    <view class="eu.crewbase.lineup.entity.wayfare.CrewChange"
           extends="_local"
           name="crewChange-transfer-waypoint-edit-view">
         <property name="transfers"
@@ -358,6 +360,15 @@
                 <property name="orderNo"/>
                 <property name="stopoverTime"/>
             </property>
+            <property name="craftType"
+                      view="_minimal"/>
+            <property name="ways"
+                      view="_minimal">
+                <property name="arrivalSite"
+                          view="_minimal"/>
+                <property name="travelTime"/>
+                <property name="occupiedSeats"/>
+            </property>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
@@ -366,7 +377,7 @@
         <property name="parentType"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.Transfer"
+    <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
           name="transfer-browse">
         <property name="crewChange"
@@ -374,7 +385,7 @@
             <property name="flightDate"/>
         </property>
     </view>
-    <view class="eu.crewbase.lineup.entity.Waypoint"
+    <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-view-edit">
         <property name="site"

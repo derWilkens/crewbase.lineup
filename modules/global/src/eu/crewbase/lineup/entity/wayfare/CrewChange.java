@@ -1,8 +1,9 @@
 /*
  * Copyright (c) 2016 saas
  */
-package eu.crewbase.lineup.entity;
+package eu.crewbase.lineup.entity.wayfare;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,10 +39,13 @@ public class CrewChange extends StandardClientEntity {
 
     @OrderBy("transferOrderNo")
     @Composition
-    @OnDeleteInverse(DeletePolicy.UNLINK)
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "crewChange", cascade = CascadeType.PERSIST)
     protected List<Transfer> transfers;
+    
+    public CrewChange() {
+		this.transfers = new ArrayList<Transfer>();
+	}
 
     public List<Transfer> getTransfers() {
         return transfers;

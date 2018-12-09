@@ -7,7 +7,7 @@
         messagesPack="eu.crewbase.lineup.web.transfer">
     <dsContext>
         <groupDatasource id="transfersDs"
-                         class="eu.crewbase.lineup.entity.Transfer"
+                         class="eu.crewbase.lineup.entity.wayfare.Transfer"
                          view="transfer-edit-view">
             <query>
                 <![CDATA[select e from lineup$Transfer e]]>
@@ -35,6 +35,7 @@
                 <column id="transferOrderNo"/>
                 <column id="operatedBy"/>
                 <column id="modeOfTransfer"/>
+                <column id="craftType"/>
             </columns>
             <rows datasource="transfersDs"/>
             <rowsCount/>

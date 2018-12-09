@@ -95,8 +95,6 @@
             template="eu/crewbase/lineup/web/crewchange/crew-change-edit.xml"/>
     <screen id="lineup$CrewChangeCreateDTO.edit"
             template="eu/crewbase/lineup/web/crewchangecreatedto/crew-change-create-dto-edit.xml"/>
-    <screen id="lineup$CrewChange.browse"
-            template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
     <screen id="lineup$CrewChange.overview"
             template="eu/crewbase/lineup/web/crewchange/crew-change-overview.xml"/>
     <screen id="lineup$SiteCategory.browse"
@@ -105,4 +103,6 @@
             template="eu/crewbase/lineup/web/waypoint/waypoint-browse.xml"/>
     <screen id="lineup$Waypoint.edit"
             template="eu/crewbase/lineup/web/waypoint/waypoint-edit.xml"/>
+    <screen id="lineup$CrewChange.browse"
+            template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
 </screen-config>

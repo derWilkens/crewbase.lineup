@@ -6,9 +6,9 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 
-import eu.crewbase.lineup.entity.CrewChange;
-import eu.crewbase.lineup.entity.Transfer;
-import eu.crewbase.lineup.entity.Waypoint;
+import eu.crewbase.lineup.entity.wayfare.CrewChange;
+import eu.crewbase.lineup.entity.wayfare.Transfer;
+import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 @Component("lineup_CrewChangeEntityListener")
 public class CrewChangeEntityListener

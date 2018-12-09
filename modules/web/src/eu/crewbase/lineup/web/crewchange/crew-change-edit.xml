@@ -7,7 +7,7 @@
         messagesPack="eu.crewbase.lineup.web.crewchange">
     <dsContext>
         <datasource id="crewChangeDs"
-                    class="eu.crewbase.lineup.entity.CrewChange"
+                    class="eu.crewbase.lineup.entity.wayfare.CrewChange"
                     view="crewChange-transfer-waypoint-edit-view">
             <collectionDatasource id="transfersDs"
                                   property="transfers"/>
@@ -41,6 +41,7 @@
                     <column id="operatedBy"/>
                     <column id="waypointList"/>
                     <column id="modeOfTransfer"/>
+                    <column id="craftType"/>
                 </columns>
                 <rows datasource="transfersDs"/>
                 <buttonsPanel>

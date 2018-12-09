@@ -55,9 +55,10 @@ create table LINEUP_TRANSFER (
     CLIENT integer not null,
     --
     TRANSFER_ORDER_NO integer not null,
-    CREW_CHANGE_ID varchar(32) not null,
+    CREW_CHANGE_ID varchar(32),
     OPERATED_BY_ID varchar(32),
     MODE_OF_TRANSFER_ID varchar(32),
+    CRAFT_TYPE_ID varchar(32),
     --
     primary key (ID)
 )^
@@ -113,8 +114,7 @@ create table LINEUP_WAYPOINT (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     --
-    TAKE_OFF time(3) not null,
-    TRANSFER_DURATION integer,
+    TAKE_OFF time(3),
     TRANSFER_ID varchar(32),
     SITE_ID varchar(32),
     ORDER_NO integer,
@@ -699,3 +699,23 @@ create table LINEUP_THIRD_CLASS (
     primary key (ID)
 )^
 -- end LINEUP_THIRD_CLASS
+-- begin LINEUP_WAY
+create table LINEUP_WAY (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    --
+    ARRIVAL_SITE_ID varchar(32),
+    DEPARTURE_SITE_ID varchar(32),
+    TRAVEL_TIME integer,
+    OCCUPIED_SEATS integer,
+    TRANSFER_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_WAY

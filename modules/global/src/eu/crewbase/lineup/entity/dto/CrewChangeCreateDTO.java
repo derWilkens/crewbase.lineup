@@ -10,7 +10,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 
-@NamePattern("%s %s|crewChangeDate,destinationSite")
+@NamePattern("%s %s|crewChangeDate,arrivalSite")
 @MetaClass(name = "lineup$CrewChangeCreateDTO")
 public class CrewChangeCreateDTO extends BaseUuidEntity {
     private static final long serialVersionUID = 8628238232285382909L;
@@ -23,15 +23,55 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
-    protected Site startSite;
+    protected Site departureSite;
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
-    protected Site destinationSite;
+    protected Site arrivalSite;
+
+    @MetaProperty
+    protected Integer occupiedSeatsWay1;
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
     protected CraftType helicopterType;
+
+    @MetaProperty
+    protected Integer occupiedSeatsWay2;
+
+    public void setArrivalSite(Site arrivalSite) {
+        this.arrivalSite = arrivalSite;
+    }
+
+    public Site getArrivalSite() {
+        return arrivalSite;
+    }
+
+
+    public void setDepartureSite(Site departureSite) {
+        this.departureSite = departureSite;
+    }
+
+    public Site getDepartureSite() {
+        return departureSite;
+    }
+
+    public void setOccupiedSeatsWay1(Integer occupiedSeatsWay1) {
+        this.occupiedSeatsWay1 = occupiedSeatsWay1;
+    }
+
+    public Integer getOccupiedSeatsWay1() {
+        return occupiedSeatsWay1;
+    }
+
+    public void setOccupiedSeatsWay2(Integer occupiedSeatsWay2) {
+        this.occupiedSeatsWay2 = occupiedSeatsWay2;
+    }
+
+    public Integer getOccupiedSeatsWay2() {
+        return occupiedSeatsWay2;
+    }
+
 
     public void setCrewChangeDate(Date crewChangeDate) {
         this.crewChangeDate = crewChangeDate;
@@ -47,22 +87,6 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
 
     public Date getTakeOff() {
         return takeOff;
-    }
-
-    public void setStartSite(Site startSite) {
-        this.startSite = startSite;
-    }
-
-    public Site getStartSite() {
-        return startSite;
-    }
-
-    public void setDestinationSite(Site destinationSite) {
-        this.destinationSite = destinationSite;
-    }
-
-    public Site getDestinationSite() {
-        return destinationSite;
     }
 
     public void setHelicopterType(CraftType helicopterType) {

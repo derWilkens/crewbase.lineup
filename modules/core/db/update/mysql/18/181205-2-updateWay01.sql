@@ -1,0 +1,2 @@
+alter table LINEUP_WAY add constraint FK_LINEUP_WAY_ON_TRANSFER foreign key (TRANSFER_ID) references LINEUP_TRANSFER(ID);
+create index IDX_LINEUP_WAY_ON_TRANSFER on LINEUP_WAY (TRANSFER_ID);

@@ -7,7 +7,7 @@
         messagesPack="eu.crewbase.lineup.web.crewchange">
     <dsContext>
         <groupDatasource id="crewChangesDs"
-                         class="eu.crewbase.lineup.entity.CrewChange"
+                         class="eu.crewbase.lineup.entity.wayfare.CrewChange"
                          view="_local">
             <query>
                 <![CDATA[select e from lineup$CrewChange e]]>

@@ -1,9 +1,17 @@
 package eu.crewbase.lineup;
 
 import com.haulmont.bali.util.Dom4j;
+import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.testsupport.TestContainer;
+
+import eu.crewbase.lineup.service.CrewChangeService;
+
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.junit.ClassRule;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +19,14 @@ import java.util.Arrays;
 
 public class LineupTestContainer extends TestContainer {
 
-    public LineupTestContainer() {
+    @ClassRule
+	public static LineupTestContainer cont = new LineupTestContainer();
+    
+	protected Metadata metadata;
+	protected DataManager dataManager;
+	protected Persistence persistence;
+	
+	public LineupTestContainer() {
         super();
         appComponents = new ArrayList<>(Arrays.asList(
                 "com.haulmont.cuba"
@@ -33,10 +48,16 @@ public class LineupTestContainer extends TestContainer {
         initDbProperties();
     }
 
+    protected void setUp() throws Exception{
+        metadata = cont.metadata();
+        persistence = cont.persistence();
+        dataManager = AppBeans.get(DataManager.class);
+    }
+    
     private void initDbProperties() {
         File contextXmlFile = new File("modules/core/web/META-INF/context.xml");
         if (!contextXmlFile.exists()) {
-            contextXmlFile = new File("web/META-INF/context.xml");
+            contextXmlFile = new File("web/META-INF/context-test.xml");
         }
         if (!contextXmlFile.exists()) {
             throw new RuntimeException("Cannot find 'context.xml' file to read database connection properties. " +

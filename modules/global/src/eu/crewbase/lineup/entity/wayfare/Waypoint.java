@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2016 saas
  */
-package eu.crewbase.lineup.entity;
+package eu.crewbase.lineup.entity.wayfare;
 
 import java.util.Date;
 
@@ -22,23 +22,27 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 
+import eu.crewbase.lineup.entity.wayfare.Transfer;
+import com.haulmont.chile.core.annotations.Composition;
+import java.util.List;
+import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
 /**
  * @author christian
  */
-@NamePattern("%s %s %s|site,takeOff,transferDuration")
+@NamePattern("%s %s |site,takeOff")
 @Table(name = "LINEUP_WAYPOINT")
 @Entity(name = "lineup$Waypoint")
 public class Waypoint extends StandardClientEntity {
     private static final long serialVersionUID = -4973545925621830772L;
 
     @Temporal(TemporalType.TIME)
-    @Column(name = "TAKE_OFF", nullable = false)
+    @Column(name = "TAKE_OFF")
     protected Date takeOff;
 
-    @Column(name = "TRANSFER_DURATION")
-    protected Integer transferDuration;
 
-    @OnDeleteInverse(DeletePolicy.CASCADE)
     @OnDelete(DeletePolicy.UNLINK)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSFER_ID")
@@ -56,13 +60,15 @@ public class Waypoint extends StandardClientEntity {
     @Column(name = "STOPOVER_TIME")
     protected Integer stopoverTime;
 
-    public Integer getTransferDuration() {
-        return transferDuration;
+    public Transfer getTransfer() {
+        return transfer;
     }
 
-    public void setTransferDuration(Integer transferDuration) {
-        this.transferDuration = transferDuration;
+    public void setTransfer(Transfer transfer) {
+        this.transfer = transfer;
     }
+
+
 
 
     public void setStopoverTime(Integer stopoverTime) {
@@ -98,13 +104,7 @@ public class Waypoint extends StandardClientEntity {
 
 
 
-    public Transfer getTransfer() {
-        return transfer;
-    }
 
-    public void setTransfer(Transfer transfer) {
-        this.transfer = transfer;
-    }
 
 
 
