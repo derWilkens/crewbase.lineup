@@ -66,6 +66,8 @@
                         <column id="itemDesignation"/>
                         <column id="category"/>
                         <column id="siteType"/>
+                        <column id="latitude"/>
+                        <column id="longitude"/>
                     </columns>
                     <rows datasource="sitesDs"/>
                     <rowsCount/>
@@ -94,6 +96,8 @@
                             <field optionsDatasource="categoriesDs"
                                    property="category"/>
                             <field property="siteType"/>
+                            <field property="latitude"/>
+                            <field property="longitude"/>
                         </column>
                     </fieldGroup>
                 </vbox>

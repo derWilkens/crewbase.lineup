@@ -19,9 +19,9 @@
             <column width="250px">
                 <field property="client"/>
                 <field property="takeOff"/>
-                <field property="site"/>
                 <field property="orderNo"/>
                 <field property="stopoverTime"/>
+                <field property="previousStandstill"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

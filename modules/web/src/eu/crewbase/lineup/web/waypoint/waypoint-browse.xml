@@ -33,9 +33,8 @@
             <columns>
                 <column id="client"/>
                 <column id="takeOff"/>
-                <column id="site"/>
-                <column id="orderNo"/>
                 <column id="stopoverTime"/>
+                <column id="previousStandstill"/>
             </columns>
             <rows datasource="waypointsDs"/>
             <rowsCount/>

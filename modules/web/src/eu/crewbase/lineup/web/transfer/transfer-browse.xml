@@ -36,6 +36,7 @@
                 <column id="operatedBy"/>
                 <column id="modeOfTransfer"/>
                 <column id="craftType"/>
+                <column id="anchorWaypoint"/>
             </columns>
             <rows datasource="transfersDs"/>
             <rowsCount/>

@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '6.10.4'
+    ext.cubaVersion = '6.10.5'
     repositories {
         
         maven {
@@ -32,6 +32,7 @@ def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 apply(plugin: 'java')
 apply(plugin: 'eclipse')
+apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -59,7 +60,8 @@ configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
     apply(plugin: 'eclipse')
-    apply(plugin: 'cuba')
+    apply(plugin: 'idea')
+apply(plugin: 'cuba')
 
     dependencies {
         testCompile('junit:junit:4.12')
@@ -126,7 +128,7 @@ configure(coreModule) {
         host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'Wilkens:)1'
+        dbPassword = 'lineup'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 
@@ -135,7 +137,7 @@ configure(coreModule) {
         host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'Wilkens:)1'
+        dbPassword = 'lineup'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 }
@@ -215,7 +217,8 @@ configure(webModule) {
 configure(webThemesModule) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'cuba')
+    apply(plugin: 'idea')
+apply(plugin: 'cuba')
 
     appModuleType = 'web-themes'
 

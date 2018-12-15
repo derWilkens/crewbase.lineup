@@ -3,21 +3,14 @@
  */
 package eu.crewbase.lineup.entity.wayfare;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -25,29 +18,31 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
 import eu.crewbase.lineup.entity.coredata.Company;
-import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
-import eu.crewbase.lineup.entity.coredata.Site;
-import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
-import javax.validation.constraints.NotNull;
-
-import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.coredata.CraftType;
+import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * @author christian
  */
-@NamePattern("%s|id")
+@PrimaryKeyJoinColumn(name = "ID", referencedColumnName = "ID")
 @Table(name = "LINEUP_TRANSFER")
 @Entity(name = "lineup$Transfer")
-public class Transfer extends StandardClientEntity {
+public class Transfer extends Standstill {
 	private static final long serialVersionUID = -5709533341256299692L;
 
 	@Column(name = "TRANSFER_ORDER_NO", nullable = false)
 	protected Integer transferOrderNo;
 
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ANCHOR_WAYPOINT_ID")
+	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@OnDelete(DeletePolicy.CASCADE)
+	protected AnchorWaypoint anchorWaypoint;
+
 	@OnDelete(DeletePolicy.UNLINK)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CREW_CHANGE_ID")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;
 
 	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
@@ -56,13 +51,6 @@ public class Transfer extends StandardClientEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
-
-	@OrderBy("orderNo")
-	@Composition
-	@OnDeleteInverse(DeletePolicy.UNLINK)
-	@OnDelete(DeletePolicy.CASCADE)
-	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
-	protected List<Waypoint> waypointList;
 
 	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
     @OnDeleteInverse(DeletePolicy.UNLINK)
@@ -78,19 +66,13 @@ public class Transfer extends StandardClientEntity {
 	@JoinColumn(name = "CRAFT_TYPE_ID")
 	protected CraftType craftType;
 
-    @OnDeleteInverse(DeletePolicy.UNLINK)
-    @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
-    protected List<Way> ways;
+	public AnchorWaypoint getAnchorWaypoint() {
+		return anchorWaypoint;
+	}
 
-    public void setWays(List<Way> ways) {
-        this.ways = ways;
-    }
-
-    public List<Way> getWays() {
-        return ways;
-    }
-
+	public void setAnchorWaypoint(AnchorWaypoint anchorWaypoint) {
+		this.anchorWaypoint = anchorWaypoint;
+	}
 
 	public void setCraftType(CraftType craftType) {
 		this.craftType = craftType;
@@ -109,9 +91,6 @@ public class Transfer extends StandardClientEntity {
 	}
 
 	public Transfer() {
-		// TODO Auto-generated constructor stub
-		this.waypointList = new ArrayList<Waypoint>();
-		this.ways = new ArrayList<>();
 	}
 
 	public Integer getTransferOrderNo() {
@@ -120,14 +99,6 @@ public class Transfer extends StandardClientEntity {
 
 	public void setTransferOrderNo(Integer transferOrderNo) {
 		this.transferOrderNo = transferOrderNo;
-	}
-
-	public List<Waypoint> getWaypointList() {
-		return waypointList;
-	}
-
-	public void setWaypointList(List<Waypoint> waypointList) {
-		this.waypointList = waypointList;
 	}
 
 	public void setModeOfTransfer(ModeOfTransfer modeOfTransfer) {
@@ -146,4 +117,35 @@ public class Transfer extends StandardClientEntity {
 		this.operatedBy = operatedBy;
 	}
 
+	public int getTotalDistance() {
+		int totalDistance = 0;
+		Standstill currentStandstill = this.getAnchorWaypoint();
+		Standstill nextStandstill = this.getAnchorWaypoint().nextWaypoint;
+		do {
+			totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(nextStandstill.getSite());
+			currentStandstill = nextStandstill;
+			nextStandstill = currentStandstill.getNextWaypoint();
+			if(nextStandstill == null){
+			//der letze Waypoint hat keinen NextWaypoint - aber die Tour geht zurück zum Anchorpoint
+			totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(anchorWaypoint.getSite());
+			}
+		} while (nextStandstill != null);
+		return totalDistance;
+
+	}
+	public String getRoute(){
+		String route = "";
+		String delim = "";
+		Standstill currentStandstill = this.getAnchorWaypoint();
+		do {
+			route = route + delim + currentStandstill.getSite().getItemDesignation();
+			currentStandstill = currentStandstill.getNextWaypoint();
+			if(currentStandstill == null){
+			//der letze Waypoint hat keinen NextWaypoint - aber die Tour geht zurück zum Anchorpoint
+				route = route + delim  + anchorWaypoint.getSite().getItemDesignation();
+			}
+			delim = " - ";
+		} while (currentStandstill != null);
+		return route;
+	}
 }

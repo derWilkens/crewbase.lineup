@@ -1,5 +1,6 @@
 <Context>
     <!-- Database connection >
+    -->
     <Resource driverClassName="com.mysql.jdbc.Driver"
               maxIdle="2"
               maxTotal="20"
@@ -8,10 +9,10 @@
               password="lineup"
               type="javax.sql.DataSource"
               url="jdbc:mysql://localhost/lineup?useSSL=false&amp;allowMultiQueries=true"
-              username="lineup"/>-->
+              username="lineup"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
-    <Resource driverClassName="com.mysql.jdbc.Driver"
+<!--     <Resource driverClassName="com.mysql.jdbc.Driver"
               maxIdle="2"
               maxTotal="20"
               maxWaitMillis="5000"
@@ -19,7 +20,7 @@
               password="Wilkens:)1"
               type="javax.sql.DataSource"
               url="jdbc:mysql://localhost:3306/lineup?useSSL=false&amp;allowMultiQueries=true"
-              username="lineup"/>
+              username="lineup"/> -->
     
     <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
           maxIdle="2"

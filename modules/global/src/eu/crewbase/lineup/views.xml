@@ -8,12 +8,9 @@
         <property name="modeOfTransfer"
                   view="_minimal">
         </property>
-        <property name="waypointList"
-                  view="_minimal">
-            <property name="orderNo"/>
-            <property name="stopoverTime"/>
-        </property>
         <property name="craftType"
+                  view="_minimal"/>
+        <property name="anchorWaypoint"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
@@ -24,11 +21,13 @@
                   view="_minimal"/>
         <property name="siteName"/>
         <property name="itemDesignation"/>
+        <property name="longitude"/>
+        <property name="latitude"/>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-browser-view">
-        <property name="site"
+        <property name="previousStandstill"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
@@ -241,6 +240,8 @@
           name="sitePeriodChoose">
         <property name="siteName"/>
         <property name="itemDesignation"/>
+        <property name="longitude"/>
+        <property name="latitude"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           extends="dutyPeriodTemplate-view"
@@ -355,20 +356,8 @@
             <property name="modeOfTransfer"
                       view="_minimal"/>
             <property name="transferOrderNo"/>
-            <property name="waypointList"
-                      view="_minimal">
-                <property name="orderNo"/>
-                <property name="stopoverTime"/>
-            </property>
             <property name="craftType"
                       view="_minimal"/>
-            <property name="ways"
-                      view="_minimal">
-                <property name="arrivalSite"
-                          view="_minimal"/>
-                <property name="travelTime"/>
-                <property name="occupiedSeats"/>
-            </property>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.FunctionCategory"
@@ -388,7 +377,7 @@
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-view-edit">
-        <property name="site"
+        <property name="previousStandstill"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.tmp.FirstClass"

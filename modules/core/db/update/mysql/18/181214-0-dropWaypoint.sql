@@ -1,0 +1,5 @@
+rename table lineup_waypoint to LINEUP_WAYPOINT__U73646 ;
+alter table lineup_anchor_waypoint drop foreign key FK_LINEUP_ANCHOR_WAYPOINT_ON_NEXT_WAYPOINT;
+alter table lineup_standstill drop foreign key FK_LINEUP_STANDSTILL_ON_NEXT_WAYPOINT;
+alter table lineup_transfer drop foreign key FK_LINEUP_TRANSFER_ON_NEXT_WAYPOINT;
+alter table lineup_waypoint drop foreign key FK_LINEUP_WAYPOINT_ON_NEXT_WAYPOINT;

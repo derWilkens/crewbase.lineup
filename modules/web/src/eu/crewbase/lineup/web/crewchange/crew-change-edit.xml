@@ -42,6 +42,7 @@
                     <column id="waypointList"/>
                     <column id="modeOfTransfer"/>
                     <column id="craftType"/>
+                    <column id="anchorWaypoint"/>
                 </columns>
                 <rows datasource="transfersDs"/>
                 <buttonsPanel>

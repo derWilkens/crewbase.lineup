@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.testsupport.TestContainer;
 
 import eu.crewbase.lineup.service.CrewChangeService;
+import eu.crewbase.lineup.service.EntityService;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -25,6 +26,7 @@ public class LineupTestContainer extends TestContainer {
 	protected Metadata metadata;
 	protected DataManager dataManager;
 	protected Persistence persistence;
+	protected EntityService entityService;
 	
 	public LineupTestContainer() {
         super();
@@ -52,6 +54,7 @@ public class LineupTestContainer extends TestContainer {
         metadata = cont.metadata();
         persistence = cont.persistence();
         dataManager = AppBeans.get(DataManager.class);
+        entityService = AppBeans.get(EntityService.NAME);
     }
     
     private void initDbProperties() {

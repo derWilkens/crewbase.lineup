@@ -1,0 +1,5 @@
+@import "../hover/hover";
+
+@mixin hover-cw {
+  @include hover;
+}

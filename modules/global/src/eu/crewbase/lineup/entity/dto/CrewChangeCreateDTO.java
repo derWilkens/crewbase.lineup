@@ -10,16 +10,13 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 
-@NamePattern("%s %s|crewChangeDate,arrivalSite")
+@NamePattern("%s %s|startDateTime,arrivalSite")
 @MetaClass(name = "lineup$CrewChangeCreateDTO")
 public class CrewChangeCreateDTO extends BaseUuidEntity {
     private static final long serialVersionUID = 8628238232285382909L;
 
     @MetaProperty
-    protected Date crewChangeDate;
-
-    @MetaProperty
-    protected Date takeOff;
+    protected Date startDateTime;
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
@@ -38,6 +35,15 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
 
     @MetaProperty
     protected Integer occupiedSeatsWay2;
+
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
+    }
+
+    public Date getStartDateTime() {
+        return startDateTime;
+    }
+
 
     public void setArrivalSite(Site arrivalSite) {
         this.arrivalSite = arrivalSite;
@@ -72,22 +78,6 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
         return occupiedSeatsWay2;
     }
 
-
-    public void setCrewChangeDate(Date crewChangeDate) {
-        this.crewChangeDate = crewChangeDate;
-    }
-
-    public Date getCrewChangeDate() {
-        return crewChangeDate;
-    }
-
-    public void setTakeOff(Date takeOff) {
-        this.takeOff = takeOff;
-    }
-
-    public Date getTakeOff() {
-        return takeOff;
-    }
 
     public void setHelicopterType(CraftType helicopterType) {
         this.helicopterType = helicopterType;

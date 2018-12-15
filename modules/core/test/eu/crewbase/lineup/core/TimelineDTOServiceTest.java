@@ -37,6 +37,7 @@ public class TimelineDTOServiceTest extends LineupTestContainer {
 	private DataManager dataManager;
 	private Persistence persistence;
 	private UserpreferencesService preferenceService;
+	private TimelineService service;
 	private Site site;
 	private List<AttendencePeriod> periodList;
 

@@ -41,6 +41,7 @@
         <class>eu.crewbase.lineup.entity.tmp.FirstClass</class>
         <class>eu.crewbase.lineup.entity.tmp.SecondClass</class>
         <class>eu.crewbase.lineup.entity.tmp.ThirdClass</class>
-        <class>eu.crewbase.lineup.entity.wayfare.Way</class>
+        <class>eu.crewbase.lineup.entity.wayfare.AnchorWaypoint</class>
+        <class>eu.crewbase.lineup.entity.wayfare.Standstill</class>
     </persistence-unit>
 </persistence>

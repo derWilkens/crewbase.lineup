@@ -47,6 +47,7 @@
                        property="modeOfTransfer"/>
                 <field optionsDatasource="craftTypesDs"
                        property="craftType"/>
+                <field property="anchorWaypoint"/>
             </column>
         </fieldGroup>
         <groupBox id="waypointListBox"
@@ -62,7 +63,7 @@
                 <columns>
                     <column id="site"/>
                     <column id="takeOff"/>
-                    <column id="orderNo"/>
+                    <column id="nextWaypoint"/>
                     <column id="stopoverTime"/>
                 </columns>
                 <rows datasource="waypointListDs"/>

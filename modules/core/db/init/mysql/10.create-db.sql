@@ -42,27 +42,7 @@ create table LINEUP_COMPANY (
     primary key (ID)
 )^
 -- end LINEUP_COMPANY
--- begin LINEUP_TRANSFER
-create table LINEUP_TRANSFER (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    CLIENT integer not null,
-    --
-    TRANSFER_ORDER_NO integer not null,
-    CREW_CHANGE_ID varchar(32),
-    OPERATED_BY_ID varchar(32),
-    MODE_OF_TRANSFER_ID varchar(32),
-    CRAFT_TYPE_ID varchar(32),
-    --
-    primary key (ID)
-)^
--- end LINEUP_TRANSFER
+
 -- begin LINEUP_CREW_CHANGE
 create table LINEUP_CREW_CHANGE (
     ID varchar(32),
@@ -93,6 +73,8 @@ create table LINEUP_SITE (
     CLIENT integer not null,
     --
     SITE_NAME varchar(50) not null,
+    LATITUDE double precision,
+    LONGITUDE double precision,
     ITEM_DESIGNATION varchar(7),
     PARENT_SITE_ID varchar(32),
     SHORT_ITEM_DESIGNATION varchar(4),
@@ -102,27 +84,7 @@ create table LINEUP_SITE (
     primary key (ID)
 )^
 -- end LINEUP_SITE
--- begin LINEUP_WAYPOINT
-create table LINEUP_WAYPOINT (
-    ID varchar(32),
-    VERSION integer not null,
-    CREATE_TS datetime(3),
-    CREATED_BY varchar(50),
-    UPDATE_TS datetime(3),
-    UPDATED_BY varchar(50),
-    DELETE_TS datetime(3),
-    DELETED_BY varchar(50),
-    CLIENT integer not null,
-    --
-    TAKE_OFF time(3),
-    TRANSFER_ID varchar(32),
-    SITE_ID varchar(32),
-    ORDER_NO integer,
-    STOPOVER_TIME integer,
-    --
-    primary key (ID)
-)^
--- end LINEUP_WAYPOINT
+
 -- begin LINEUP_CRAFT_TYPE
 create table LINEUP_CRAFT_TYPE (
     ID varchar(32),
@@ -136,6 +98,7 @@ create table LINEUP_CRAFT_TYPE (
     CLIENT integer not null,
     --
     NAME varchar(50) not null,
+    MAX_RANGE integer,
     SEATS integer not null,
     MODE_OF_TRANSFER_ID varchar(32),
     --
@@ -529,9 +492,9 @@ create table LINEUP_SITE_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
-    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
+    COLOR varchar(255),
     --
     SITE_ID varchar(32),
     --
@@ -574,9 +537,9 @@ create table LINEUP_SHIFT_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
-    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
+    COLOR varchar(255),
     --
     PERSON_ON_DUTY_ID varchar(32),
     --
@@ -617,9 +580,9 @@ create table LINEUP_OPERATION_PERIOD (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     START_DATE datetime(3),
-    COLOR varchar(255),
     END_DATE datetime(3),
     REMARK varchar(255),
+    COLOR varchar(255),
     SITE_ID varchar(32),
     --
     PARENT_PERIOD_ID varchar(32),
@@ -699,8 +662,42 @@ create table LINEUP_THIRD_CLASS (
     primary key (ID)
 )^
 -- end LINEUP_THIRD_CLASS
--- begin LINEUP_WAY
-create table LINEUP_WAY (
+-- begin LINEUP_TRANSFER
+create table LINEUP_TRANSFER (
+    ID varchar(32),
+    --
+    TRANSFER_ORDER_NO integer not null,
+    ANCHOR_WAYPOINT_ID varchar(32),
+    CREW_CHANGE_ID varchar(32),
+    OPERATED_BY_ID varchar(32),
+    MODE_OF_TRANSFER_ID varchar(32),
+    CRAFT_TYPE_ID varchar(32),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_TRANSFER
+-- begin LINEUP_WAYPOINT
+create table LINEUP_WAYPOINT (
+    ID varchar(32),
+    --
+    TAKE_OFF time(3),
+    PREVIOUS_STANDSTILL_ID varchar(32),
+    STOPOVER_TIME integer,
+    --
+    primary key (ID)
+)^
+-- end LINEUP_WAYPOINT
+-- begin LINEUP_ANCHOR_WAYPOINT
+create table LINEUP_ANCHOR_WAYPOINT (
+    ID varchar(32),
+    --
+    START_DATE_TIME datetime(3),
+    --
+    primary key (ID)
+)^
+-- end LINEUP_ANCHOR_WAYPOINT
+-- begin LINEUP_STANDSTILL
+create table LINEUP_STANDSTILL (
     ID varchar(32),
     VERSION integer not null,
     CREATE_TS datetime(3),
@@ -709,13 +706,12 @@ create table LINEUP_WAY (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
+    DTYPE varchar(31),
     --
-    ARRIVAL_SITE_ID varchar(32),
-    DEPARTURE_SITE_ID varchar(32),
-    TRAVEL_TIME integer,
-    OCCUPIED_SEATS integer,
+    SITE_ID varchar(32),
     TRANSFER_ID varchar(32),
+    NEXT_WAYPOINT_ID varchar(32),
     --
     primary key (ID)
 )^
--- end LINEUP_WAY
+-- end LINEUP_STANDSTILL

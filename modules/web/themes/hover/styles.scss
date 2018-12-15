@@ -1,0 +1,11 @@
+@import "hover-defaults";
+@import "eu.crewbase.lineup/hover-ext-defaults";
+@import "app-components";
+@import "eu.crewbase.lineup/hover-ext";
+
+.hover {
+  // include auto-generated app components SCSS
+  @include app_components;
+  
+  @include eu_crewbase_lineup-hover-ext;
+}

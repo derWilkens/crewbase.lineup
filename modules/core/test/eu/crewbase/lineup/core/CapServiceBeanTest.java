@@ -33,6 +33,7 @@ public class CapServiceBeanTest extends LineupTestContainer {
 	private DataManager dataManager;
 	private Persistence persistence;
 	private UserpreferencesService preferenceService;
+	private CapService service;
 	private Site site;
 	private List<AttendencePeriod> periodList;
 	private AttendencePeriod dutyPeriod;

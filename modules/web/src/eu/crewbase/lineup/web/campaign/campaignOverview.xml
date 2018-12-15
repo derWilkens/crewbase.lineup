@@ -78,6 +78,8 @@
                 <columns>
                     <column id="siteName"/>
                     <column id="category"/>
+                    <column id="latitude"/>
+                    <column id="longitude"/>
                 </columns>
                 <rows datasource="sitesDs"/>
             </table>

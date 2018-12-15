@@ -1,0 +1,2 @@
+rename table lineup_standstill to LINEUP_STANDSTILL__U62209 ;
+alter table lineup_waypoint drop foreign key FK_LINEUP_WAYPOINT_ON_PREVIOUS_STANDSTILL;

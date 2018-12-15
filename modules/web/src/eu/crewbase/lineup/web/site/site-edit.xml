@@ -40,6 +40,8 @@
                 <field optionsDatasource="categoriesDs"
                        property="category"/>
                 <field property="siteType"/>
+                <field property="latitude"/>
+                <field property="longitude"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

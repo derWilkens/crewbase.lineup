@@ -78,7 +78,7 @@ public class CrewChangeTest {
 		
 		Transfer transfer1 = cont.persistence().createTransaction().execute(em ->{
 			Transfer transfer = new Transfer();
-			transfer.setClient(1);
+			//transfer.setClient(1);
 			transfer.setModeOfTransfer(modeOfTransfer);
 			transfer.setOperatedBy(operatedBy);
 			transfer.setTransferOrderNo(1);
@@ -91,19 +91,19 @@ public class CrewChangeTest {
 		waypointList = new ArrayList<Waypoint>();
 		waypointList.add(cont.persistence().createTransaction().execute(em ->{
 			Waypoint wp = new Waypoint();
-			wp.setClient(1);
+			//wp.setClient(1);
 			wp.setSite(hus);
 			return wp;
 		}));
 		waypointList.add(cont.persistence().createTransaction().execute(em ->{
 			Waypoint wp = new Waypoint();
-			wp.setClient(1);
+			//wp.setClient(1);
 			wp.setSite(sw1);
 			return wp;
 		}));
 		waypointList.add(cont.persistence().createTransaction().execute(em ->{
 			Waypoint wp = new Waypoint();
-			wp.setClient(1);
+			//wp.setClient(1);
 			wp.setSite(hus);
 			return wp;
 		}));
@@ -121,7 +121,7 @@ public class CrewChangeTest {
     	assertTrue(transfers.size() == 1);
     	Transfer transfer1 = transfers.iterator().next();
     	//transfer1.addWaypoint(hus,null);
-    	transfer1.getWaypointList();
+    	//transfer1.getWaypointList();
     	
     		
         try (Transaction tx = cont.persistence().createTransaction()) {

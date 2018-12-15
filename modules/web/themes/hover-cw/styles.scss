@@ -1,0 +1,6 @@
+@import "hover-cw-defaults";
+@import "hover-cw";
+
+.hover-cw {
+  @include hover-cw;
+}

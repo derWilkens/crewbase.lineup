@@ -1,0 +1,10 @@
+alter table LINEUP_STANDSTILL drop column DTYPE__U60817 cascade ;
+alter table LINEUP_STANDSTILL drop column START_DATE_TIME__U32111 cascade ;
+alter table LINEUP_STANDSTILL drop column TAKE_OFF__U16031 cascade ;
+alter table LINEUP_STANDSTILL drop column PREVIOUS_STANDSTILL_ID__U56393 cascade ;
+alter table LINEUP_STANDSTILL drop column STOPOVER_TIME__U88576 cascade ;
+alter table LINEUP_STANDSTILL drop column TRANSFER_ORDER_NO__U84043 cascade ;
+alter table LINEUP_STANDSTILL drop column CREW_CHANGE_ID__U23850 cascade ;
+alter table LINEUP_STANDSTILL drop column OPERATED_BY_ID__U22356 cascade ;
+alter table LINEUP_STANDSTILL drop column MODE_OF_TRANSFER_ID__U20029 cascade ;
+alter table LINEUP_STANDSTILL drop column CRAFT_TYPE_ID__U23187 cascade ;

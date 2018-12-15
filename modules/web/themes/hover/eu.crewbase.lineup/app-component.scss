@@ -1,0 +1,5 @@
+@import "hover-ext";
+
+@mixin eu_crewbase_lineup {
+  @include eu_crewbase_lineup-hover-ext;
+}
