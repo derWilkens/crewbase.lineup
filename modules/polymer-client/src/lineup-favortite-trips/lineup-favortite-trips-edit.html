@@ -1,0 +1,106 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-entity-edit-view-behavior.html">
+<link rel="import" href="../../bower_components/cuba-data/cuba-entity.html">
+<link rel="import" href="../../bower_components/cuba-form/cuba-entity-form.html">
+<link rel="import" href="../../bower_components/cuba-styles/cuba-styles.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="lineup-favortite-trips-edit">
+  <template>
+    <style include="cuba-styles"></style>
+    <style include="shared-styles"></style>
+    <style>
+      paper-card {
+        display: block;
+      }
+    </style>
+
+    <cuba-entity entity-name="lineup$FavortiteTrips" entity-id="[[entityId]]" view="favortiteTrips-view" data="{{entity}}"></cuba-entity>
+    <cuba-entity-form id="form"
+                      entity-name="lineup$FavortiteTrips"
+                      entity="{{entity}}"
+                      on-cuba-form-response="_onSuccess"
+                      on-cuba-form-error="_onError"
+                      server-errors="{{serverErrors}}">
+      <paper-card>
+        <div class="card-content">
+          <vaadin-form-layout>
+
+<vaadin-checkbox checked="{{entity.emailNotification}}">[[msg('emailNotification')]]</vaadin-checkbox>
+
+<vaadin-checkbox checked="{{entity.roundTrip}}">[[msg('roundTrip')]]</vaadin-checkbox>
+
+<cuba-lookup picked-entity="{{entity.startSite}}">
+  <div slot="dropdown">
+    <cuba-entities entity-name="lineup$Site" view="_minimal" data="{{entity_startSiteOptions}}"></cuba-entities>
+    <vaadin-combo-box label="[[msg('startSite')]]"
+                      items="[[entity_startSiteOptions]]"
+                      selected-item="{{entity.startSite}}"
+                      item-label-path="_instanceName"
+                      item-value-path="id"
+                      value="[[entity.startSite.id]]"
+                       required 
+                      error-message="[[serverErrors.startSite]]"
+                      invalid="[[_isInvalid(serverErrors.startSite)]]">
+    </vaadin-combo-box>
+  </div>
+</cuba-lookup>
+
+<cuba-lookup picked-entity="{{entity.destination}}">
+  <div slot="dropdown">
+    <cuba-entities entity-name="lineup$Site" view="_minimal" data="{{entity_destinationOptions}}"></cuba-entities>
+    <vaadin-combo-box label="[[msg('destination')]]"
+                      items="[[entity_destinationOptions]]"
+                      selected-item="{{entity.destination}}"
+                      item-label-path="_instanceName"
+                      item-value-path="id"
+                      value="[[entity.destination.id]]"
+                       required 
+                      error-message="[[serverErrors.destination]]"
+                      invalid="[[_isInvalid(serverErrors.destination)]]">
+    </vaadin-combo-box>
+  </div>
+</cuba-lookup>
+          </vaadin-form-layout>
+        </div>
+        <div class="card-actions">
+          <vaadin-button on-tap="_delete" hidden$="[[!entityId]]">
+            [[msg('Delete')]]
+          </vaadin-button>
+          <vaadin-button on-tap="_cancel">
+            [[msg('Cancel')]]
+          </vaadin-button>
+          <vaadin-button on-tap="_save">
+            [[msg('Save')]]
+          </vaadin-button>
+        </div>
+      </paper-card>
+    </cuba-entity-form>
+
+    <vaadin-notification id="errorMessage" position="bottom-end">
+      <template>
+        [[msg('Failed to save')]]
+      </template>
+    </vaadin-notification>
+
+  </template>
+  <script>
+    {
+      /**
+       * @extends {Polymer.Element}
+       * @appliesMixin CubaLocalizeBehavior
+       * @appliesMixin CubaEntityEditViewBehavior
+       */
+      class LineupFavortiteTripsEdit extends Polymer.mixinBehaviors([CubaLocalizeBehavior, CubaEntityEditViewBehavior], Polymer.Element) {
+
+        static get is() { return 'lineup-favortite-trips-edit'; }
+
+      }
+
+      customElements.define(LineupFavortiteTripsEdit.is, LineupFavortiteTripsEdit);
+    }
+  </script>
+</dom-module>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.favortitetrips.FavortiteTripsBrowse"
+        focusComponent="favortiteTripsesTable"
+        lookupComponent="favortiteTripsesTable"
+        messagesPack="eu.crewbase.lineup.web.favortitetrips">
+    <dsContext>
+        <collectionDatasource id="favortiteTripsesDs"
+                              class="eu.crewbase.lineup.entity.wayfare.FavortiteTrips"
+                              view="favortiteTrips-view">
+            <query>
+                <![CDATA[select e from lineup$FavortiteTrips e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="favortiteTripsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="favortiteTripsesTable"
+                datasource="favortiteTripsesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="favortiteTripsesTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="startSite"/>
+                <column id="destination"/>
+                <column id="emailNotification"/>
+                <column id="roundTrip"/>
+            </columns>
+            <rows datasource="favortiteTripsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="favortiteTripsesTable.create"/>
+                <button id="editBtn"
+                        action="favortiteTripsesTable.edit"/>
+                <button id="removeBtn"
+                        action="favortiteTripsesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

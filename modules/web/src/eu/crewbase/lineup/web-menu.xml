@@ -12,6 +12,7 @@
         <item screen="lineup$SiteCategory.browse"/>
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
+        <item screen="lineup$FavortiteTrips.browse"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"

@@ -406,4 +406,16 @@
         <property name="siteType"
                   view="_minimal"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.FavortiteTrips"
+          extends="_local"
+          name="favortiteTrips-view">
+        <property name="startSite"
+                  view="_minimal">
+            <property name="itemDesignation"/>
+        </property>
+        <property name="destination"
+                  view="_minimal">
+            <property name="itemDesignation"/>
+        </property>
+    </view>
 </views>

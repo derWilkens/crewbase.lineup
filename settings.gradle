@@ -1,8 +1,9 @@
 rootProject.name = 'lineup'
-include(':lineupapp-global', ':lineupapp-core', ':lineupapp-gui', ':lineupapp-web', ':lineupapp-web-themes')
+include(':lineupapp-global', ':lineupapp-core', ':lineupapp-gui', ':lineupapp-web', ':lineupapp-web-themes', ':lineupapp-polymer-client')
 project(':lineupapp-global').projectDir = new File(settingsDir, 'modules/global')
 project(':lineupapp-core').projectDir = new File(settingsDir, 'modules/core')
 project(':lineupapp-gui').projectDir = new File(settingsDir, 'modules/gui')
 project(':lineupapp-web').projectDir = new File(settingsDir, 'modules/web')
 
 project(':lineupapp-web-themes').projectDir = new File(settingsDir, 'modules/web/themes')
+project(':lineupapp-polymer-client').projectDir = new File(settingsDir, 'modules/polymer-client')

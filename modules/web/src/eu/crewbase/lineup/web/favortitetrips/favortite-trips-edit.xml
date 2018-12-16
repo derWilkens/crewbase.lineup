@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.favortitetrips.FavortiteTripsEdit"
+        datasource="favortiteTripsDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.favortitetrips">
+    <dsContext>
+        <datasource id="favortiteTripsDs"
+                    class="eu.crewbase.lineup.entity.wayfare.FavortiteTrips"
+                    view="favortiteTrips-view"/>
+        <collectionDatasource id="startSitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="destinationsDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="favortiteTripsDs">
+            <column width="250px">
+                <field optionsDatasource="startSitesDs"
+                       property="startSite"/>
+                <field optionsDatasource="destinationsDs"
+                       property="destination"/>
+                <field property="emailNotification"/>
+                <field property="roundTrip"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

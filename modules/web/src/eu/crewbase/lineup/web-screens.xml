@@ -105,4 +105,8 @@
             template="eu/crewbase/lineup/web/waypoint/waypoint-edit.xml"/>
     <screen id="lineup$CrewChange.browse"
             template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
+    <screen id="lineup$FavortiteTrips.browse"
+            template="eu/crewbase/lineup/web/favortitetrips/favortite-trips-browse.xml"/>
+    <screen id="lineup$FavortiteTrips.edit"
+            template="eu/crewbase/lineup/web/favortitetrips/favortite-trips-edit.xml"/>
 </screen-config>

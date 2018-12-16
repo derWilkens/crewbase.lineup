@@ -43,7 +43,7 @@
                       spacing="true">
                 <dateField id="fligthDate"
                            datasource="crewChangeCreateDTODs"
-                           property="crewChangeDate"
+                           property="startDateTime"
                            required="true"
                            resolution="DAY"
                            responsive="true"/>
