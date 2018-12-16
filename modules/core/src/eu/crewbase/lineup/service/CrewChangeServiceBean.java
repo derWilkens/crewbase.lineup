@@ -6,10 +6,15 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.esotericsoftware.minlog.Log;
+import com.google.common.base.Ticker;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.controllers.FileDownloadController;
 import com.haulmont.cuba.core.global.Metadata;
 
 import eu.crewbase.lineup.entity.coredata.CraftType;
@@ -18,11 +23,14 @@ import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import eu.crewbase.lineup.entity.wayfare.AnchorWaypoint;
 import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.Standstill;
+import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 @Service(CrewChangeService.NAME)
 public class CrewChangeServiceBean implements CrewChangeService {
+	private static final Logger log = LoggerFactory.getLogger(CrewChangeServiceBean.class);
+	
 	@Inject
 	private Persistence persistence;
 
@@ -66,11 +74,25 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			awp1.setStartDateTime(dto.getStartDateTime());
 			wp1.setPreviousStandstill(awp1);
 			cc.getTransfers().add(transfer);
+			
+			createTickets(dto.getOccupiedSeatsWay1(), dto, transfer);
+			createTickets(dto.getOccupiedSeatsWay2(), dto, transfer);
 
 			persistence.getEntityManager().persist(cc);
 			tx.commit();
 		}
 		return cc.getId();
+	}
+
+	private void createTickets(int amount, CrewChangeCreateDTO dto, Transfer transfer) {
+		for(int i = 0; i < amount;i++){
+			Ticket ticket = metadata.create(Ticket.class);
+			ticket.setTransfer(transfer);
+			ticket.setStartSite(dto.getDepartureSite());
+			ticket.setDestinationSite(dto.getArrivalSite());
+			transfer.getTickets().add(ticket);
+		}
+		
 	}
 
 	@Override
@@ -146,42 +168,35 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		List<Site> siteResultList = new ArrayList<Site>();
 		try (Transaction tx = persistence.createTransaction()) {
 			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
+			//List<Waypoint> entSites = persistence.getEntityManager().createQuery("select w from lineup$Waypoint w where w.transfer.Id = '" + transfer.getId()+"'", Waypoint.class).getResultList();
 			CraftType craft = transfer.getCraftType();
 			List<Site> siteList = persistence.getEntityManager().createQuery("select s from lineup$Site s", Site.class)
 					.getResultList();
-			craft.getMetaClass();
+			craft = metadata.create(CraftType.class);
+			craft.setMaxRange(10000);
+			
 			// welche Sites können noch erreicht werden?
 			// - Liste der vorhandenen Sites übergeben
-			transfer.getNextWaypoint().getSite();
 
 			// jede site an jeder position einfügen und gesamtdistanz ausrechnen
-			Standstill currentStandstill = transfer.getNextWaypoint().getPreviousStandstill();
+			
 			for (Site site : siteList) {
-
+				Standstill currentStandstill = transfer.getAnchorWaypoint();
+				
 				do {
-					Waypoint addWaypoint = createWaypoint(transfer, site, currentStandstill);
-					currentStandstill.getNextWaypoint();
-					int totalDistance = transfer.getTotalDistance();
-					if (totalDistance < craft.getMaxRange()) {
+					Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
+					Waypoint addedWaypoint = createWaypoint(transfer, site, currentStandstill);
+					currentStandstill = nextOriginalWaypoint;
+					Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
+					if (transfer.getTotalDistance() < craft.getMaxRange()) {
 						siteResultList.add(site);
+						unlinkWaypoint(addedWaypoint);
+						break;
 					}
-					removeWaypoint(addWaypoint.getId());
+					unlinkWaypoint(addedWaypoint);
 				} while (currentStandstill != null);
 
 			}
-
-			// - für jede enthaltene Site die weiteren Sites im Umkreis < x km
-			// finden
-			// evtl. einfach Matrix aufstellen von x nach y für alle 15
-			// Helidecks
-
-			List<Site> transferSites = new ArrayList<Site>();
-			// transfer.getWaypointList().stream().collect(Collectors.toList(Waypoint::getSite));
-			// for (Waypoint waypoint : transfer.getWaypointList()) {
-			// transferSites.add(waypoint.getSite());
-			// }
-
-			int length = getMinLength(transferSites);
 
 			// jeweils eine noch nicht vorhandene hinzufügen und beste Route
 			// berechnen, ist die beste Route kürzer als Range?
@@ -190,7 +205,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			// nur hinzufügen, wenn zus. Strecke kürzer als Weg Hin/Rück allein
 
 		}
-		return null;
+		return siteResultList;
 	}
 
 	private int getMinLength(List<Site> transferSites) {

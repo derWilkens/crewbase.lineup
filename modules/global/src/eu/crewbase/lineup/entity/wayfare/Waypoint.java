@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import javax.persistence.PrimaryKeyJoinColumn;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 
 /**
  * @author christian
@@ -31,7 +33,8 @@ public class Waypoint extends Standstill {
 	@Column(name = "TAKE_OFF")
 	protected Date takeOff;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OnDelete(DeletePolicy.CASCADE)
+    @OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PREVIOUS_STANDSTILL_ID")
 	protected Standstill previousStandstill;
 

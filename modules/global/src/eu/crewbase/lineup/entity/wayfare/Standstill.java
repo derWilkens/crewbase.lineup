@@ -16,6 +16,8 @@ import eu.crewbase.lineup.entity.coredata.Site;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorColumn;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 
 @DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -33,6 +35,7 @@ public class Standstill extends StandardEntity {
     @JoinColumn(name = "TRANSFER_ID")
     protected Transfer transfer;
 
+    @OnDelete(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "NEXT_WAYPOINT_ID")
     protected Waypoint nextWaypoint;

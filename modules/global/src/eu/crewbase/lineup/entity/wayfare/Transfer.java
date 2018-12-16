@@ -22,6 +22,10 @@ import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import javax.persistence.PrimaryKeyJoinColumn;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.OneToMany;
+
 /**
  * @author christian
  */
@@ -34,26 +38,32 @@ public class Transfer extends Standstill {
 	@Column(name = "TRANSFER_ORDER_NO", nullable = false)
 	protected Integer transferOrderNo;
 
+	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@OnDelete(DeletePolicy.CASCADE)
+	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
+	protected List<Ticket> tickets;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "ANCHOR_WAYPOINT_ID")
+	@JoinColumn(name = "ANCHOR_WAYPOINT_ID")
 	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.CASCADE)
 	protected AnchorWaypoint anchorWaypoint;
 
+	@OnDeleteInverse(DeletePolicy.CASCADE)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = { "clear" })
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODE_OF_TRANSFER_ID")
@@ -65,6 +75,14 @@ public class Transfer extends Standstill {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CRAFT_TYPE_ID")
 	protected CraftType craftType;
+
+	public void setTickets(List<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+	public List<Ticket> getTickets() {
+		return tickets;
+	}
 
 	public AnchorWaypoint getAnchorWaypoint() {
 		return anchorWaypoint;
@@ -91,6 +109,7 @@ public class Transfer extends Standstill {
 	}
 
 	public Transfer() {
+		this.tickets = new ArrayList<Ticket>();
 	}
 
 	public Integer getTransferOrderNo() {
@@ -125,24 +144,27 @@ public class Transfer extends Standstill {
 			totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(nextStandstill.getSite());
 			currentStandstill = nextStandstill;
 			nextStandstill = currentStandstill.getNextWaypoint();
-			if(nextStandstill == null){
-			//der letze Waypoint hat keinen NextWaypoint - aber die Tour geht zurück zum Anchorpoint
-			totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(anchorWaypoint.getSite());
+			if (nextStandstill == null) {
+				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
+				// geht zurück zum Anchorpoint
+				totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(anchorWaypoint.getSite());
 			}
 		} while (nextStandstill != null);
 		return totalDistance;
 
 	}
-	public String getRoute(){
+
+	public String getRoute() {
 		String route = "";
 		String delim = "";
 		Standstill currentStandstill = this.getAnchorWaypoint();
 		do {
 			route = route + delim + currentStandstill.getSite().getItemDesignation();
 			currentStandstill = currentStandstill.getNextWaypoint();
-			if(currentStandstill == null){
-			//der letze Waypoint hat keinen NextWaypoint - aber die Tour geht zurück zum Anchorpoint
-				route = route + delim  + anchorWaypoint.getSite().getItemDesignation();
+			if (currentStandstill == null) {
+				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
+				// geht zurück zum Anchorpoint
+				route = route + delim + anchorWaypoint.getSite().getItemDesignation();
 			}
 			delim = " - ";
 		} while (currentStandstill != null);
