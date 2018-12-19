@@ -32,9 +32,10 @@ import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 public class CrewChange extends StandardClientEntity {
     private static final long serialVersionUID = 3072080113502808893L;
 
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "FLIGHT_DATE", nullable = false)
-    protected Date flightDate;
+    @Column(name = "START_DATE", nullable = false)
+    protected Date startDate;
 
     @OrderBy("transferOrderNo")
     @Composition
@@ -42,6 +43,15 @@ public class CrewChange extends StandardClientEntity {
     @OneToMany(mappedBy = "crewChange", cascade = CascadeType.PERSIST)
     protected List<Transfer> transfers;
     
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+
     public CrewChange() {
 		this.transfers = new ArrayList<Transfer>();
 	}
@@ -56,14 +66,6 @@ public class CrewChange extends StandardClientEntity {
 
 
 
-
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
-    }
-
-    public Date getFlightDate() {
-        return flightDate;
-    }
 
 
 }

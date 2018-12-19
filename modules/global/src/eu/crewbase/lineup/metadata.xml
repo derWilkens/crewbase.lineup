@@ -9,5 +9,6 @@
         <class>eu.crewbase.lineup.entity.dto.DutyPeriodDTO</class>
         <class>eu.crewbase.lineup.entity.dto.PeriodDTO</class>
         <class>eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO</class>
+        <class>eu.crewbase.lineup.entity.dto.TripDTO</class>
     </metadata-model>
 </metadata>

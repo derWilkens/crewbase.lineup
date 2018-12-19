@@ -32,7 +32,7 @@
             </actions>
             <columns>
                 <column id="client"/>
-                <column id="flightDate"/>
+                <column id="startDate"/>
             </columns>
             <rows datasource="crewChangesDs"/>
             <rowsCount/>

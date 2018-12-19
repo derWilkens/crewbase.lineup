@@ -3,12 +3,17 @@
  */
 package eu.crewbase.lineup.entity.wayfare;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.haulmont.cuba.core.entity.annotation.Lookup;
@@ -20,11 +25,10 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
-import javax.persistence.PrimaryKeyJoinColumn;
+import eu.crewbase.lineup.entity.coredata.Site;
+import javax.validation.constraints.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.OneToMany;
+import org.springframework.util.Assert;
 
 /**
  * @author christian
@@ -55,15 +59,15 @@ public class Transfer extends Standstill {
 	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
+    @OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "clear" })
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
+    @OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODE_OF_TRANSFER_ID")
@@ -73,7 +77,7 @@ public class Transfer extends Standstill {
 	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CRAFT_TYPE_ID")
+    @JoinColumn(name = "CRAFT_TYPE_ID")
 	protected CraftType craftType;
 
 	public void setTickets(List<Ticket> tickets) {
@@ -158,6 +162,7 @@ public class Transfer extends Standstill {
 		String route = "";
 		String delim = "";
 		Standstill currentStandstill = this.getAnchorWaypoint();
+		 
 		do {
 			route = route + delim + currentStandstill.getSite().getItemDesignation();
 			currentStandstill = currentStandstill.getNextWaypoint();
@@ -169,5 +174,45 @@ public class Transfer extends Standstill {
 			delim = " - ";
 		} while (currentStandstill != null);
 		return route;
+	}
+
+	public List<Site> getSites() {
+		List<Site> siteList = new ArrayList<Site>();
+		String delim = "";
+		Standstill currentStandstill = this.getAnchorWaypoint();
+		do {
+			siteList.add(currentStandstill.getSite());
+			currentStandstill = currentStandstill.getNextWaypoint();
+			if (currentStandstill == null) {
+				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
+				// geht zurück zum Anchorpoint
+				siteList.add(anchorWaypoint.getSite());
+			}
+		} while (currentStandstill != null);
+		return siteList;
+	}
+
+	public Transfer(List<Site> siteList) {
+		Standstill currentStandstill = null;
+		for (Site site : siteList) {
+
+			if (this.getAnchorWaypoint() == null) {
+				AnchorWaypoint awp = new AnchorWaypoint();
+				awp.setSite(site);
+				this.setAnchorWaypoint(awp);
+				currentStandstill = awp;
+				/**
+				 * die letzte Site ist eigentlich ein AWP - muss der noch
+				 * eingefügt werden?
+				 */
+				// }else
+				// if(!tmpTransfer.getAnchorWaypoint().getSite().getId().equals(site.getId())){
+			} else {
+				Waypoint wp = new Waypoint();
+				wp.setSite(site);
+				currentStandstill.setNextWaypoint(wp);
+				currentStandstill = wp;
+			}
+		}
 	}
 }

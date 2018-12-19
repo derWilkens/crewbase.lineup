@@ -72,7 +72,7 @@ public class CrewChangeTest {
 		crewChange = cont.persistence().createTransaction().execute(em ->{
 			CrewChange crewChange = new CrewChange();
 			crewChange.setClient(1);
-			crewChange.setFlightDate(new Date());
+			crewChange.setStartDate(new Date());
 			return crewChange;
 		});
 		

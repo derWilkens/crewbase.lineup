@@ -55,7 +55,7 @@ create table LINEUP_CREW_CHANGE (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     --
-    FLIGHT_DATE date not null,
+    START_DATE date not null,
     --
     primary key (ID)
 )^
@@ -734,8 +734,9 @@ create table LINEUP_TICKET (
     primary key (ID)
 )^
 -- end LINEUP_TICKET
--- begin LINEUP_FAVORTITE_TRIPS
-create table LINEUP_FAVORTITE_TRIPS (
+
+-- begin LINEUP_FAVORITE_TRIP
+create table LINEUP_FAVORITE_TRIP (
     ID varchar(32),
     VERSION integer not null,
     CREATE_TS datetime(3),
@@ -752,4 +753,4 @@ create table LINEUP_FAVORTITE_TRIPS (
     --
     primary key (ID)
 )^
--- end LINEUP_FAVORTITE_TRIPS
+-- end LINEUP_FAVORITE_TRIP

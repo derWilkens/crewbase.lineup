@@ -8,6 +8,9 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import eu.crewbase.lineup.entity.coredata.Site;
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -17,9 +20,9 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s - %s|startSite,destination")
-@Table(name = "LINEUP_FAVORTITE_TRIPS")
-@Entity(name = "lineup$FavortiteTrips")
-public class FavortiteTrips extends StandardEntity {
+@Table(name = "LINEUP_FAVORITE_TRIP")
+@Entity(name = "lineup$FavoriteTrip")
+public class FavoriteTrip extends StandardEntity {
     private static final long serialVersionUID = -1426158774165112345L;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "clear"})
@@ -73,6 +76,28 @@ public class FavortiteTrips extends StandardEntity {
     public Boolean getRoundTrip() {
         return roundTrip;
     }
+
+    /**
+     * Alle Sites eines CrewChanges werden überprüft, ob sie mit diesem Favoriten übereinstimmen
+     * 
+     * @param siteListTransfers
+     * @return dieser Favorite besteht aus den Sites die auch im CrewChange enthalten sind
+     */
+	public boolean containsCrewChangeSites(List<Site> siteListTransfers) {
+		boolean site1 = false;
+				
+		for (Site site : siteListTransfers) {
+			
+			//site1 und site2 müssen in der richtigen Reihenfolge in Liste sein
+			if(site.getUuid().equals(this.getStartSite().getUuid())){
+				site1 = true;
+			}
+			if(site1 && site.getUuid().equals(this.getDestination().getUuid())){
+				return true;
+			}
+		}
+		return false;
+	}
 
 
 }

@@ -1,0 +1,1 @@
+rename table lineup_favortite_trips to LINEUP_FAVORTITE_TRIPS__U55480 ;

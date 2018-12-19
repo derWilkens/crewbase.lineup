@@ -371,7 +371,7 @@
           name="transfer-browse">
         <property name="crewChange"
                   view="_minimal">
-            <property name="flightDate"/>
+            <property name="startDate"/>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
@@ -406,7 +406,7 @@
         <property name="siteType"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.wayfare.FavortiteTrips"
+    <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
           extends="_local"
           name="favortiteTrips-view">
         <property name="startSite"
@@ -417,5 +417,13 @@
                   view="_minimal">
             <property name="itemDesignation"/>
         </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
+          extends="_local"
+          name="favoriteTrip-view">
+        <property name="startSite"
+                  view="_minimal"/>
+        <property name="destination"
+                  view="_minimal"/>
     </view>
 </views>
