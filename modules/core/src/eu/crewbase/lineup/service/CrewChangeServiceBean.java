@@ -1,6 +1,7 @@
 package eu.crewbase.lineup.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -266,8 +267,19 @@ public class CrewChangeServiceBean implements CrewChangeService {
 	public List<TripDTO> getMyTrips(Date dateRangeStart, Date dateRangeEnd) {
 		List<TripDTO> resultList = new ArrayList<TripDTO>();
 
+		// Zukünftige CrewChanges und meine Favoriten holen
 		try (Transaction tx = persistence.createTransaction()) {
 
+			if(dateRangeStart == null){
+				dateRangeStart = new Date();
+			}
+			if(dateRangeEnd == null){
+				//dateRangeEnd = Calendar.getInstance()
+				Calendar c = Calendar.getInstance();
+				c.setTime(new Date());
+				c.add(Calendar.DAY_OF_YEAR, 1);
+				dateRangeEnd = c.getTime();
+			}
 			List<CrewChange> ccList = persistence.getEntityManager()
 					.createQuery(
 							"select c from lineup$CrewChange c where c.startDate >= :dateRangeStart and c.startDate <= :dateRangeEnd",
@@ -280,19 +292,25 @@ public class CrewChangeServiceBean implements CrewChangeService {
 							FavoriteTrip.class)
 					.setParameter("createdBy", "test_admin").getResultList();
 			favList.get(0).getStartSite();
+
 			for (FavoriteTrip favoriteTrip : favList) {
 				favoriteTrip = persistence.getEntityManager().find(FavoriteTrip.class, favoriteTrip.getId(),
 						"favoriteTrip-view");
-				log.debug(favoriteTrip.getCreateTs() + " " + favoriteTrip.getStartSite().getItemDesignation());
+				log.debug("Mein Favorit: " + favoriteTrip.getCreateTs() + " "
+						+ favoriteTrip.getStartSite().getItemDesignation());
 
 			}
+			// in jeden Transfer meine Favoriten einbauen
 			for (CrewChange cc : ccList) {
 				for (Transfer transfer : cc.getTransfers()) {
 					for (FavoriteTrip favoriteTrip : favList) {
+						// nur den Start einbauen
 						Transfer transferWithFirstSite = siteInRouteEingebauen(transfer, favoriteTrip.getStartSite());
 						if (transferWithFirstSite != null) {
+							// in den neuen Transfer die zweite Site einbauen
 							Transfer transferWithFavTrips = siteInRouteEingebauen(transferWithFirstSite,
 									favoriteTrip.getDestination());
+
 							if (transferWithFavTrips != null) {
 								resultList.add(getFreeCapacityForTrip(favoriteTrip, transferWithFavTrips, transfer));
 							}
@@ -306,39 +324,16 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	}
 
+	/**
+	 * Es werden die Tickets gruppiert nach Sites selektiert -> Tickets bilden
+	 * Strecken ab mit entsprechenden gebuchten Plätzen
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
 	public TripDTO getFreeCapacityForTrip(FavoriteTrip desiredTrip, Transfer transferWithFavTrips, Transfer transfer) {
-		List<TripDTO> resultList = new ArrayList<TripDTO>();
-		try (Transaction tx = persistence.createTransaction()) {
-			List<Object[]> ticketList = persistence.getEntityManager()
-					.createQuery("SELECT t.startSite AS siteA, t.destinationSite, COUNT(t) AS total "
-							+ "FROM lineup$Ticket t where t.transfer.id = :transferId "
-							+ "GROUP BY t.startSite, t.destinationSite ORDER BY t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC")
-					.setParameter("transferId", transfer.getId()).getResultList();
-			for (Object[] result : ticketList) {
-				TripDTO tmp = new TripDTO();
-				tmp.setSiteA((Site) result[0]);
-				tmp.setSiteB((Site) result[1]);
-				tmp.setBookedSeats(((Number) result[2]).intValue());
-				resultList.add(tmp);
-			}
-		}
-		// über die tickets iterieren
-		HashMap<UUID, Integer> capaMap = new HashMap<UUID, Integer>();
-		for (TripDTO ticketGroup : resultList) {
-			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
-			// zu, wenn Site = destination -> PAX steigen aus
-			boolean onboard = false;
-			for (Site site : transfer.getSites()) {
-				// site.booked = site.booked + ticket.booked
-				if (site.getId().equals(ticketGroup.getSiteA()) || onboard) {
-					capaMap.put(site.getId(), capaMap.get(site.getId()) + ticketGroup.getBookedSeats());
-					onboard = true;
-				} else if (site.getId().equals(ticketGroup.getSiteB()) && onboard) {
-					onboard = false;
-				}
-			}
-		}
+		
+		List<TripDTO> groupedTickets = getGroupedTickets(transfer);
+		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets, transferWithFavTrips);
 
 		// dann über Fav-Strecke und Result iterieren
 		int capa = transfer.getCraftType().getSeats();
@@ -348,14 +343,14 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		// der desiredRoute ermitteln
 		for (Site favSite : transferWithFavTrips.getSites()) {
 			boolean onboard = false;
-			if (favSite.getId().equals(desiredTrip.getStartSite())) {
+			if (favSite.getId().equals(desiredTrip.getStartSite().getId())) {
 				onboard = true;
 			}
-			if (favSite.getId().equals(desiredTrip.getDestination())) {
+			if (favSite.getId().equals(desiredTrip.getDestination().getId())) {
 				onboard = false;
 			}
 			if (onboard && capaMap.get(favSite.getId()) < minAvailable) {
-				minAvailable = capaMap.get(favSite.getId());
+				minAvailable = minAvailable - capaMap.get(favSite.getId());
 			}
 		}
 
@@ -368,8 +363,66 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		return tmp;
 	}
 
+	public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips) {
+
+		HashMap<UUID, Integer> resultCapaMap = new HashMap<UUID, Integer>();
+
+		// über die tickets iterieren
+
+		for (TripDTO ticketGroup : groupedTickets) {
+			log.debug("Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - " + ticketGroup.getSiteB().getItemDesignation() + ": " + ticketGroup.getBookedSeats());
+			
+			// capaMap enthält booked seats beim Verlassen der Site:
+			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
+			// zu, wenn Site = destination -> PAX steigen aus
+			boolean onboard = false;
+			Standstill currentStandstill = transferWithFavTrips.getAnchorWaypoint();
+			while(currentStandstill != null){
+				Site site = currentStandstill.getSite();
+				
+				if (site.getId().equals(ticketGroup.getSiteB().getId()) && onboard) {
+					onboard = false;
+				} else if (site.getId().equals(ticketGroup.getSiteA().getId()) || onboard) {
+					int currentSeats = 0;
+					if (resultCapaMap.containsKey(site.getId())) {
+						currentSeats = resultCapaMap.get(site.getId());
+					}
+					log.debug("Site: " + site.getItemDesignation() + " Seats to add: " + ticketGroup.getBookedSeats());
+					resultCapaMap.put(site.getId(), currentSeats + ticketGroup.getBookedSeats());
+					onboard = true;
+				}
+				currentStandstill = currentStandstill.getNextWaypoint();
+			}
+		}
+		return resultCapaMap;
+	}
+
+	public List<TripDTO> getGroupedTickets(Transfer transfer) {
+		List<TripDTO> resultList = new ArrayList<TripDTO>();
+		try (Transaction tx = persistence.createTransaction()) {
+			List<Object[]> ticketList = persistence.getEntityManager()
+					.createQuery("SELECT t.startSite AS siteA, t.destinationSite, COUNT(t) AS total "
+							+ "FROM lineup$Ticket t where t.transfer.id = :transferId "
+							+ "GROUP BY t.startSite, t.destinationSite ORDER BY t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC")
+					.setParameter("transferId", transfer.getId()).getResultList();
+
+			for (Object[] result : ticketList) {
+				TripDTO tmp = new TripDTO();
+				tmp.setSiteA((Site) result[0]);
+				tmp.setSiteB((Site) result[1]);
+				tmp.setBookedSeats(((Number) result[2]).intValue());
+				resultList.add(tmp);
+			}
+		}
+		return resultList;
+	}
+
 	private Transfer siteInRouteEingebauen(Transfer transfer, Site siteA) {
-		List<Site> minSiteList = null;
+		// Ist Site schon drin? Dann einfach Kopie zurück
+		if (transfer.getSiteHash().containsKey(siteA.getId())) {
+			return transfer.getTransientCopy();
+		}
+		// List<Site> minSiteList = null;
 		Transfer resultTransfer = null;
 		CraftType craft = transfer.getCraftType();
 
@@ -378,7 +431,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 		do {
 			Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
-			if (currentStandstill.getSite().getId().equals(siteA.getId())) {
+			//if (currentStandstill.getSite().getId().equals(siteA.getId())) {
 				Waypoint addedWaypoint = createWaypoint(transfer, siteA, currentStandstill);
 				Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
 				if (transfer.getTotalDistance() < craft.getMaxRange()) {
@@ -389,10 +442,10 @@ public class CrewChangeServiceBean implements CrewChangeService {
 						resultTransfer.setCraftType(craft);
 					}
 
-					unlinkWaypoint(addedWaypoint);
+					//unlinkWaypoint(addedWaypoint);
 				}
 				unlinkWaypoint(addedWaypoint);
-			}
+			//}
 			currentStandstill = nextOriginalWaypoint;
 		} while (currentStandstill != null);
 		// }

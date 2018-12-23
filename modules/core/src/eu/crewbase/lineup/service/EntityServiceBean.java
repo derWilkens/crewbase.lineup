@@ -24,7 +24,7 @@ public class EntityServiceBean implements EntityService {
 	@Override
 	public void remove(Entity<?> entity){
 		try (Transaction tx = persistence.createTransaction()) {
-			
+			//dataManager.remove(dataManager.getReference(Customer.class, customerId));
 			 persistence.getEntityManager().remove(getById(entity.getClass(), entity.getId()));
 			 tx.commit();
 		}

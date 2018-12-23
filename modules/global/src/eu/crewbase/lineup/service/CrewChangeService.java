@@ -1,6 +1,7 @@
 package eu.crewbase.lineup.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,5 +23,7 @@ public interface CrewChangeService {
     public List<Site> getReachableSites(UUID transferId);
     public List<TripDTO> getMyTrips(Date dateRangeStart, Date dateRangeEnd);
     
+    public List<TripDTO> getGroupedTickets(Transfer transfer);
+    public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips); 
     public TripDTO getFreeCapacityForTrip(FavoriteTrip desiredTrip,  Transfer transferWithFavTrips, Transfer transfer);
 }

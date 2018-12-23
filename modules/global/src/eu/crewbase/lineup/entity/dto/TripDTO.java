@@ -68,5 +68,9 @@ public class TripDTO extends BaseUuidEntity {
 	public Transfer getTransfer() {
 		return transfer;
 	}
+	
+	public String toString(){
+		return siteA.getItemDesignation() + " - " + siteB.getItemDesignation() + ": " + getBookedSeats();
+	}
 
 }

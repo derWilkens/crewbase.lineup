@@ -4,7 +4,10 @@
 package eu.crewbase.lineup.entity.wayfare;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,9 +29,6 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.util.Assert;
 
 /**
  * @author christian
@@ -178,7 +178,6 @@ public class Transfer extends Standstill {
 
 	public List<Site> getSites() {
 		List<Site> siteList = new ArrayList<Site>();
-		String delim = "";
 		Standstill currentStandstill = this.getAnchorWaypoint();
 		do {
 			siteList.add(currentStandstill.getSite());
@@ -191,7 +190,16 @@ public class Transfer extends Standstill {
 		} while (currentStandstill != null);
 		return siteList;
 	}
+	public HashMap<UUID,Site> getSiteHash(){
+		HashMap<UUID,Site> siteHash = new HashMap<UUID,Site>();
+		Standstill currentStandstill = this.getAnchorWaypoint();
+		do {
+			siteHash.put(currentStandstill.getSite().getUuid(),currentStandstill.getSite());
+			currentStandstill = currentStandstill.getNextWaypoint();
 
+		} while (currentStandstill != null);
+		return siteHash;
+	}
 	public Transfer(List<Site> siteList) {
 		Standstill currentStandstill = null;
 		for (Site site : siteList) {
@@ -214,5 +222,11 @@ public class Transfer extends Standstill {
 				currentStandstill = wp;
 			}
 		}
+	}
+
+	public Transfer getTransientCopy() {
+		Transfer copy = new Transfer(this.getSites());
+		copy.setCraftType(getCraftType());
+		return copy;
 	}
 }

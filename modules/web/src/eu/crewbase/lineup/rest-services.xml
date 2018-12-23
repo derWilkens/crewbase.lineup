@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<services xmlns="http://schemas.haulmont.com/cuba/rest-services-v2.xsd">
+    <service name="lineup_CrewChangeService">
+        <method name="getMyTrips">
+            <param name="dateRangeStart"/>
+            <param name="dateRangeEnd"/>
+        </method>
+    </service>
+</services>

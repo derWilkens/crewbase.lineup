@@ -1,11 +1,12 @@
 package eu.crewbase.lineup.core;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,9 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	private Site emdn;
 	private Site bwal;
 	private Site dwal;
-
+	private Site dwbe;
+	private CrewChange cc;
+	private UUID ccId; 
 	private CrewChangeService service;
 
 	@Before
@@ -56,16 +59,21 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			for (Site site : siteList) {
 				persistence.getEntityManager().remove(site);
 			}
+			List<FavoriteTrip> favList = persistence.getEntityManager().createQuery("select s from lineup$FavoriteTrip s", FavoriteTrip.class)
+					.getResultList();
+			for (FavoriteTrip fav : favList) {
+				persistence.getEntityManager().remove(fav);
+			}
 			tx.commit();
 		}
 		service = AppBeans.get(CrewChangeService.NAME);
 		emdn = createSite("Emden", "EMDN", 53.38893, 7.2263314);
-		createSite("Hannover", "HANN", 52.3796457, 9.691432);
-		createSite("Burgdorf", "BURF", 52.4742371, 9.9413628);
-		createSite("Celle", "CELL", 52.6455589, 9.9578078);
-		Site pein = createSite("Peine", "PEIN", 52.3161997, 10.1630724);
-		createSite("Wunstorf", "WUNF", 52.4313259, 9.31948230);
-		log.info("Dist EMDN - PEIN: " + emdn.getDistanceTo(pein));
+//		createSite("Hannover", "HANN", 52.3796457, 9.691432);
+//		createSite("Burgdorf", "BURF", 52.4742371, 9.9413628);
+//		createSite("Celle", "CELL", 52.6455589, 9.9578078);
+//		Site pein = createSite("Peine", "PEIN", 52.3161997, 10.1630724);
+//		createSite("Wunstorf", "WUNF", 52.4313259, 9.31948230);
+//		log.info("Dist EMDN - PEIN: " + emdn.getDistanceTo(pein));
 		// createSite("Borkum Riffgrund 1 (EDYB)",53.9736 ,6.5592);
 		// createSite("Borkum Riffgrund 2",53.9617 ,6.4744);
 		bwal = createSite("BorWin alpha", "BWAL", 54.3569, 6.0169);
@@ -73,7 +81,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		// createSite("Butendiek (EKBU)",55.0214 ,7.7964);
 		// createSite("DanTysk (EKDT)",55.1267 ,7.2372);
 		dwal = createSite("DolWin alpha", "DWAL", 54.0061, 6.4236);
-		// createSite("DolWin beta (EDYD)",53.9858 ,6.9319);
+		dwbe = createSite("DolWin beta (EDYD)", "DWBE", 53.9858 ,6.9319);
 		// createSite("Fino 1 (EDYF)",54.0239 ,6.5931);
 		// createSite("Fino 3",55.2028 ,7.1525);
 		// createSite("Gemini (Buitengaats)",54.0392 ,6.0339);
@@ -94,19 +102,23 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	@After
 	public void tearDown() throws Exception {
+		dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
+		//dataManager.remove(bwal);
+		//dataManager.remove(dwal);
+		//dataManager.remove(emdn);
+		
 	}
 
 	@Test
 	public void testCreateCrewChange() {
 
-		UUID ccId = createCC(2, 3);
+		ccId = createCC(2, 3);
 		validateCrewChange(ccId);
 	}
 
 	@Test
 	public void testAddWaypoint() {
-		UUID ccId = createCC(0, 0);
-		CrewChange cc;
+		ccId = createCC(0, 0);
 		Transfer transfer;
 
 		try (Transaction tx = persistence.createTransaction()) {
@@ -127,8 +139,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	@Test
 	public void testReachableSites() {
-		UUID ccId = createCC(0, 0);
-		CrewChange cc;
+		ccId = createCC(0, 0);
 		Transfer transfer;
 		try (Transaction tx = persistence.createTransaction()) {
 
@@ -137,14 +148,15 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		}
 		List<Site> reachableSites = service.getReachableSites(transfer.getId());
-
-		System.out.println(reachableSites.size());
+		for (Site site2 : reachableSites) {
+			log.debug(site2.getItemDesignation());
+		}
+		assertEquals(4, reachableSites.size());
 	}
 
 	@Test
 	public void testremoveWaypoint() {
-		UUID ccId = createCC(0, 0);
-		CrewChange cc;
+		ccId = createCC(0, 0);
 		Transfer transfer;
 		AnchorWaypoint awp1;
 
@@ -175,9 +187,10 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	}
 
 	@Test
-	public void testGroupSelection() {
+	public void testMyTrips() {
 
-		UUID ccId = createCC(0, 0);
+		// CrewChange erstellen
+		ccId = createCC(0, 0);
 		CrewChange cc;
 		Transfer transfer;
 		AnchorWaypoint awp1;
@@ -194,6 +207,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
+			/** "EMDN (3) - BWAL (2) - DWAL - EMDN" */
 			assertEquals("EMDN - BWAL - DWAL - EMDN", transfer.getRoute());
 
 			Ticket ticket1 = metadata.create(Ticket.class);
@@ -221,52 +235,61 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			persistence.getEntityManager().persist(ticket3);
 			persistence.getEntityManager().persist(ticket4);
 
+			// Ich will mit von BWAL zu DWAL
+			/** "EMDN (3) - BWAL (2) - DWAL - EMDN" */
 			FavoriteTrip trip = metadata.create(FavoriteTrip.class);
 			trip.setStartSite(bwal);
 			trip.setDestination(dwal);
+			//entityManager().persist(trip);
+			
+			trip = metadata.create(FavoriteTrip.class);
+			trip.setStartSite(emdn);
+			trip.setDestination(dwal);
+			//entityManager().persist(trip);
+			
+			trip = metadata.create(FavoriteTrip.class);
+			trip.setStartSite(dwbe);
+			trip.setDestination(dwal);
 			entityManager().persist(trip);
-
+			
 			tx.commit();
 		}
 		
-		List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
-		//es werden die booked seats ausgegen nicht die verfügbaren
-		assertTrue(myTrips.get(0).getTransfer().equals(transfer.getId()));
+		List<TripDTO> groupedTickets = service.getGroupedTickets(transfer);
 		
+		assertEquals(3, groupedTickets.size());
+		assertEquals("BWAL", groupedTickets.get(0).getSiteA().getItemDesignation());
+		assertEquals("DWAL", groupedTickets.get(0).getSiteB().getItemDesignation());
+		assertEquals(1, groupedTickets.get(0).getBookedSeats().intValue());
 
-		// List<TripDTO> freeCapacityForTrip =
-		// service.getFreeCapacityForTrip(trips, transfer );
-		//
-		// assertEquals(3, freeCapacityForTrip.size());
-		// assertEquals("BWAL",
-		// freeCapacityForTrip.get(0).getSiteA().getItemDesignation());
-		// assertEquals("DWAL",
-		// freeCapacityForTrip.get(0).getSiteB().getItemDesignation());
-		// assertEquals(1,
-		// freeCapacityForTrip.get(0).getBookedSeats().intValue());
-		//
-		// assertEquals("EMDN",
-		// freeCapacityForTrip.get(1).getSiteA().getItemDesignation());
-		// assertEquals("BWAL",
-		// freeCapacityForTrip.get(1).getSiteB().getItemDesignation());
-		// assertEquals(2,
-		// freeCapacityForTrip.get(1).getBookedSeats().intValue());
-		//
-		// assertEquals("EMDN",
-		// freeCapacityForTrip.get(2).getSiteA().getItemDesignation());
-		// assertEquals("DWAL",
-		// freeCapacityForTrip.get(2).getSiteB().getItemDesignation());
-		// assertEquals(1,
-		// freeCapacityForTrip.get(2).getBookedSeats().intValue());
+		assertEquals("EMDN", groupedTickets.get(1).getSiteA().getItemDesignation());
+		assertEquals("BWAL", groupedTickets.get(1).getSiteB().getItemDesignation());
+		assertEquals(2, groupedTickets.get(1).getBookedSeats().intValue());
+
+		assertEquals("EMDN", groupedTickets.get(2).getSiteA().getItemDesignation());
+		assertEquals("DWAL", groupedTickets.get(2).getSiteB().getItemDesignation());
+		assertEquals(1, groupedTickets.get(2).getBookedSeats().intValue());
+
+		HashMap<UUID, Integer> bookedSeatsMap = service.getBookedSeatsMap(groupedTickets,transfer);
+		assertEquals(3, bookedSeatsMap.get(emdn.getUuid()).intValue());
+		assertEquals(2, bookedSeatsMap.get(bwal.getUuid()).intValue());
+		assertNull(bookedSeatsMap.get(dwal.getUuid()));
+		
+		List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
+		// es werden die booked seats ausgegen nicht die verfügbaren
+		assertTrue(myTrips.get(0).getTransfer().getId().equals(transfer.getId()));
+
+		for (TripDTO tripDTO : myTrips) {
+			log.debug(tripDTO.toString());
+		}
 
 	}
 
 	@Test
 	public void testMoveWaypoint() {
 
-		UUID ccId = createCC(0, 0);
+		ccId = createCC(0, 0);
 		int distance = 0;
-		CrewChange cc;
 		Transfer transfer;
 		try (Transaction tx = persistence.createTransaction()) {
 
@@ -318,18 +341,20 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		return service.createCrewChange(dto);
 
 	}
-private CraftType createCraftType(){
-	CraftType ct = null;
-	try (Transaction tx = persistence.createTransaction()) {
-		ct = metadata.create(CraftType.class);
-		ct.setName("AW123");
-		ct.setMaxRange(300);
-		ct.setSeats(10);
-		persistence.getEntityManager().persist(ct);
-		tx.commit();
+
+	private CraftType createCraftType() {
+		CraftType ct = null;
+		try (Transaction tx = persistence.createTransaction()) {
+			ct = metadata.create(CraftType.class);
+			ct.setName("AW123");
+			ct.setMaxRange(300);
+			ct.setSeats(10);
+			persistence.getEntityManager().persist(ct);
+			tx.commit();
+		}
+		return ct;
 	}
-	return ct;
-}
+
 	private void validateCrewChange(UUID ccId) {
 		try (Transaction tx = persistence.createTransaction()) {
 
