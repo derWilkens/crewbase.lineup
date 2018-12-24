@@ -21,3 +21,5 @@ gradle/wrapper/gradle-wrapper.jar
 *.prefs
 *.prefs
 modules/web/.settings/org.eclipse.jdt.core.prefs
+modules/global/.classpath
+modules/core/.classpath

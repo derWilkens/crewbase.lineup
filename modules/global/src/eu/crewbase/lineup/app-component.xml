@@ -41,8 +41,6 @@
                   configuration="webcontent"
                   ext="zip"
                   name="lineup-web"/>
-        <artifact configuration="themes"
-                  name="lineup-web-themes"/>
         <property name="cuba.springContextConfig"
                   value="+eu/crewbase/lineup/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"

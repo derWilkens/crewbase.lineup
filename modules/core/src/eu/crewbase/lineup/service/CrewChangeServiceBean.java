@@ -54,7 +54,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		Transfer transfer = dataManager.create(Transfer.class);
 		transfer.setTransferOrderNo(1);
 		transfer.setCrewChange(cc);
-		transfer.setCraftType(dto.getHelicopterType());
+		transfer.setCraftType(dto.getCraftType());
 
 		/**
 		 * 2 Standard-Waypoints anlegen A - B - (A) Endpunkt ist implizit
@@ -67,7 +67,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		// transfer.setNextWaypoint(awp1);
 
 		Waypoint wp1 = dataManager.create(Waypoint.class);
-		wp1.setSite(dto.getArrivalSite());
+		wp1.setSite(dto.getDestinationSite());
 		wp1.setTransfer(transfer);
 		// wp1.setNextWaypoint(awp1); geht nicht, weil der letzte Punkt
 		// grundsätzlich der erste ist - das ist aber ein Problem
@@ -77,8 +77,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		wp1.setPreviousStandstill(awp1);
 		cc.getTransfers().add(transfer);
 
-		createTickets(dto.getOccupiedSeatsWay1(), dto.getDepartureSite(), dto.getArrivalSite(), transfer);
-		createTickets(dto.getOccupiedSeatsWay2(), dto.getArrivalSite(), dto.getDepartureSite(), transfer);
+		createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+		createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
 
 		dataManager.commit(cc);
 		return cc.getId();
@@ -102,7 +102,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			Transfer transfer = metadata.create(Transfer.class);
 			transfer.setTransferOrderNo(1);
 			transfer.setCrewChange(cc);
-			transfer.setCraftType(dto.getHelicopterType());
+			transfer.setCraftType(dto.getCraftType());
 
 			/**
 			 * 2 Standard-Waypoints anlegen A - B - (A) Endpunkt ist implizit
@@ -115,7 +115,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			// transfer.setNextWaypoint(awp1);
 
 			Waypoint wp1 = metadata.create(Waypoint.class);
-			wp1.setSite(dto.getArrivalSite());
+			wp1.setSite(dto.getDestinationSite());
 			wp1.setTransfer(transfer);
 			// wp1.setNextWaypoint(awp1); geht nicht, weil der letzte Punkt
 			// grundsätzlich der erste ist - das ist aber ein Problem
@@ -125,8 +125,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			wp1.setPreviousStandstill(awp1);
 			cc.getTransfers().add(transfer);
 
-			createTickets(dto.getOccupiedSeatsWay1(), dto.getDepartureSite(), dto.getArrivalSite(), transfer);
-			createTickets(dto.getOccupiedSeatsWay2(), dto.getArrivalSite(), dto.getDepartureSite(), transfer);
+			createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+			createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
 
 			persistence.getEntityManager().persist(cc);
 			tx.commit();

@@ -333,10 +333,10 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		CrewChangeCreateDTO dto = metadata.create(CrewChangeCreateDTO.class);
 		dto.setStartDateTime(new Date());
 		dto.setDepartureSite(emdn);
-		dto.setArrivalSite(bwal);
-		dto.setHelicopterType(createCraftType());
-		dto.setOccupiedSeatsWay1(seatsWay1);
-		dto.setOccupiedSeatsWay2(seatsWay2);
+		dto.setDestinationSite(bwal);
+		dto.setCraftType(createCraftType());
+		dto.setBookedSeatsOutbound(seatsWay1);
+		dto.setBookedSeatsInbound(seatsWay2);
 
 		return service.createCrewChange(dto);
 
