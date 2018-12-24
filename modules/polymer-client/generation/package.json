@@ -1,0 +1,6 @@
+{
+  "name": "lineup-generation",
+  "devDependencies": {
+    "@cuba-platform/front-generator": "^1.0.1-beta.8"
+  }
+}

@@ -10,7 +10,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 
-@NamePattern("%s %s|startDateTime,arrivalSite")
+@NamePattern("%s %s|startDateTime,destinationSite")
 @MetaClass(name = "lineup$CrewChangeCreateDTO")
 public class CrewChangeCreateDTO extends BaseUuidEntity {
     private static final long serialVersionUID = 8628238232285382909L;
@@ -24,17 +24,51 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
-    protected Site arrivalSite;
-
-    @MetaProperty
-    protected Integer occupiedSeatsWay1;
+    protected Site destinationSite;
 
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
-    protected CraftType helicopterType;
+    protected CraftType craftType;
 
     @MetaProperty
-    protected Integer occupiedSeatsWay2;
+    protected Integer bookedSeatsOutbound;
+
+    @MetaProperty
+    protected Integer bookedSeatsInbound;
+
+    public void setDestinationSite(Site destinationSite) {
+        this.destinationSite = destinationSite;
+    }
+
+    public Site getDestinationSite() {
+        return destinationSite;
+    }
+
+
+    public void setBookedSeatsOutbound(Integer bookedSeatsOutbound) {
+        this.bookedSeatsOutbound = bookedSeatsOutbound;
+    }
+
+    public Integer getBookedSeatsOutbound() {
+        return bookedSeatsOutbound;
+    }
+
+    public void setCraftType(CraftType craftType) {
+        this.craftType = craftType;
+    }
+
+    public CraftType getCraftType() {
+        return craftType;
+    }
+
+    public void setBookedSeatsInbound(Integer bookedSeatsInbound) {
+        this.bookedSeatsInbound = bookedSeatsInbound;
+    }
+
+    public Integer getBookedSeatsInbound() {
+        return bookedSeatsInbound;
+    }
+
 
     public void setStartDateTime(Date startDateTime) {
         this.startDateTime = startDateTime;
@@ -45,14 +79,6 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
     }
 
 
-    public void setArrivalSite(Site arrivalSite) {
-        this.arrivalSite = arrivalSite;
-    }
-
-    public Site getArrivalSite() {
-        return arrivalSite;
-    }
-
 
     public void setDepartureSite(Site departureSite) {
         this.departureSite = departureSite;
@@ -62,30 +88,6 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
         return departureSite;
     }
 
-    public void setOccupiedSeatsWay1(Integer occupiedSeatsWay1) {
-        this.occupiedSeatsWay1 = occupiedSeatsWay1;
-    }
-
-    public Integer getOccupiedSeatsWay1() {
-        return occupiedSeatsWay1;
-    }
-
-    public void setOccupiedSeatsWay2(Integer occupiedSeatsWay2) {
-        this.occupiedSeatsWay2 = occupiedSeatsWay2;
-    }
-
-    public Integer getOccupiedSeatsWay2() {
-        return occupiedSeatsWay2;
-    }
-
-
-    public void setHelicopterType(CraftType helicopterType) {
-        this.helicopterType = helicopterType;
-    }
-
-    public CraftType getHelicopterType() {
-        return helicopterType;
-    }
 
 
 }

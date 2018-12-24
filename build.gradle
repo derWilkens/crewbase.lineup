@@ -9,31 +9,33 @@ buildscript {
                 username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
                 password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
             }
+        }
         
         maven {
         	url 'http://repo.maven.apache.org/maven2'
         	}
-        }
+        
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
     }
 }
 
-def globalModule = project(':lineupapp-global')
-def coreModule = project(':lineupapp-core')
-def guiModule = project(':lineupapp-gui')
-def webModule = project(':lineupapp-web')
-def webThemesModule = project(':lineupapp-web-themes')
+def modulePrefix = 'lineup'
 
-
+def globalModule = project(":${modulePrefix}-global")
+def coreModule = project(":${modulePrefix}-core")
+def guiModule = project(":${modulePrefix}-gui")
+def webModule = project(":${modulePrefix}-web")
+def webThemesModule= project(":${modulePrefix}-web-themes")
+def polymerClientModule = project(":${modulePrefix}-polymer-client")
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
 
+apply(plugin: 'idea')
 apply(plugin: 'java')
 apply(plugin: 'eclipse')
-apply(plugin: 'idea')
 apply(plugin: 'cuba')
 
 cuba {
@@ -46,6 +48,7 @@ cuba {
         dir = "$project.rootDir/deploy/tomcat"
     }
     ide {
+         
         vcs = 'Git'
     }
 }
@@ -55,14 +58,14 @@ dependencies {
 
 }
 
-def mysql = 'mysql:mysql-connector-java:5.1.38'
+def mysql = 'mysql:mysql-connector-java:5.1.46'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'eclipse')
     apply(plugin: 'idea')
-apply(plugin: 'cuba')
+    apply(plugin: 'eclipse')
+    apply(plugin: 'cuba')
 
     dependencies {
         testCompile('junit:junit:4.12')
@@ -80,16 +83,18 @@ apply(plugin: 'cuba')
 
 configure(globalModule) {
     entitiesEnhancing {
-        main { enabled = true }
+        main {
+            enabled = true
+        }
     }
 
+    
     jar {
         manifest {
             attributes('App-Component-Id': cuba.artifact.group)
             attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
         }
     }
-
     
 }
 
@@ -110,7 +115,7 @@ configure(coreModule) {
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/lineupapp-core')
+            def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}-core")
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -120,8 +125,8 @@ configure(coreModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'lineupapp-core'
-        appJars('lineupapp-global', 'lineupapp-core')
+        appName = "${modulePrefix}-core"
+        appJars(modulePrefix + '-global', modulePrefix + '-core')
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
@@ -142,7 +147,7 @@ configure(coreModule) {
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 }
-
+    
 configure(guiModule) {
     dependencies {
         compile(globalModule)
@@ -152,7 +157,7 @@ configure(guiModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "eu/crewbase/lineup/**"
-        into "$cuba.tomcat.dir/conf/lineupapp"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 }
 
@@ -166,13 +171,6 @@ configure(webModule) {
         compile(guiModule)
 
     }
-
-    jar {
-        with copySpec {
-            from sourceSets.main.allJava
-        }
-    }
-
     
     task webArchive(type: Zip) {
         from file("$buildDir/web")
@@ -187,17 +185,17 @@ configure(webModule) {
     task deployConf(type: Copy) {
         from file('src')
         include "eu/crewbase/lineup/**"
-        into "$cuba.tomcat.dir/conf/lineupapp"
+        into "$cuba.tomcat.dir/conf/${modulePrefix}"
     }
 
     task clearMessagesCache(type: CubaClearMessagesCache) {
-        appName = 'lineupapp'
+        appName = "${modulePrefix}"
     }
     deployConf.dependsOn clearMessagesCache
 
     task cleanConf(description: 'Cleans up conf directory') {
         doLast {
-            def dir = new File(cuba.tomcat.dir, '/conf/lineupapp')
+            def dir = new File(cuba.tomcat.dir, "/conf/${modulePrefix}")
             if (dir.isDirectory()) {
                 ant.delete(includeemptydirs: true) {
                     fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
@@ -207,19 +205,21 @@ configure(webModule) {
     }
 
     task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
-        appName = 'lineupapp'
-        appJars('lineupapp-global', 'lineupapp-gui', 'lineupapp-web')
+        appName = "${modulePrefix}"
+        appJars(modulePrefix + '-global', modulePrefix + '-gui', modulePrefix + '-web')
     }
     task buildScssThemes(type: CubaWebScssThemeCreation)
     task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
     assemble.dependsOn buildScssThemes
 }
 
+
+
+
 configure(webThemesModule) {
     apply(plugin: 'java')
     apply(plugin: 'maven')
-    apply(plugin: 'idea')
-apply(plugin: 'cuba')
+    apply(plugin: 'cuba')
 
     appModuleType = 'web-themes'
 
@@ -237,16 +237,74 @@ apply(plugin: 'cuba')
     }
 }
 
+configure(polymerClientModule) {
+    apply(plugin: 'cuba')
+    apply(plugin: 'idea')
+    apply(plugin: 'eclipse')
+    apply(plugin: 'war')
+    apply(plugin: 'maven')
 
+    def frontAppDir = "${modulePrefix}-front"
 
-task undeploy(type: Delete, dependsOn: ':lineupapp-web:cleanConf') {
-    delete("$cuba.tomcat.dir/shared")
-    delete("$cuba.tomcat.dir/webapps/lineupapp-core")
-    delete("$cuba.tomcat.dir/webapps/lineupapp")
+    task installGenerators(type: NpmTask) {
+        workingDir = file('generation')
+        args = ['install']
+        inputs.file 'generation/package.json'
+        outputs.dir 'generation/node_modules'
+    }
 
+    task listGenerators(type: NodeTask, dependsOn: installGenerators) {
+        script = file("generation/node_modules/@cuba-platform/front-generator/bin/gen-cuba-front")
+        args = ['list', '-s', 'generation/generators.json']
+        outputs.file 'generation/generators.json'
+    }
+
+    
+    def mainBuildDir = 'build/es6-unbundled'
+
+    task installBowerPackages(type: NodeTask, dependsOn: npmInstall) {
+        script = file("node_modules/bower/bin/bower")
+        args = ['install','-F']
+        inputs.file "bower.json"
+        outputs.dir "bower_components"
+    }
+
+    task buildPolymer(type: NpmTask, dependsOn: installBowerPackages) {
+        args = ['run','build']
+        inputs.files fileTree('./') {
+            exclude 'build'
+        }
+        outputs.dir "build"
+    }
+
+    assemble.dependsOn buildPolymer
+
+    task deployUnbundled(type: Copy) {
+        from file('./')
+        include 'bower_components/**'
+        include 'src/**'
+        into "$cuba.tomcat.dir/webapps/$frontAppDir"
+    }
+
+    task deploy(type: Copy, dependsOn: [assemble, deployUnbundled]) {
+        from file(mainBuildDir)
+        into "$cuba.tomcat.dir/webapps/$frontAppDir"
+    }
+
+    war {
+        from file(mainBuildDir)
+    }
 }
 
-task restart(dependsOn: ['stop', ':lineupapp-core:deploy', ':lineupapp-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
+
+task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
+    delete("$cuba.tomcat.dir/shared")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}")
+    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-front")
+}
+
+task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
     doLast {
         ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
             not {
@@ -260,8 +318,6 @@ task restart(dependsOn: ['stop', ':lineupapp-core:deploy', ':lineupapp-web:deplo
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
 }
-
-apply from: 'extra.gradle'
 
 task buildWar(type: CubaWarBuilding) {
     coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'

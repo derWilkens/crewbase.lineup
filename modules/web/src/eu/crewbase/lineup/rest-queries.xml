@@ -1,13 +1,3 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <queries xmlns="http://schemas.haulmont.com/cuba/rest-queries.xsd">
-    <query entity="lineup$Ticket"
-           name="ticket-query"
-           view="_local">
-        <jpql>
-            <![CDATA[SELECT t.startSite AS siteA, t.destinationSite, COUNT(t) AS total
-FROM lineup$Ticket t
-GROUP BY t.startSite, t.destinationSite ORDER BY t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC]]>
-        </jpql>
-        <params/>
-    </query>
 </queries>

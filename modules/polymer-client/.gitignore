@@ -1,1 +1,4 @@
-/bin/
+node_modules
+bower_components
+build
+.generation

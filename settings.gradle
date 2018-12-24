@@ -1,8 +1,9 @@
 rootProject.name = 'lineup'
-include(':lineupapp-global', ':lineupapp-core', ':lineupapp-gui', ':lineupapp-web', ':lineupapp-web-themes')
-project(':lineupapp-global').projectDir = new File(settingsDir, 'modules/global')
-project(':lineupapp-core').projectDir = new File(settingsDir, 'modules/core')
-project(':lineupapp-gui').projectDir = new File(settingsDir, 'modules/gui')
-project(':lineupapp-web').projectDir = new File(settingsDir, 'modules/web')
-
-project(':lineupapp-web-themes').projectDir = new File(settingsDir, 'modules/web/themes')
+def modulePrefix = 'lineup'
+include(":${modulePrefix}-global", ":${modulePrefix}-core", ":${modulePrefix}-gui", ":${modulePrefix}-web", ":${modulePrefix}-web-themes", ":${modulePrefix}-polymer-client")
+project(":${modulePrefix}-global").projectDir = new File(settingsDir, 'modules/global')
+project(":${modulePrefix}-core").projectDir = new File(settingsDir, 'modules/core')
+project(":${modulePrefix}-gui").projectDir = new File(settingsDir, 'modules/gui')
+project(":${modulePrefix}-web").projectDir = new File(settingsDir, 'modules/web')
+project(":${modulePrefix}-web-themes").projectDir = new File(settingsDir, 'modules/web/themes')
+project(":${modulePrefix}-polymer-client").projectDir = new File(settingsDir, 'modules/polymer-client')
