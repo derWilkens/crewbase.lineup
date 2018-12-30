@@ -105,4 +105,18 @@
             template="eu/crewbase/lineup/web/waypoint/waypoint-edit.xml"/>
     <screen id="lineup$CrewChange.browse"
             template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
+    <screen id="lineup$CraftType.edit"
+            template="eu/crewbase/lineup/web/crafttype/craft-type-edit.xml"/>
+    <screen id="lineup$ModeOfTransfer.browse"
+            template="eu/crewbase/lineup/web/modeoftransfer/mode-of-transfer-browse.xml"/>
+    <screen id="lineup$ModeOfTransfer.edit"
+            template="eu/crewbase/lineup/web/modeoftransfer/mode-of-transfer-edit.xml"/>
+    <screen id="lineup$CraftType.browse"
+            template="eu/crewbase/lineup/web/crafttype/craft-type-browse.xml"/>
+    <screen id="lineup$SiteCategory.edit"
+            template="eu/crewbase/lineup/web/sitecategory/site-category-edit.xml"/>
+    <screen id="lineup$Airport.browse"
+            template="eu/crewbase/lineup/web/airport/airport-browse.xml"/>
+    <screen id="lineup$Airport.edit"
+            template="eu/crewbase/lineup/web/airport/airport-edit.xml"/>
 </screen-config>

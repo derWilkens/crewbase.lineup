@@ -142,7 +142,6 @@ public class CapServiceBeanTest extends LineupTestContainer {
 			
 			site = persistence.createTransaction().execute(em -> {
 				Site site = new Site();
-				site.setClient(1);
 				site.setSiteName("Testsite");
 				site.setItemDesignation("TEST");
 				em.persist(site);

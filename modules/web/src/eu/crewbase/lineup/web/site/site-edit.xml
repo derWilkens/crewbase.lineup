@@ -8,14 +8,7 @@
     <dsContext>
         <datasource id="siteDs"
                     class="eu.crewbase.lineup.entity.coredata.Site"
-                    view="site-browser-view"/>
-        <collectionDatasource id="parentSitesDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from lineup$Site e]]>
-            </query>
-        </collectionDatasource>
+                    view="site-manage"/>
         <collectionDatasource id="categoriesDs"
                               class="eu.crewbase.lineup.entity.coredata.SiteCategory"
                               view="_minimal">
@@ -31,17 +24,12 @@
         <fieldGroup id="fieldGroup"
                     datasource="siteDs">
             <column width="250px">
-                <field property="client"/>
                 <field property="siteName"/>
-                <field property="itemDesignation"/>
-                <field optionsDatasource="parentSitesDs"
-                       property="parentSite"/>
-                <field property="shortItemDesignation"/>
-                <field optionsDatasource="categoriesDs"
-                       property="category"/>
-                <field property="siteType"/>
                 <field property="latitude"/>
                 <field property="longitude"/>
+                <field property="itemDesignation"/>
+                <field optionsDatasource="categoriesDs"
+                       property="category"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

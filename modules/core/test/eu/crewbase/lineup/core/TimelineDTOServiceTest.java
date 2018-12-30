@@ -71,7 +71,6 @@ public class TimelineDTOServiceTest extends LineupTestContainer {
 		dataManager.commit(personOnDuty);
 
 		site = metadata.create(Site.class);
-		site.setClient(1);
 		site.setSiteName("Testsite");
 		site.setItemDesignation("TEST");
 		dataManager.commit(site);

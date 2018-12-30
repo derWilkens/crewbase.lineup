@@ -20,10 +20,13 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import javax.persistence.InheritanceType;
+import javax.persistence.Inheritance;
 
 /**
  * @author christian
  */
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamePattern("%s|siteName")
 @Table(name = "LINEUP_SITE")
 @Entity(name = "lineup$Site")

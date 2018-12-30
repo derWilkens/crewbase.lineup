@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.crafttype.CraftTypeBrowse"
+        focusComponent="craftTypesTable"
+        lookupComponent="craftTypesTable"
+        messagesPack="eu.crewbase.lineup.web.crafttype">
+    <dsContext>
+        <groupDatasource id="craftTypesDs"
+                         class="eu.crewbase.lineup.entity.coredata.CraftType"
+                         view="craftType-view">
+            <query>
+                <![CDATA[select e from lineup$CraftType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="craftTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="craftTypesTable"
+                datasource="craftTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="craftTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="seats"/>
+                <column id="maxRange"/>
+                <column id="payloadOutbound"/>
+                <column id="payloadInbound"/>
+                <column id="modeOfTransfer"/>
+            </columns>
+            <rows datasource="craftTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="craftTypesTable.create"/>
+                <button id="editBtn"
+                        action="craftTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="craftTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

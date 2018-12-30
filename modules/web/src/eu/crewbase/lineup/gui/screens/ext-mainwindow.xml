@@ -50,12 +50,14 @@
                           stylename="c-main-buttons">
                         <main:newWindowButton id="newWindowButton"
                                               description="mainMsg://newWindowBtnDescription"
-                                              icon="app/images/new-window.png"/>
+                                              icon="app/images/new-window.png"
+                                              visible="false"/>
                         <main:logoutButton id="logoutButton"
                                            description="mainMsg://logoutBtnDescription"
                                            icon="app/images/exit.png"/>
                     </hbox>
                     <main:timeZoneIndicator id="timeZoneIndicator"
+                                            visible="false"
                                             width="100%"/>
                     <main:sideMenu id="sideMenu"
                                    sidePanel="sideMenuPanel"

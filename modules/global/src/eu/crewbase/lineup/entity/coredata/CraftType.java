@@ -29,11 +29,17 @@ public class CraftType extends StandardClientEntity {
     @Column(name = "NAME", nullable = false, length = 50)
     protected String name;
 
+    @Column(name = "SEATS", nullable = false)
+    protected Integer seats;
+
     @Column(name = "MAX_RANGE")
     protected Integer maxRange;
 
-    @Column(name = "SEATS", nullable = false)
-    protected Integer seats;
+    @Column(name = "PAYLOAD_OUTBOUND")
+    protected Integer payloadOutbound;
+
+    @Column(name = "PAYLOAD_INBOUND")
+    protected Integer payloadInbound;
 
     @Lookup(type = LookupType.DROPDOWN)
     @OnDeleteInverse(DeletePolicy.UNLINK)
@@ -41,6 +47,23 @@ public class CraftType extends StandardClientEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MODE_OF_TRANSFER_ID")
     protected ModeOfTransfer modeOfTransfer;
+
+    public void setPayloadOutbound(Integer payloadOutbound) {
+        this.payloadOutbound = payloadOutbound;
+    }
+
+    public Integer getPayloadOutbound() {
+        return payloadOutbound;
+    }
+
+    public void setPayloadInbound(Integer payloadInbound) {
+        this.payloadInbound = payloadInbound;
+    }
+
+    public Integer getPayloadInbound() {
+        return payloadInbound;
+    }
+
 
     public void setMaxRange(Integer maxRange) {
         this.maxRange = maxRange;

@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-  ~ Copyright (c) 2017 Haulmont Technology Ltd. All Rights Reserved.
-  ~ Haulmont Technology proprietary and confidential.
-  ~ Use is subject to license terms.
-  -->
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://caption"
+        caption="msg://browseCaption"
         class="eu.crewbase.lineup.web.sitecategory.SiteCategoryBrowse"
-        focusComponent="table"
-        lookupComponent="table"
+        focusComponent="siteCategoriesTable"
+        lookupComponent="siteCategoriesTable"
         messagesPack="eu.crewbase.lineup.web.sitecategory">
     <dsContext>
-        <datasource id="siteCategoryDs"
-                    class="eu.crewbase.lineup.entity.coredata.SiteCategory"
-                    view="_local"/>
         <groupDatasource id="siteCategoriesDs"
                          class="eu.crewbase.lineup.entity.coredata.SiteCategory"
                          view="_local">
@@ -22,81 +14,36 @@
             </query>
         </groupDatasource>
     </dsContext>
-    <actions>
-        <action id="save"
-                caption="mainMsg://actions.Ok"
-                icon="icons/ok.png"
-                invoke="save"
-                shortcut="CTRL-ENTER"/>
-        <action id="cancel"
-                caption="mainMsg://actions.Cancel"
-                description="Esc"
-                icon="icons/cancel.png"
-                invoke="cancel"/>
-    </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout>
-        <split id="split"
-               height="100%"
-               orientation="horizontal"
-               reversePosition="true"
-               width="100%">
-            <vbox id="lookupBox"
-                  expand="table"
-                  height="100%"
-                  margin="false,true,false,false"
-                  spacing="true">
-                <filter id="filter"
-                        applyTo="table"
-                        datasource="siteCategoriesDs">
-                    <properties include=".*"/>
-                </filter>
-                <groupTable id="table"
-                            width="100%">
-                    <actions>
-                        <action id="create"/>
-                        <action id="edit"/>
-                        <action id="remove"/>
-                    </actions>
-                    <columns>
-                        <column id="name"/>
-                    </columns>
-                    <rows datasource="siteCategoriesDs"/>
-                    <rowsCount/>
-                    <buttonsPanel id="buttonsPanel"
-                                  alwaysVisible="true">
-                        <button id="createBtn"
-                                action="table.create"/>
-                        <button id="editBtn"
-                                action="table.edit"/>
-                        <button id="removeBtn"
-                                action="table.remove"/>
-                    </buttonsPanel>
-                </groupTable>
-            </vbox>
-            <vbox id="editBox"
-                  expand="fieldGroupBox"
-                  height="100%"
-                  margin="false,false,false,true"
-                  spacing="true">
-                <scrollBox id="fieldGroupBox">
-                    <fieldGroup id="fieldGroup"
-                                datasource="siteCategoryDs">
-                        <column width="250px">
-                            <field property="name"/>
-                        </column>
-                    </fieldGroup>
-                </scrollBox>
-                <hbox id="actionsPane"
-                      spacing="true"
-                      visible="false">
-                    <button id="saveBtn"
-                            action="save"/>
-                    <button id="cancelBtn"
-                            action="cancel"/>
-                </hbox>
-            </vbox>
-        </split>
+    <layout expand="siteCategoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="siteCategoriesTable"
+                datasource="siteCategoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="siteCategoriesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+            </columns>
+            <rows datasource="siteCategoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="siteCategoriesTable.create"/>
+                <button id="editBtn"
+                        action="siteCategoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="siteCategoriesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
     </layout>
 </window>

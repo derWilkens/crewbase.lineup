@@ -91,7 +91,6 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	private Site createSite(String name, String itemDesignation, double lat, double lon) {
 		Site site1 = metadata.create(Site.class);
-		site1.setClient(1);
 		site1.setSiteName(name);
 		site1.setItemDesignation(itemDesignation);
 		site1.setLatitude(lat);

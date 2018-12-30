@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.modeoftransfer.ModeOfTransferBrowse"
+        focusComponent="modeOfTransfersTable"
+        lookupComponent="modeOfTransfersTable"
+        messagesPack="eu.crewbase.lineup.web.modeoftransfer">
+    <dsContext>
+        <groupDatasource id="modeOfTransfersDs"
+                         class="eu.crewbase.lineup.entity.coredata.ModeOfTransfer"
+                         view="_local">
+            <query>
+                <![CDATA[select e from lineup$ModeOfTransfer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="modeOfTransfersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="modeOfTransfersTable"
+                datasource="modeOfTransfersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="modeOfTransfersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="mode"/>
+            </columns>
+            <rows datasource="modeOfTransfersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="modeOfTransfersTable.create"/>
+                <button id="editBtn"
+                        action="modeOfTransfersTable.edit"/>
+                <button id="removeBtn"
+                        action="modeOfTransfersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

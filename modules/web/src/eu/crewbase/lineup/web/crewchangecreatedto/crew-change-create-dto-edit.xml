@@ -14,21 +14,28 @@
                               class="eu.crewbase.lineup.entity.coredata.Site"
                               view="site-view-airport">
             <query>
-                <![CDATA[select e from lineup$Site e where e.category.name = 'Airport']]>
+                <![CDATA[select e from lineup$Site e ]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="platformDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="_local">
+                              view="site-view-airport">
             <query>
-                <![CDATA[select e from lineup$Site e where e.category.name = 'Platform']]>
+                <![CDATA[select e from lineup$Site e ]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="craftTypesDs"
                               class="eu.crewbase.lineup.entity.coredata.CraftType"
                               view="_local">
             <query>
-                <![CDATA[select e from lineup$CraftType e]]>
+                <![CDATA[select e from lineup$CraftType e where e.modeOfTransfer.id = :ds$modeOfTransferDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="modeOfTransferDs"
+                              class="eu.crewbase.lineup.entity.coredata.ModeOfTransfer"
+                              view="_local">
+            <query>
+                <![CDATA[select e from lineup$ModeOfTransfer e]]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -72,27 +79,31 @@
                              property="destinationSite"/>
             </groupBox>
         </vbox>
-        <groupBox>
+        <groupBox caption="Transportation"
+                  orientation="horizontal"
+                  spacing="true">
+            <optionsGroup optionsDatasource="modeOfTransferDs"
+                          orientation="horizontal"/>
             <lookupField id="craftType"
                          datasource="crewChangeCreateDTODs"
                          inputPrompt="Helicopter Type"
                          optionsDatasource="craftTypesDs"
                          property="craftType"/>
-            <groupBox caption="Booked Seats"
-                      orientation="horizontal"
-                      spacing="true">
-                <textField id="occupiedSeatsOutbound"
-                           caption="Outbound"
-                           datasource="crewChangeCreateDTODs"
-                           icon="font-icon:ARROW_UP"
-                           property="bookedSeatsOutbound"/>
-                <textField id="occupiedSeatsInbound"
-                           caption="Inbound"
-                           datasource="crewChangeCreateDTODs"
-                           datatype="int"
-                           icon="font-icon:ARROW_DOWN"
-                           property="bookedSeatsInbound"/>
-            </groupBox>
+        </groupBox>
+        <groupBox caption="Booked Seats"
+                  orientation="horizontal"
+                  spacing="true">
+            <lookupField id="bookedSeatsOutbound"
+                         caption="Outbound"
+                         datasource="crewChangeCreateDTODs"
+                         icon="font-icon:ARROW_UP"
+                         property="bookedSeatsOutbound"/>
+            <lookupField id="bookedSeatsInbound"
+                         caption="Inbound"
+                         datasource="crewChangeCreateDTODs"
+                         datatype="int"
+                         icon="font-icon:ARROW_DOWN"
+                         property="bookedSeatsInbound"/>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>

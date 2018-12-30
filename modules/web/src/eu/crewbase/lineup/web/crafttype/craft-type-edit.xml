@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.crafttype.CraftTypeEdit"
+        datasource="craftTypeDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.crafttype">
+    <dsContext>
+        <datasource id="craftTypeDs"
+                    class="eu.crewbase.lineup.entity.coredata.CraftType"
+                    view="craftType-view"/>
+        <collectionDatasource id="modeOfTransfersDs"
+                              class="eu.crewbase.lineup.entity.coredata.ModeOfTransfer"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from lineup$ModeOfTransfer e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="craftTypeDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="seats"/>
+                <field property="maxRange"/>
+                <field property="payloadOutbound"/>
+                <field property="payloadInbound"/>
+                <field optionsDatasource="modeOfTransfersDs"
+                       property="modeOfTransfer"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

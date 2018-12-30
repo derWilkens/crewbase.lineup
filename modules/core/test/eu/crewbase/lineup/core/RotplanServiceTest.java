@@ -80,7 +80,6 @@ public class RotplanServiceTest extends LineupTestContainer {
 		//
 
 		site = metadata.create(Site.class);
-		site.setClient(1);
 		site.setSiteName("Testsite");
 		site.setItemDesignation("TEST");
 		dataManager.commit(site);

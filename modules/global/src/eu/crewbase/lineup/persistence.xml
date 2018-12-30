@@ -45,5 +45,6 @@
         <class>eu.crewbase.lineup.entity.wayfare.Standstill</class>
         <class>eu.crewbase.lineup.entity.wayfare.Ticket</class>
         <class>eu.crewbase.lineup.entity.wayfare.FavoriteTrip</class>
+        <class>eu.crewbase.lineup.entity.coredata.Airport</class>
     </persistence-unit>
 </persistence>

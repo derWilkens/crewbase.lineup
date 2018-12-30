@@ -1,115 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
-  ~ Copyright (c) 2017 Haulmont Technology Ltd. All Rights Reserved.
-  ~ Haulmont Technology proprietary and confidential.
-  ~ Use is subject to license terms.
-  -->
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://caption"
+        caption="msg://browseCaption"
         class="eu.crewbase.lineup.web.site.SiteBrowse"
-        focusComponent="table"
-        lookupComponent="table"
+        focusComponent="sitesTable"
+        lookupComponent="sitesTable"
         messagesPack="eu.crewbase.lineup.web.site">
     <dsContext>
-        <datasource id="siteDs"
-                    class="eu.crewbase.lineup.entity.coredata.Site"
-                    view="site-browser-view"/>
-        <collectionDatasource id="sitesDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="site-browser-view">
+        <groupDatasource id="sitesDs"
+                         class="eu.crewbase.lineup.entity.coredata.Site"
+                         view="site-manage">
             <query>
                 <![CDATA[select e from lineup$Site e]]>
             </query>
-        </collectionDatasource>
-        <collectionDatasource id="categoriesDs"
-                              class="eu.crewbase.lineup.entity.coredata.SiteCategory"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from lineup$SiteCategory e]]>
-            </query>
-        </collectionDatasource>
+        </groupDatasource>
     </dsContext>
-    <actions>
-        <action id="save"
-                caption="mainMsg://actions.Ok"
-                icon="icons/ok.png"
-                invoke="save"
-                shortcut="CTRL-ENTER"/>
-        <action id="cancel"
-                caption="mainMsg://actions.Cancel"
-                description="Esc"
-                icon="icons/cancel.png"
-                invoke="cancel"/>
-    </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout>
-        <split id="split"
-               height="100%"
-               orientation="horizontal"
-               reversePosition="true"
-               width="100%">
-            <vbox id="lookupBox"
-                  height="100%"
-                  margin="false,true,false,false"
-                  spacing="true">
-                <table id="table"
-                       height="100%"
-                       width="100%">
-                    <actions>
-                        <action id="create"/>
-                        <action id="edit"/>
-                        <action id="remove"/>
-                    </actions>
-                    <columns>
-                        <column id="siteName"/>
-                        <column id="itemDesignation"/>
-                        <column id="category"/>
-                        <column id="siteType"/>
-                        <column id="latitude"/>
-                        <column id="longitude"/>
-                    </columns>
-                    <rows datasource="sitesDs"/>
-                    <rowsCount/>
-                    <buttonsPanel id="buttonsPanel"
-                                  alwaysVisible="true">
-                        <button id="createBtn"
-                                action="table.create"/>
-                        <button id="editBtn"
-                                action="table.edit"/>
-                        <button id="removeBtn"
-                                action="table.remove"/>
-                    </buttonsPanel>
-                </table>
-            </vbox>
-            <vbox id="editBox"
-                  expand="fieldGroupBox"
-                  height="100%"
-                  margin="false,false,false,true"
-                  spacing="true">
-                <vbox id="fieldGroupBox">
-                    <fieldGroup id="fieldGroup"
-                                datasource="siteDs">
-                        <column width="250px">
-                            <field property="siteName"/>
-                            <field property="itemDesignation"/>
-                            <field optionsDatasource="categoriesDs"
-                                   property="category"/>
-                            <field property="siteType"/>
-                            <field property="latitude"/>
-                            <field property="longitude"/>
-                        </column>
-                    </fieldGroup>
-                </vbox>
-                <hbox id="actionsPane"
-                      spacing="true"
-                      visible="false">
-                    <button id="saveBtn"
-                            action="save"/>
-                    <button id="cancelBtn"
-                            action="cancel"/>
-                </hbox>
-            </vbox>
-        </split>
+    <layout expand="sitesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="sitesTable"
+                datasource="sitesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="sitesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="siteName"/>
+                <column id="latitude"/>
+                <column id="longitude"/>
+                <column id="itemDesignation"/>
+                <column id="category"/>
+            </columns>
+            <rows datasource="sitesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="sitesTable.create"/>
+                <button id="editBtn"
+                        action="sitesTable.edit"/>
+                <button id="removeBtn"
+                        action="sitesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
     </layout>
 </window>

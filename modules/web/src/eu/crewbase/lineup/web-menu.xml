@@ -7,9 +7,7 @@
         <item id="emlTime"
               screen="eml-timeline"/>
         <item screen="CampaignPlan"/>
-        <item screen="lineup$Company.browse"/>
         <item screen="lineup$Transfer.browse"/>
-        <item screen="lineup$SiteCategory.browse"/>
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
     </menu>
@@ -47,17 +45,14 @@
     <menu id="masterdata"
           icon="font-icon:TABLE"
           insertBefore="administration">
-        <item screen="lineup$AttendencePeriod.browse"/>
-        <item screen="lineup$OperationPeriod.browse"/>
-        <item screen="lineup$Site.browse"/>
-        <item screen="lineup$Department.browse"/>
-        <item screen="lineup$AppUser.browse"/>
-        <menu id="TEMP Dialoge">
-            <item screen="lineup$ShiftPeriod.choose"/>
-            <item screen="lineup$FirstClass.browse"/>
-            <item screen="lineup$SecondClass.browse"/>
-            <item screen="lineup$ThirdClass.browse"/>
+        <menu id="Crafts">
+            <item screen="lineup$CraftType.browse"/>
+            <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
-        <item screen="lineup$FunctionCategory.browse"/>
+        <menu id="Sites">
+            <item screen="lineup$Site.browse"/>
+            <item screen="lineup$SiteCategory.browse"/>
+            <item screen="lineup$Airport.browse"/>
+        </menu>
     </menu>
 </menu-config>

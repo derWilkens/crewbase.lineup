@@ -108,8 +108,12 @@
         <property name="lastname"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.CraftType"
-          extends="_local"
           name="craftType-view">
+        <property name="name"/>
+        <property name="maxRange"/>
+        <property name="seats"/>
+        <property name="payloadInbound"/>
+        <property name="payloadOutbound"/>
         <property name="modeOfTransfer"
                   view="_minimal"/>
     </view>
@@ -403,8 +407,6 @@
           name="site-view-airport">
         <property name="category"
                   view="_minimal"/>
-        <property name="siteType"
-                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
           extends="_local"
@@ -425,5 +427,25 @@
                   view="_minimal"/>
         <property name="destination"
                   view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Site"
+          name="site-manage">
+        <property name="siteName"/>
+        <property name="latitude"/>
+        <property name="longitude"/>
+        <property name="itemDesignation"/>
+        <property name="category"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.coredata.Airport"
+          name="airport-manage">
+        <property name="category"
+                  view="_minimal"/>
+        <property name="icaoCode"/>
+        <property name="iataCode"/>
+        <property name="siteName"/>
+        <property name="latitude"/>
+        <property name="longitude"/>
+        <property name="itemDesignation"/>
     </view>
 </views>
