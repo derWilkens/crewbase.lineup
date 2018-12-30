@@ -1,2 +1,0 @@
-rename table lineup_anchor_waypoint to LINEUP_ANCHOR_WAYPOINT__U24076 ;
-alter table lineup_transfer drop foreign key FK_LINEUP_TRANSFER_ON_ANCHOR_WAYPOINT;

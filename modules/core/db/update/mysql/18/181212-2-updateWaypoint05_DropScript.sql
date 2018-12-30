@@ -1,9 +1,0 @@
-alter table LINEUP_WAYPOINT drop column VERSION__U52145 cascade ;
-alter table LINEUP_WAYPOINT drop column CREATE_TS__U46998 cascade ;
-alter table LINEUP_WAYPOINT drop column CREATED_BY__U22463 cascade ;
-alter table LINEUP_WAYPOINT drop column UPDATE_TS__U95118 cascade ;
-alter table LINEUP_WAYPOINT drop column UPDATED_BY__U05222 cascade ;
-alter table LINEUP_WAYPOINT drop column DELETE_TS__U33697 cascade ;
-alter table LINEUP_WAYPOINT drop column DELETED_BY__U51757 cascade ;
-alter table LINEUP_WAYPOINT drop column CLIENT__U47565 cascade ;
-alter table LINEUP_WAYPOINT drop column TRANSFER_ID__U94257 cascade ;

@@ -1,2 +1,0 @@
-alter table LINEUP_SITE add constraint FK_LINEUP_SITE_ON_CATEGORY foreign key (CATEGORY_ID) references LINEUP_SITE_CATEGORY(ID);
-create index IDX_LINEUP_SITE_ON_CATEGORY on LINEUP_SITE (CATEGORY_ID);

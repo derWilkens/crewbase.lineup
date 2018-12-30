@@ -70,7 +70,6 @@ create table LINEUP_SITE (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
-    CLIENT integer not null,
     --
     SITE_NAME varchar(50) not null,
     LATITUDE double precision,
@@ -747,6 +746,7 @@ create table LINEUP_FAVORITE_TRIP (
     DELETED_BY varchar(50),
     --
     START_SITE_ID varchar(32) not null,
+    EXACT_MATCH boolean,
     DESTINATION_ID varchar(32) not null,
     EMAIL_NOTIFICATION boolean,
     ROUND_TRIP boolean,

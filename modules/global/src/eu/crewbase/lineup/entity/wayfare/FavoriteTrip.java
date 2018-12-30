@@ -32,6 +32,9 @@ public class FavoriteTrip extends StandardEntity {
     @JoinColumn(name = "START_SITE_ID")
     protected Site startSite;
 
+    @Column(name = "EXACT_MATCH")
+    protected Boolean exactMatch;
+
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "clear"})
     @NotNull
     @OnDeleteInverse(DeletePolicy.CASCADE)
@@ -44,6 +47,15 @@ public class FavoriteTrip extends StandardEntity {
 
     @Column(name = "ROUND_TRIP")
     protected Boolean roundTrip;
+
+    public void setExactMatch(Boolean exactMatch) {
+        this.exactMatch = exactMatch;
+    }
+
+    public Boolean getExactMatch() {
+        return exactMatch;
+    }
+
 
     public void setStartSite(Site startSite) {
         this.startSite = startSite;

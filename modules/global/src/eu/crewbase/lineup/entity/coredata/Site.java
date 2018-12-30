@@ -19,6 +19,7 @@ import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.cuba.core.entity.StandardEntity;
 
 /**
  * @author christian
@@ -26,7 +27,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 @NamePattern("%s|siteName")
 @Table(name = "LINEUP_SITE")
 @Entity(name = "lineup$Site")
-public class Site extends StandardClientEntity {
+public class Site extends StandardEntity {
 	private static final long serialVersionUID = -1161554407313338235L;
 
 	@Column(name = "SITE_NAME", nullable = false, length = 50)

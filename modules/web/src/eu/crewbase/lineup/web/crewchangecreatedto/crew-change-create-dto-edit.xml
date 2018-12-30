@@ -18,13 +18,15 @@
             </query>
         </collectionDatasource>
         <collectionDatasource id="platformDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site">
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="_local">
             <query>
                 <![CDATA[select e from lineup$Site e where e.category.name = 'Platform']]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="craftTypesDs"
-                              class="eu.crewbase.lineup.entity.coredata.CraftType">
+                              class="eu.crewbase.lineup.entity.coredata.CraftType"
+                              view="_local">
             <query>
                 <![CDATA[select e from lineup$CraftType e]]>
             </query>
@@ -44,42 +46,53 @@
                 <dateField id="fligthDate"
                            datasource="crewChangeCreateDTODs"
                            property="startDateTime"
-                           required="true"
                            resolution="DAY"
                            responsive="true"/>
                 <timeField id="takeOff"
                            datasource="crewChangeCreateDTODs"
-                           property="takeOff"/>
+                           property="startDateTime"/>
             </groupBox>
-            <groupBox caption="Departure - Main Destination"
+            <groupBox caption="Trip"
                       orientation="horizontal"
                       spacing="true">
-                <optionsGroup datasource="crewChangeCreateDTODs"
-                              optionsDatasource="sitesDs"
-                              orientation="horizontal"
-                              property="departureSite"/>
-                <lookupField datasource="crewChangeCreateDTODs"
+                <lookupField id="departure"
+                             caption="Departure "
+                             captionProperty="siteName"
+                             datasource="crewChangeCreateDTODs"
+                             inputPrompt="(start typing...)"
+                             nullOptionVisible="false"
+                             optionsDatasource="sitesDs"
+                             property="departureSite"/>
+                <lookupField id="destination"
+                             caption="Main Destination"
+                             datasource="crewChangeCreateDTODs"
                              inputPrompt="(start typing...)"
                              nullOptionVisible="false"
                              optionsDatasource="platformDs"
-                             property="arrivalSite"/>
+                             property="destinationSite"/>
             </groupBox>
         </vbox>
-        <groupBox caption="Misc.">
-            <lookupField id="helikopterType"
+        <groupBox>
+            <lookupField id="craftType"
                          datasource="crewChangeCreateDTODs"
                          inputPrompt="Helicopter Type"
                          optionsDatasource="craftTypesDs"
-                         property="helicopterType"/>
-            <textField id="occupiedSeatsOutbound"
-                       caption="Occupied Seats Outbound"
-                       datasource="crewChangeCreateDTODs"
-                       property="occupiedSeatsWay1"/>
-            <textField id="occupiedSeatsInbound"
-                       caption="Occupied Seats Inbound"
-                       datasource="crewChangeCreateDTODs"
-                       datatype="int"
-                       property="occupiedSeatsWay2"/>
+                         property="craftType"/>
+            <groupBox caption="Booked Seats"
+                      orientation="horizontal"
+                      spacing="true">
+                <textField id="occupiedSeatsOutbound"
+                           caption="Outbound"
+                           datasource="crewChangeCreateDTODs"
+                           icon="font-icon:ARROW_UP"
+                           property="bookedSeatsOutbound"/>
+                <textField id="occupiedSeatsInbound"
+                           caption="Inbound"
+                           datasource="crewChangeCreateDTODs"
+                           datatype="int"
+                           icon="font-icon:ARROW_DOWN"
+                           property="bookedSeatsInbound"/>
+            </groupBox>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>

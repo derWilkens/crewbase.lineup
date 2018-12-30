@@ -1,2 +1,0 @@
-alter table LINEUP_SITE add constraint FK_LINEUP_SITE_ON_PARENT_SITE foreign key (PARENT_SITE_ID) references LINEUP_SITE(ID);
-create index IDX_LINEUP_SITE_ON_PARENT_SITE on LINEUP_SITE (PARENT_SITE_ID);
