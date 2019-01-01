@@ -7,21 +7,25 @@ import javax.persistence.Table;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
-@NamePattern("%s|name")
+@NamePattern("%s|categoryName")
 @Table(name = "LINEUP_SITE_CATEGORY")
 @Entity(name = "lineup$SiteCategory")
 public class SiteCategory extends StandardEntity {
-	private static final long serialVersionUID = 8818245036847572405L;
+private static final long serialVersionUID = 8818245036847572405L;
 
-	@Column(name = "NAME", length = 50)
-	protected String name;
+    @Column(name = "CATEGORY_NAME", length = 50)
+    protected String categoryName;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getCategoryName() {
+        return categoryName;
+    }
 
+
+	
+	
+	
 }

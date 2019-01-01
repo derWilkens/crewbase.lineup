@@ -10,25 +10,11 @@
         <datasource id="crewChangeDs"
                     class="eu.crewbase.lineup.entity.wayfare.CrewChange"
                     view="crewChange-transfer-waypoint-edit-view"/>
-        <collectionDatasource id="sitesDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="site-view-airport">
-            <query>
-                <![CDATA[select e from lineup$Site e ]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="platformDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="site-view-airport">
-            <query>
-                <![CDATA[select e from lineup$Site e ]]>
-            </query>
-        </collectionDatasource>
         <collectionDatasource id="craftTypesDs"
                               class="eu.crewbase.lineup.entity.coredata.CraftType"
-                              view="_local">
+                              view="craftType-select">
             <query>
-                <![CDATA[select e from lineup$CraftType e where e.modeOfTransfer.id = :ds$modeOfTransferDs]]>
+                <![CDATA[select e from lineup$CraftType e where e.modeOfTransfer.id = :ds$modeOfTransferDs.id]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="modeOfTransferDs"
@@ -36,6 +22,20 @@
                               view="_local">
             <query>
                 <![CDATA[select e from lineup$ModeOfTransfer e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="airportDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="siteSelect">
+            <query>
+                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Airport']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="platformDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="siteSelect">
+            <query>
+                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Helideck']]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -64,11 +64,10 @@
                       spacing="true">
                 <lookupField id="departure"
                              caption="Departure "
-                             captionProperty="siteName"
                              datasource="crewChangeCreateDTODs"
                              inputPrompt="(start typing...)"
                              nullOptionVisible="false"
-                             optionsDatasource="sitesDs"
+                             optionsDatasource="airportDs"
                              property="departureSite"/>
                 <lookupField id="destination"
                              caption="Main Destination"
@@ -84,7 +83,9 @@
                   spacing="true">
             <optionsGroup optionsDatasource="modeOfTransferDs"
                           orientation="horizontal"/>
+            <lookupField optionsDatasource="modeOfTransferDs"/>
             <lookupField id="craftType"
+                         captionProperty="name"
                          datasource="crewChangeCreateDTODs"
                          inputPrompt="Helicopter Type"
                          optionsDatasource="craftTypesDs"

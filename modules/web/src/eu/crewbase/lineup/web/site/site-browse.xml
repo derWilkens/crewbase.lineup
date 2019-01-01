@@ -32,10 +32,10 @@
             </actions>
             <columns>
                 <column id="siteName"/>
+                <column id="siteCategory"/>
                 <column id="latitude"/>
                 <column id="longitude"/>
                 <column id="itemDesignation"/>
-                <column id="category"/>
             </columns>
             <rows datasource="sitesDs"/>
             <rowsCount/>

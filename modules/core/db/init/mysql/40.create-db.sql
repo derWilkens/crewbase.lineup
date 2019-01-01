@@ -22,7 +22,7 @@
 
 LOCK TABLES `sec_constraint` WRITE;
 /*!40000 ALTER TABLE `sec_constraint` DISABLE KEYS */;
-INSERT INTO `sec_constraint` VALUES ('5dec7a21f2b47858140a8047b4bbe4b2','2016-05-09 11:04:43.172','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','lineup$Site',NULL,'{E}.client = :session$client_id',NULL,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<filter>\n  <and>\n    <c name=\"client\" class=\"java.lang.Integer\" operatorType=\"EQUAL\" width=\"1\" type=\"PROPERTY\"><![CDATA[queryEntity.client = :component$filterWithoutId.client81566]]>\n      <param name=\"component$filterWithoutId.client81566\" javaClass=\"java.lang.Integer\">NULL</param>\n    </c>\n  </and>\n</filter>\n',1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('66d2f1ae4d6f22597e89728b8885b3ea','2016-05-09 11:05:21.153','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','lineup$Site',NULL,'{E}.client = :session$client_id',NULL,NULL,1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('68bf0408f455f6c5f77829ee4591575d','2016-05-09 11:15:04.171','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','sec$Group',NULL,'{E}.id in (select h.group.id from sec$GroupHierarchy h where h.group.id = :session$userGroupId or h.parent.id = :session$userGroupId)',NULL,NULL,1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('8bf946251c624686d8bfbdd62b702d4e','2016-05-09 11:26:29.742','admin',3,NULL,NULL,NULL,NULL,NULL,'db','read','sec$Role',NULL,'{E}.name like \'client_%\'',NULL,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<filter>\n  <and>\n    <c name=\"name\" class=\"java.lang.String\" operatorType=\"STARTS_WITH\" width=\"1\" type=\"PROPERTY\"><![CDATA[queryEntity.name like :component$filterWithoutId.name88818 ESCAPE \'\' ]]>\n      <param name=\"component$filterWithoutId.name88818\" javaClass=\"java.lang.String\">client_</param>\n    </c>\n  </and>\n</filter>\n',1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('e2700808eb38aa75a554dfaf28aad84f','2016-05-09 11:19:41.404','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','sec$User',NULL,'{E}.group.id in (select h.group.id from sec$GroupHierarchy h where h.group.id = :session$userGroupId or h.parent.id = :session$userGroupId)',NULL,NULL,1,'888ea8bbc4649d41fbdf7bc0f37855cb');
+INSERT INTO `sec_constraint` VALUES ('5dec7a21f2b47858140a8047b4bbe4b2','2016-05-09 11:04:43.172','admin',2,'2018-12-30 22:22:24.035','admin',NULL,NULL,NULL,'db','read','lineup$AppUser',NULL,'{E}.client = :session$client_id',NULL,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<filter>\n  <and>\n    <c name=\"client\" class=\"java.lang.Integer\" operatorType=\"EQUAL\" width=\"1\" type=\"PROPERTY\"><![CDATA[queryEntity.client = :component$filterWithoutId.client81566]]>\n      <param name=\"component$filterWithoutId.client81566\" javaClass=\"java.lang.Integer\">NULL</param>\n    </c>\n  </and>\n</filter>\n',1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('68bf0408f455f6c5f77829ee4591575d','2016-05-09 11:15:04.171','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','sec$Group',NULL,'{E}.id in (select h.group.id from sec$GroupHierarchy h where h.group.id = :session$userGroupId or h.parent.id = :session$userGroupId)',NULL,NULL,1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('8bf946251c624686d8bfbdd62b702d4e','2016-05-09 11:26:29.742','admin',3,NULL,NULL,NULL,NULL,NULL,'db','read','sec$Role',NULL,'{E}.name like \'client_%\'',NULL,'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<filter>\n  <and>\n    <c name=\"name\" class=\"java.lang.String\" operatorType=\"STARTS_WITH\" width=\"1\" type=\"PROPERTY\"><![CDATA[queryEntity.name like :component$filterWithoutId.name88818 ESCAPE \'\' ]]>\n      <param name=\"component$filterWithoutId.name88818\" javaClass=\"java.lang.String\">client_</param>\n    </c>\n  </and>\n</filter>\n',1,'888ea8bbc4649d41fbdf7bc0f37855cb'),('e2700808eb38aa75a554dfaf28aad84f','2016-05-09 11:19:41.404','admin',1,NULL,NULL,NULL,NULL,NULL,'db','read','sec$User',NULL,'{E}.group.id in (select h.group.id from sec$GroupHierarchy h where h.group.id = :session$userGroupId or h.parent.id = :session$userGroupId)',NULL,NULL,1,'888ea8bbc4649d41fbdf7bc0f37855cb');
 /*!40000 ALTER TABLE `sec_constraint` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_user` WRITE;
 /*!40000 ALTER TABLE `sec_user` DISABLE KEYS */;
-INSERT INTO `sec_user` VALUES ('2c537f196039a63ed57fa46558dbb547','2016-05-09 11:15:44.230','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','stark','stark','31b7cf3b9ea2dd0a0d7ccc35cf9c56a189d8017b','Tony Stark','Tony','Stark',NULL,NULL,NULL,'en',NULL,NULL,1,'e571013b664d000572cf5af3dfa6d3e9',NULL,0),('739241240560fa3c49967961dbc730d6','2016-05-10 10:27:26.938','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','potts','potts','79883add5204e24982ed4d7f454c3e9432fa3c21','Pepper Potts','Pepper','Potts',NULL,NULL,NULL,'en',NULL,NULL,1,'e571013b664d000572cf5af3dfa6d3e9',NULL,0),('7c0416f6b4dacb7b64e53a0c15bd40de','2016-05-09 11:16:10.548','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','dent','dent','6aa822894d78fd547ae8c1ba412dab0aefbb40f1','Arthur Dent','Arthur','Dent',NULL,NULL,NULL,'en',NULL,NULL,1,'1f02f531d6d99abdff0d4a64a47d5486',NULL,0);
+INSERT INTO `sec_user` VALUES ('0a5104fda2a77c48af601cd45771b21f','2018-12-30 22:19:46.661','admin',1,'2018-12-30 22:19:46.661',NULL,NULL,NULL,'1000-01-01 00:00:00.000','qwe','qwe','7f503d0791891ac55556f403c1d3f7f1e7bd5910','Max Mustermann','Max','Mustermann','Master',NULL,NULL,'de',NULL,NULL,1,'1f02f531d6d99abdff0d4a64a47d5486',NULL,0),('2c537f196039a63ed57fa46558dbb547','2016-05-09 11:15:44.230','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','stark','stark','31b7cf3b9ea2dd0a0d7ccc35cf9c56a189d8017b','Tony Stark','Tony','Stark',NULL,NULL,NULL,'en',NULL,NULL,1,'e571013b664d000572cf5af3dfa6d3e9',NULL,0),('739241240560fa3c49967961dbc730d6','2016-05-10 10:27:26.938','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','potts','potts','79883add5204e24982ed4d7f454c3e9432fa3c21','Pepper Potts','Pepper','Potts',NULL,NULL,NULL,'en',NULL,NULL,1,'e571013b664d000572cf5af3dfa6d3e9',NULL,0),('7c0416f6b4dacb7b64e53a0c15bd40de','2016-05-09 11:16:10.548','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','dent','dent','6aa822894d78fd547ae8c1ba412dab0aefbb40f1','Arthur Dent','Arthur','Dent',NULL,NULL,NULL,'en',NULL,NULL,1,'1f02f531d6d99abdff0d4a64a47d5486',NULL,0);
 /*!40000 ALTER TABLE `sec_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,28 +98,8 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_user_role` WRITE;
 /*!40000 ALTER TABLE `sec_user_role` DISABLE KEYS */;
-INSERT INTO `sec_user_role` VALUES ('027b14b72fa53057473ebd6ec3cc793b','2016-05-10 10:27:26.000','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','739241240560fa3c49967961dbc730d6','ce3c39ab0b5adfc1e3b7918e2fee1c22'),('0e2cb90684f390b2b33a266237645fb8','2016-05-09 12:41:13.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','2c537f196039a63ed57fa46558dbb547','4082fc82562a346cfddb6cca3a88d500'),('3c43be6734318e5e1ce8862f317f0fa9','2016-05-09 11:32:51.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','7c0416f6b4dacb7b64e53a0c15bd40de','50e7762e624baa1d69752f773a735c15'),('7888e90068e902b00a17acdc8b41b57a','2016-05-10 10:27:26.000','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','739241240560fa3c49967961dbc730d6','50e7762e624baa1d69752f773a735c15'),('7e7f7c8233532a08d8f3832495f96bdc','2016-05-09 11:32:43.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','2c537f196039a63ed57fa46558dbb547','50e7762e624baa1d69752f773a735c15'),('9b09a9cafbc2c2eb5c7ef8c864fc6cc7','2016-05-10 10:29:32.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','7c0416f6b4dacb7b64e53a0c15bd40de','4082fc82562a346cfddb6cca3a88d500');
+INSERT INTO `sec_user_role` VALUES ('0093908cb9f729f9f811d3321c0c843e','2018-12-30 22:19:46.662','admin',1,'2018-12-30 22:19:46.662',NULL,NULL,NULL,'1000-01-01 00:00:00.000','0a5104fda2a77c48af601cd45771b21f','0c018061b26f4de2a5bedff348347f93'),('027b14b72fa53057473ebd6ec3cc793b','2016-05-10 10:27:26.000','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','739241240560fa3c49967961dbc730d6','ce3c39ab0b5adfc1e3b7918e2fee1c22'),('0e2cb90684f390b2b33a266237645fb8','2016-05-09 12:41:13.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','2c537f196039a63ed57fa46558dbb547','4082fc82562a346cfddb6cca3a88d500'),('3c43be6734318e5e1ce8862f317f0fa9','2016-05-09 11:32:51.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','7c0416f6b4dacb7b64e53a0c15bd40de','50e7762e624baa1d69752f773a735c15'),('40da1e46264d831b4c7fb803c6842fed','2018-12-30 22:19:46.662','admin',1,'2018-12-30 22:19:46.662',NULL,NULL,NULL,'1000-01-01 00:00:00.000','0a5104fda2a77c48af601cd45771b21f','50e7762e624baa1d69752f773a735c15'),('7888e90068e902b00a17acdc8b41b57a','2016-05-10 10:27:26.000','stark',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','739241240560fa3c49967961dbc730d6','50e7762e624baa1d69752f773a735c15'),('7e7f7c8233532a08d8f3832495f96bdc','2016-05-09 11:32:43.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','2c537f196039a63ed57fa46558dbb547','50e7762e624baa1d69752f773a735c15'),('9b09a9cafbc2c2eb5c7ef8c864fc6cc7','2016-05-10 10:29:32.000','admin',1,NULL,NULL,NULL,NULL,'1000-01-01 00:00:00.000','7c0416f6b4dacb7b64e53a0c15bd40de','4082fc82562a346cfddb6cca3a88d500');
 /*!40000 ALTER TABLE `sec_user_role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `lineup_mode_of_transfer`
---
--- WHERE:  created_by is not NULL and delete_ts is null
-
-LOCK TABLES `lineup_mode_of_transfer` WRITE;
-/*!40000 ALTER TABLE `lineup_mode_of_transfer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lineup_mode_of_transfer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping data for table `lineup_craft_type`
---
--- WHERE:  created_by is not NULL and delete_ts is null
-
-LOCK TABLES `lineup_craft_type` WRITE;
-/*!40000 ALTER TABLE `lineup_craft_type` DISABLE KEYS */;
-/*!40000 ALTER TABLE `lineup_craft_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -131,4 +111,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-30 17:28:50
+-- Dump completed on 2019-01-01 14:28:40

@@ -31,7 +31,7 @@
                 <action id="remove"/>
             </actions>
             <columns>
-                <column id="name"/>
+                <column id="categoryName"/>
             </columns>
             <rows datasource="siteCategoriesDs"/>
             <rowsCount/>

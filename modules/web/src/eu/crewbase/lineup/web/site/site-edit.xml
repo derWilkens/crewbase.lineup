@@ -9,7 +9,7 @@
         <datasource id="siteDs"
                     class="eu.crewbase.lineup.entity.coredata.Site"
                     view="site-manage"/>
-        <collectionDatasource id="categoriesDs"
+        <collectionDatasource id="siteCategoriesDs"
                               class="eu.crewbase.lineup.entity.coredata.SiteCategory"
                               view="_minimal">
             <query>
@@ -25,11 +25,11 @@
                     datasource="siteDs">
             <column width="250px">
                 <field property="siteName"/>
+                <field optionsDatasource="siteCategoriesDs"
+                       property="siteCategory"/>
                 <field property="latitude"/>
                 <field property="longitude"/>
                 <field property="itemDesignation"/>
-                <field optionsDatasource="categoriesDs"
-                       property="category"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

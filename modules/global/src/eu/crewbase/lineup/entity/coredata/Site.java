@@ -22,11 +22,11 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import javax.persistence.InheritanceType;
 import javax.persistence.Inheritance;
+import com.haulmont.chile.core.annotations.NumberFormat;
 
 /**
  * @author christian
  */
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamePattern("%s|siteName")
 @Table(name = "LINEUP_SITE")
 @Entity(name = "lineup$Site")
@@ -36,9 +36,16 @@ public class Site extends StandardEntity {
 	@Column(name = "SITE_NAME", nullable = false, length = 50)
 	protected String siteName;
 
-	    @Column(name = "LATITUDE")
+	    @Lookup(type = LookupType.DROPDOWN)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SITE_CATEGORY_ID")
+    protected SiteCategory siteCategory;
+
+    @NumberFormat(pattern = "0.0000000")
+    @Column(name = "LATITUDE")
     protected Double latitude;
 
+    @NumberFormat(pattern = "0.0000000")
     @Column(name = "LONGITUDE")
     protected Double longitude;
 
@@ -55,10 +62,7 @@ public class Site extends StandardEntity {
 	@Column(name = "SHORT_ITEM_DESIGNATION", length = 4)
 	protected String shortItemDesignation;
 
-	@Lookup(type = LookupType.DROPDOWN)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CATEGORY_ID")
-	protected SiteCategory category;
+	
 
 	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
@@ -68,6 +72,15 @@ public class Site extends StandardEntity {
 
 	@OneToMany(mappedBy = "site")
 	protected List<SiteRoleRule> siteRoleRules;
+
+    public void setSiteCategory(SiteCategory siteCategory) {
+        this.siteCategory = siteCategory;
+    }
+
+    public SiteCategory getSiteCategory() {
+        return siteCategory;
+    }
+
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
@@ -106,13 +119,9 @@ public class Site extends StandardEntity {
 		return siteRoleRules;
 	}
 
-	public void setCategory(SiteCategory category) {
-		this.category = category;
-	}
+	
 
-	public SiteCategory getCategory() {
-		return category;
-	}
+	
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;

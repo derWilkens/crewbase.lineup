@@ -13,17 +13,6 @@
         <property name="anchorWaypoint"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          name="site-browser-view">
-        <property name="siteType"
-                  view="_minimal"/>
-        <property name="category"
-                  view="_minimal"/>
-        <property name="siteName"/>
-        <property name="itemDesignation"/>
-        <property name="longitude"/>
-        <property name="latitude"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-browser-view">
@@ -33,7 +22,7 @@
     <view class="eu.crewbase.lineup.entity.coredata.Site"
           extends="_local"
           name="siteSelect">
-        <property name="category"
+        <property name="siteCategory"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.UserPreference"
@@ -43,9 +32,6 @@
           extends="_local"
           name="periodType-view">
     </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          extends="_local"
-          name="site-view"/>
     <view class="eu.crewbase.lineup.entity.coredata.SiteType"
           extends="_local"
           name="siteType-view">
@@ -123,13 +109,6 @@
         <property name="personOnDuty"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          name="preferred-site-view">
-        <property name="siteName"/>
-        <property name="itemDesignation"/>
-        <property name="siteType"
-                  view="_minimal"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.coredata.Department"
           name="department-view">
         <property name="parentDepartment"
@@ -165,13 +144,6 @@
         <property name="duration2"/>
         <property name="duration3"/>
         <property name="remark"/>
-    </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          name="site-period-choose">
-        <property name="siteName"/>
-        <property name="itemDesignation"/>
-        <property name="category"
-                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.cap.coredata.Jobfunction"
           extends="_local"
@@ -246,6 +218,8 @@
         <property name="itemDesignation"/>
         <property name="longitude"/>
         <property name="latitude"/>
+        <property name="siteCategory"
+                  view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.period.PeriodTemplate"
           extends="dutyPeriodTemplate-view"
@@ -402,12 +376,6 @@
     <view class="eu.crewbase.lineup.entity.tmp.ThirdClass"
           extends="_local"
           name="thirdClass-view"/>
-    <view class="eu.crewbase.lineup.entity.coredata.Site"
-          extends="_local"
-          name="site-view-airport">
-        <property name="category"
-                  view="_minimal"/>
-    </view>
     <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
           extends="_local"
           name="favortiteTrips-view">
@@ -434,18 +402,17 @@
         <property name="latitude"/>
         <property name="longitude"/>
         <property name="itemDesignation"/>
-        <property name="category"
+        <property name="siteCategory"
                   view="_minimal"/>
     </view>
-    <view class="eu.crewbase.lineup.entity.coredata.Airport"
-          name="airport-manage">
-        <property name="category"
+    <view class="eu.crewbase.lineup.entity.coredata.CraftType"
+          name="craftType-select">
+        <property name="name"/>
+        <property name="seats"/>
+        <property name="maxRange"/>
+        <property name="payloadOutbound"/>
+        <property name="payloadInbound"/>
+        <property name="modeOfTransfer"
                   view="_minimal"/>
-        <property name="icaoCode"/>
-        <property name="iataCode"/>
-        <property name="siteName"/>
-        <property name="latitude"/>
-        <property name="longitude"/>
-        <property name="itemDesignation"/>
     </view>
 </views>

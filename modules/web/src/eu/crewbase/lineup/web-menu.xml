@@ -50,9 +50,8 @@
             <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
         <menu id="Sites">
-            <item screen="lineup$Site.browse"/>
             <item screen="lineup$SiteCategory.browse"/>
-            <item screen="lineup$Airport.browse"/>
+            <item screen="lineup$Site.browse"/>
         </menu>
     </menu>
 </menu-config>

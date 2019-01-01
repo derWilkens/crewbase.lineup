@@ -77,9 +77,9 @@
                    width="100%">
                 <columns>
                     <column id="siteName"/>
-                    <column id="category"/>
                     <column id="latitude"/>
                     <column id="longitude"/>
+                    <column id="siteCategory"/>
                 </columns>
                 <rows datasource="sitesDs"/>
             </table>

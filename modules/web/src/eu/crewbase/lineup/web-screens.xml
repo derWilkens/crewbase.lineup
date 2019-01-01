@@ -47,8 +47,6 @@
             template="eu/crewbase/lineup/web/siterolerule/site-role-rule-browse.xml"/>
     <screen id="lineup$AppUser.browse"
             template="eu/crewbase/lineup/web/appuser/app-user-browse.xml"/>
-    <screen id="lineup$Site.browse"
-            template="eu/crewbase/lineup/web/site/site-browse.xml"/>
     <screen id="lineup$SitePeriod.choose"
             template="eu/crewbase/lineup/web/site/site-period-choose.xml"/>
     <screen id="lineup$AttendencePeriod.browse"
@@ -115,8 +113,6 @@
             template="eu/crewbase/lineup/web/crafttype/craft-type-browse.xml"/>
     <screen id="lineup$SiteCategory.edit"
             template="eu/crewbase/lineup/web/sitecategory/site-category-edit.xml"/>
-    <screen id="lineup$Airport.browse"
-            template="eu/crewbase/lineup/web/airport/airport-browse.xml"/>
-    <screen id="lineup$Airport.edit"
-            template="eu/crewbase/lineup/web/airport/airport-edit.xml"/>
+    <screen id="lineup$Site.browse"
+            template="eu/crewbase/lineup/web/site/site-browse.xml"/>
 </screen-config>
