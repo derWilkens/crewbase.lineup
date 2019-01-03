@@ -81,9 +81,12 @@
         <groupBox caption="Transportation"
                   orientation="horizontal"
                   spacing="true">
-            <optionsGroup optionsDatasource="modeOfTransferDs"
-                          orientation="horizontal"/>
-            <lookupField optionsDatasource="modeOfTransferDs"/>
+            <optionsGroup id="modeOfTransfer"
+                          optionsDatasource="modeOfTransferDs"
+                          orientation="horizontal"
+                          visible="false"/>
+            <lookupField id="modeOfTransferLF"
+                         optionsDatasource="modeOfTransferDs"/>
             <lookupField id="craftType"
                          captionProperty="name"
                          datasource="crewChangeCreateDTODs"

@@ -8,8 +8,10 @@ import javax.inject.Inject;
 
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
+import com.haulmont.cuba.gui.components.OptionsGroup;
 
 import eu.crewbase.lineup.entity.coredata.CraftType;
+import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import eu.crewbase.lineup.service.CrewChangeService;
 
@@ -24,10 +26,19 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 	protected LookupField bookedSeatsOutbound;
 	@Inject
 	protected LookupField bookedSeatsInbound;
+	@Inject
+	protected OptionsGroup modeOfTransfer;
+	@Inject
+	protected LookupField modeOfTransferLF;
 
 	@Override
 	public void init(Map<String, Object> params) {
 		
+		presetModeOfTransfer();
+		initListener();
+	}
+
+	private void initListener() {
 		craftType.addValueChangeListener(new ValueChangeListener() {
 
 			@Override
@@ -45,9 +56,20 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 		});
 	}
 
+	private void presetModeOfTransfer() {
+		modeOfTransfer.getOptionsDatasource().refresh();
+		for(Object mofID:modeOfTransfer.getOptionsDatasource().getItemIds()){
+			@SuppressWarnings("unchecked")
+			ModeOfTransfer tempMot= (ModeOfTransfer)modeOfTransfer.getOptionsDatasource().getItem(mofID);
+			if(tempMot.getMode().equals("Heli")){
+				//modeOfTransfer.setValue(tempMot);
+				modeOfTransferLF.setValue(tempMot);
+			}
+		}
+	}
+
 	@Override
 	protected void initNewItem(CrewChangeCreateDTO item) {
-
 	}
 
 	@Override

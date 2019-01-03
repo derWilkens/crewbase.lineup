@@ -27,6 +27,7 @@ import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 /**
  * @author christian
  */
+@Listeners("lineup_CrewChangeCreateListener")
 @Table(name = "LINEUP_CREW_CHANGE")
 @Entity(name = "lineup$CrewChange")
 public class CrewChange extends StandardClientEntity {

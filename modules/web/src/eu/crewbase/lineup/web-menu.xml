@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
+    <item insertBefore="administration"
+          screen="lineup$CrewChangeCreateDTO.edit"/>
     <menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
@@ -17,7 +19,6 @@
         <item screen="lineup$NumberRangeRule.browse"/>
         <item screen="lineup$SiteRoleRule.browse"/>
         <item screen="lineup$CrewChange.overview"/>
-        <item screen="lineup$CrewChangeCreateDTO.edit"/>
     </menu>
     <menu id="capDB"
           icon="font-icon:GRADUATION_CAP"

@@ -76,9 +76,12 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		awp1.setStartDateTime(dto.getStartDateTime());
 		wp1.setPreviousStandstill(awp1);
 		cc.getTransfers().add(transfer);
-
-		createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
-		createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+		if (dto.getBookedSeatsOutbound() != null) {
+			createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+		}
+		if (dto.getBookedSeatsInbound() != null) {
+			createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+		}
 
 		dataManager.commit(cc);
 		return cc.getId();
@@ -124,9 +127,12 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			awp1.setStartDateTime(dto.getStartDateTime());
 			wp1.setPreviousStandstill(awp1);
 			cc.getTransfers().add(transfer);
-
-			createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
-			createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+			if (dto.getBookedSeatsOutbound() != null) {
+				createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+			}
+			if (dto.getBookedSeatsInbound() != null) {
+				createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+			}
 
 			persistence.getEntityManager().persist(cc);
 			tx.commit();
@@ -270,11 +276,11 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		// Zukünftige CrewChanges und meine Favoriten holen
 		try (Transaction tx = persistence.createTransaction()) {
 
-			if(dateRangeStart == null){
+			if (dateRangeStart == null) {
 				dateRangeStart = new Date();
 			}
-			if(dateRangeEnd == null){
-				//dateRangeEnd = Calendar.getInstance()
+			if (dateRangeEnd == null) {
+				// dateRangeEnd = Calendar.getInstance()
 				Calendar c = Calendar.getInstance();
 				c.setTime(new Date());
 				c.add(Calendar.DAY_OF_YEAR, 1);
@@ -331,7 +337,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 	 */
 	@SuppressWarnings("unchecked")
 	public TripDTO getFreeCapacityForTrip(FavoriteTrip desiredTrip, Transfer transferWithFavTrips, Transfer transfer) {
-		
+
 		List<TripDTO> groupedTickets = getGroupedTickets(transfer);
 		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets, transferWithFavTrips);
 
@@ -370,16 +376,17 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		// über die tickets iterieren
 
 		for (TripDTO ticketGroup : groupedTickets) {
-			log.debug("Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - " + ticketGroup.getSiteB().getItemDesignation() + ": " + ticketGroup.getBookedSeats());
-			
+			log.debug("Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - "
+					+ ticketGroup.getSiteB().getItemDesignation() + ": " + ticketGroup.getBookedSeats());
+
 			// capaMap enthält booked seats beim Verlassen der Site:
 			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
 			// zu, wenn Site = destination -> PAX steigen aus
 			boolean onboard = false;
 			Standstill currentStandstill = transferWithFavTrips.getAnchorWaypoint();
-			while(currentStandstill != null){
+			while (currentStandstill != null) {
 				Site site = currentStandstill.getSite();
-				
+
 				if (site.getId().equals(ticketGroup.getSiteB().getId()) && onboard) {
 					onboard = false;
 				} else if (site.getId().equals(ticketGroup.getSiteA().getId()) || onboard) {
@@ -431,21 +438,21 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 		do {
 			Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
-			//if (currentStandstill.getSite().getId().equals(siteA.getId())) {
-				Waypoint addedWaypoint = createWaypoint(transfer, siteA, currentStandstill);
-				Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
-				if (transfer.getTotalDistance() < craft.getMaxRange()) {
-					// siteResultList.add(site);
-					if (transfer.getTotalDistance() < minDistance) {
-						minDistance = transfer.getTotalDistance();
-						resultTransfer = new Transfer(transfer.getSites());
-						resultTransfer.setCraftType(craft);
-					}
-
-					//unlinkWaypoint(addedWaypoint);
+			// if (currentStandstill.getSite().getId().equals(siteA.getId())) {
+			Waypoint addedWaypoint = createWaypoint(transfer, siteA, currentStandstill);
+			Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
+			if (transfer.getTotalDistance() < craft.getMaxRange()) {
+				// siteResultList.add(site);
+				if (transfer.getTotalDistance() < minDistance) {
+					minDistance = transfer.getTotalDistance();
+					resultTransfer = new Transfer(transfer.getSites());
+					resultTransfer.setCraftType(craft);
 				}
-				unlinkWaypoint(addedWaypoint);
-			//}
+
+				// unlinkWaypoint(addedWaypoint);
+			}
+			unlinkWaypoint(addedWaypoint);
+			// }
 			currentStandstill = nextOriginalWaypoint;
 		} while (currentStandstill != null);
 		// }

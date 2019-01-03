@@ -11,24 +11,28 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 
 @NamePattern("%s %s|startDateTime,destinationSite")
 @MetaClass(name = "lineup$CrewChangeCreateDTO")
 public class CrewChangeCreateDTO extends BaseUuidEntity {
     private static final long serialVersionUID = 8628238232285382909L;
 
-    @Future(message = "Transfers Back in Time are not implemented right now.")
+    @NotNull
     @MetaProperty
     protected Date startDateTime;
 
+    @NotNull
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
     protected Site departureSite;
 
+    @NotNull
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
     protected Site destinationSite;
 
+    @NotNull
     @Lookup(type = LookupType.DROPDOWN)
     @MetaProperty
     protected CraftType craftType;
