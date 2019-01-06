@@ -30,6 +30,8 @@
                        value="eu.crewbase.lineup.service.DemoService"/>
                 <entry key="lineup_CrewChangeService"
                        value="eu.crewbase.lineup.service.CrewChangeService"/>
+                <entry key="lineup_TravelOptionService"
+                       value="eu.crewbase.lineup.service.TravelOptionService"/>
             </map>
         </property>
     </bean>

@@ -48,7 +48,27 @@ public class Waypoint extends Standstill {
         this.previousStandstill = previousStandstill;
         previousStandstill.setNextWaypoint(this);
     }
+    
+	public void linkWaypoint(Standstill prevStandstill) {
+		Waypoint newNext = prevStandstill.getNextWaypoint();
+		this.setNextWaypoint(newNext);
+		this.setPreviousStandstill(prevStandstill);
 
+		// Nachfolger auf newWP setzen
+		if (null != newNext) {
+			newNext.setPreviousStandstill(this);
+		}
+
+		// Vorgänger auf newWP setzen
+		prevStandstill.setNextWaypoint(this);
+	}
+	
+	public void unlink() {
+		this.getPreviousStandstill().setNextWaypoint(this.getNextWaypoint());
+		if (null != this.getNextWaypoint()) {
+			this.getNextWaypoint().setPreviousStandstill(this.getPreviousStandstill());
+		}
+	}
     public String toString(){
     	if(site != null){
     		return site.getItemDesignation();

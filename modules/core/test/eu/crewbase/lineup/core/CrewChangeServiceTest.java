@@ -37,6 +37,7 @@ import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 import eu.crewbase.lineup.service.CrewChangeService;
+import eu.crewbase.lineup.service.TravelOptionService;
 
 public class CrewChangeServiceTest extends LineupTestContainer {
 	private static final Logger log = LoggerFactory.getLogger(LineupTestContainer.class);
@@ -47,6 +48,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	private CrewChange cc;
 	private UUID ccId;
 	private CrewChangeService service;
+	private TravelOptionService tos;
 
 	@Before
 	public void setUp() throws Exception {
@@ -74,6 +76,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			tx.commit();
 		}
 		service = AppBeans.get(CrewChangeService.NAME);
+		tos = AppBeans.get(TravelOptionService.NAME);
 		emdn = createSite("Emden", "EMDN", 53.38893, 7.2263314);
 		// createSite("Hannover", "HANN", 52.3796457, 9.691432);
 		// createSite("Burgdorf", "BURF", 52.4742371, 9.9413628);
@@ -157,7 +160,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			transfer = cc.getTransfers().get(0);
 
 		}
-		List<Site> reachableSites = service.getReachableSites(transfer.getId());
+		List<Site> reachableSites = tos.getReachableSites(transfer.getId());
 		for (Site site2 : reachableSites) {
 			log.debug(site2.getItemDesignation());
 		}
@@ -265,7 +268,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			tx.commit();
 		}
 
-		List<TripDTO> groupedTickets = service.getGroupedTickets(transfer);
+		List<TripDTO> groupedTickets = tos.getGroupedTickets(transfer);
 
 		assertEquals(3, groupedTickets.size());
 		assertEquals("BWAL", groupedTickets.get(0).getSiteA().getItemDesignation());
@@ -280,18 +283,18 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		assertEquals("DWAL", groupedTickets.get(2).getSiteB().getItemDesignation());
 		assertEquals(1, groupedTickets.get(2).getBookedSeats().intValue());
 
-		HashMap<UUID, Integer> bookedSeatsMap = service.getBookedSeatsMap(groupedTickets, transfer);
+		HashMap<UUID, Integer> bookedSeatsMap = tos.getBookedSeatsMap(groupedTickets, transfer);
 		assertEquals(3, bookedSeatsMap.get(emdn.getUuid()).intValue());
 		assertEquals(2, bookedSeatsMap.get(bwal.getUuid()).intValue());
 		assertNull(bookedSeatsMap.get(dwal.getUuid()));
 
-		List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
+		//List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
 		// es werden die booked seats ausgegen nicht die verfügbaren
-		assertTrue(myTrips.get(0).getTransfer().getId().equals(transfer.getId()));
+		//assertTrue(myTrips.get(0).getTransfer().getId().equals(transfer.getId()));
 
-		for (TripDTO tripDTO : myTrips) {
-			log.debug(tripDTO.toString());
-		}
+		//for (TripDTO tripDTO : myTrips) {
+		//	log.debug(tripDTO.toString());
+		//}
 
 	}
 
@@ -386,7 +389,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			assertEquals("EMDN - BWAL - EMDN", transfer.getRouteShort());
 		}
 		
-		service.sendTravelOptions();
+		tos.sendTravelOptionNotification();
 		
 		List<TravelOption> list = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.transfer.id = :transferId")
@@ -414,11 +417,6 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	}
 	
-	@Test
-	public void testSendTravelOptions(){
-		service.sendTravelOptions();
-	}
-
 	private CraftType createCraftType() {
 		CraftType ct = null;
 		try (Transaction tx = persistence.createTransaction()) {

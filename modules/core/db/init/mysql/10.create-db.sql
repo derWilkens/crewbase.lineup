@@ -771,9 +771,9 @@ create table LINEUP_TRAVEL_OPTION (
     CLIENT integer not null,
     --
     TRANSFER_ID varchar(32),
+    BOOKED_SEATS integer,
     FAVORITE_TRIP_ID varchar(32),
     STATUS integer,
-    SEND_SUMMERY boolean,
     --
     primary key (ID)
 )^

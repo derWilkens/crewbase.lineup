@@ -24,12 +24,24 @@ public class TravelOption extends StandardClientEntity {
     @JoinColumn(name = "TRANSFER_ID")
     protected Transfer transfer;
 
+    @Column(name = "BOOKED_SEATS")
+    protected Integer bookedSeats;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FAVORITE_TRIP_ID")
     protected FavoriteTrip favoriteTrip;
 
     @Column(name = "STATUS")
     protected Integer status;
+
+    public void setBookedSeats(Integer bookedSeats) {
+        this.bookedSeats = bookedSeats;
+    }
+
+    public Integer getBookedSeats() {
+        return bookedSeats;
+    }
+
 
     public void setFavoriteTrip(FavoriteTrip favoriteTrip) {
         this.favoriteTrip = favoriteTrip;
