@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -16,8 +17,12 @@ import org.springframework.stereotype.Service;
 import com.esotericsoftware.minlog.Log;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.app.EmailService;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.EmailInfo;
+import com.haulmont.cuba.core.global.FluentValueLoader;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.security.entity.User;
 
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.Site;
@@ -29,6 +34,8 @@ import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
 import eu.crewbase.lineup.entity.wayfare.Standstill;
 import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
+import eu.crewbase.lineup.entity.wayfare.TravelOption;
+import eu.crewbase.lineup.entity.wayfare.TravelOptionStatus;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 @Service(CrewChangeService.NAME)
@@ -44,6 +51,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	@Override
 	public UUID createCrewChange(CrewChangeCreateDTO dto) {
+
 		CrewChange cc = null;
 		cc = dataManager.create(CrewChange.class);
 		cc.setStartDate(dto.getStartDateTime());
@@ -76,14 +84,15 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		awp1.setStartDateTime(dto.getStartDateTime());
 		wp1.setPreviousStandstill(awp1);
 		cc.getTransfers().add(transfer);
-		if (dto.getBookedSeatsOutbound() != null) {
-			createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+		if (dto.getFreeSeatsOutbound() != null) {
+			createTickets(dto.getFreeSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
 		}
-		if (dto.getBookedSeatsInbound() != null) {
-			createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+		if (dto.getFreeSeatsInbound() != null) {
+			createTickets(dto.getFreeSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
 		}
-
 		dataManager.commit(cc);
+		Transfer one = dataManager.load(Transfer.class).id(transfer.getId()).one();
+		createTravelOption(one);
 		return cc.getId();
 
 	}
@@ -127,11 +136,11 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			awp1.setStartDateTime(dto.getStartDateTime());
 			wp1.setPreviousStandstill(awp1);
 			cc.getTransfers().add(transfer);
-			if (dto.getBookedSeatsOutbound() != null) {
-				createTickets(dto.getBookedSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+			if (dto.getFreeSeatsOutbound() != null) {
+				createTickets(dto.getFreeSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
 			}
-			if (dto.getBookedSeatsInbound() != null) {
-				createTickets(dto.getBookedSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+			if (dto.getFreeSeatsInbound() != null) {
+				createTickets(dto.getFreeSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
 			}
 
 			persistence.getEntityManager().persist(cc);
@@ -140,7 +149,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		return cc.getId();
 	}
 
-	private void createTickets(int amount, Site siteA, Site siteB, Transfer transfer) {
+	private void createTickets(int freeSeats, Site siteA, Site siteB, Transfer transfer) {
+		int amount = transfer.getCraftType().getSeats() - freeSeats;
 		for (int i = 0; i < amount; i++) {
 			Ticket ticket = metadata.create(Ticket.class);
 			ticket.setTransfer(transfer);
@@ -172,6 +182,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		Waypoint waypoint = metadata.create(Waypoint.class);
 		waypoint.setSite(site);
 		linkWaypoint(waypoint, prevStandstill);
+		log.debug(
+				"Waypoint " + site.getSiteName() + " hinter " + prevStandstill.getSite().getSiteName() + " eingefügt.");
 		return waypoint;
 	}
 
@@ -221,40 +233,11 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	@Override
 	public List<Site> getReachableSites(UUID transferId) {
-		List<Site> siteResultList = new ArrayList<Site>();
+		List<Site> siteResultList = null;
 		try (Transaction tx = persistence.createTransaction()) {
+
 			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
-			// List<Waypoint> entSites =
-			// persistence.getEntityManager().createQuery("select w from
-			// lineup$Waypoint w where w.transfer.Id = '" +
-			// transfer.getId()+"'", Waypoint.class).getResultList();
-			CraftType craft = transfer.getCraftType();
-			List<Site> siteList = persistence.getEntityManager().createQuery("select s from lineup$Site s", Site.class)
-					.getResultList();
-			craft = metadata.create(CraftType.class);
-			craft.setMaxRange(10000);
-
-			// welche Sites können noch erreicht werden?
-			// - Liste der vorhandenen Sites übergeben
-
-			// jede site an jeder position einfügen und Gesamtdistanz ausrechnen
-
-			for (Site site : siteList) {
-				Standstill currentStandstill = transfer.getAnchorWaypoint();
-
-				do {
-					Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
-					Waypoint addedWaypoint = createWaypoint(transfer, site, currentStandstill);
-					currentStandstill = nextOriginalWaypoint;
-					Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
-					if (transfer.getTotalDistance() < craft.getMaxRange()) {
-						siteResultList.add(site);
-						unlinkWaypoint(addedWaypoint);
-						break;
-					}
-					unlinkWaypoint(addedWaypoint);
-				} while (currentStandstill != null);
-			}
+			siteResultList = getReachableSites(transfer);
 
 			// jeweils eine noch nicht vorhandene hinzufügen und beste Route
 			// berechnen, ist die beste Route kürzer als Range?
@@ -262,6 +245,43 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			// wie lang darf der Umweg für die PAX sein? Wenn keiner drin sitzt?
 			// nur hinzufügen, wenn zus. Strecke kürzer als Weg Hin/Rück allein
 
+		}
+		return siteResultList;
+	}
+
+	public List<Site> getReachableSites(Transfer transfer) {
+		List<Site> siteResultList;
+		siteResultList = new ArrayList<Site>();
+		CraftType craft = transfer.getCraftType();
+
+		List<UUID> collect = transfer.getSites().stream().map(Site::getId).collect(Collectors.toList());
+
+		List<Site> siteList = dataManager.load(Site.class)
+				.query("select s from lineup$Site s where s.id not in :transferSiteList")
+				.parameter("transferSiteList", collect).list();
+
+		// welche Sites können noch erreicht werden?
+		// - Liste der vorhandenen Sites übergeben
+
+		// jede site an jeder position einfügen und Gesamtdistanz ausrechnen
+
+		for (Site site : siteList) {
+			Standstill currentStandstill = transfer.getAnchorWaypoint();
+
+			do {
+				Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
+				Waypoint addedWaypoint = createWaypoint(transfer, site, currentStandstill);
+				currentStandstill = nextOriginalWaypoint;
+				Log.info(transfer.getRouteShort() + " Dist: " + transfer.getTotalDistance() + " MaxRange:"
+						+ craft.getMaxRange());
+				if (transfer.getTotalDistance() < craft.getMaxRange()) {
+					siteResultList.add(site);
+					unlinkWaypoint(addedWaypoint);
+					break; // wenn die Site an einer Stelle grundsätzlich
+							// eingefügt werden kann ist es gut gewesen.
+				}
+				unlinkWaypoint(addedWaypoint);
+			} while (currentStandstill != null);
 		}
 		return siteResultList;
 	}
@@ -311,10 +331,10 @@ public class CrewChangeServiceBean implements CrewChangeService {
 				for (Transfer transfer : cc.getTransfers()) {
 					for (FavoriteTrip favoriteTrip : favList) {
 						// nur den Start einbauen
-						Transfer transferWithFirstSite = siteInRouteEingebauen(transfer, favoriteTrip.getStartSite());
+						Transfer transferWithFirstSite = siteInRouteEinbauen(transfer, favoriteTrip.getStartSite());
 						if (transferWithFirstSite != null) {
 							// in den neuen Transfer die zweite Site einbauen
-							Transfer transferWithFavTrips = siteInRouteEingebauen(transferWithFirstSite,
+							Transfer transferWithFavTrips = siteInRouteEinbauen(transferWithFirstSite,
 									favoriteTrip.getDestination());
 
 							if (transferWithFavTrips != null) {
@@ -355,7 +375,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			if (favSite.getId().equals(desiredTrip.getDestination().getId())) {
 				onboard = false;
 			}
-			if (onboard && capaMap.get(favSite.getId()) < minAvailable) {
+			if (onboard && capaMap.get(favSite.getId()) != null && capaMap.get(favSite.getId()) < minAvailable) {
 				minAvailable = minAvailable - capaMap.get(favSite.getId());
 			}
 		}
@@ -365,7 +385,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		tmp.setSiteA(desiredTrip.getStartSite());
 		tmp.setSiteB(desiredTrip.getDestination());
 		tmp.setTransfer(transfer);
-
+		log.info(tmp.toString());
 		return tmp;
 	}
 
@@ -424,11 +444,13 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		return resultList;
 	}
 
-	private Transfer siteInRouteEingebauen(Transfer transfer, Site siteA) {
+	private Transfer siteInRouteEinbauen(Transfer transfer, Site siteA) {
+
 		// Ist Site schon drin? Dann einfach Kopie zurück
 		if (transfer.getSiteHash().containsKey(siteA.getId())) {
 			return transfer.getTransientCopy();
 		}
+
 		// List<Site> minSiteList = null;
 		Transfer resultTransfer = null;
 		CraftType craft = transfer.getCraftType();
@@ -440,7 +462,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
 			// if (currentStandstill.getSite().getId().equals(siteA.getId())) {
 			Waypoint addedWaypoint = createWaypoint(transfer, siteA, currentStandstill);
-			Log.info(transfer.getRoute() + " Dist: " + transfer.getTotalDistance());
+			Log.info(transfer.getRouteShort() + " Dist: " + transfer.getTotalDistance());
 			if (transfer.getTotalDistance() < craft.getMaxRange()) {
 				// siteResultList.add(site);
 				if (transfer.getTotalDistance() < minDistance) {
@@ -450,6 +472,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 				}
 
 				// unlinkWaypoint(addedWaypoint);
+			}else{
+				log.debug("Site " + siteA.getSiteName() + " kann nicht erreicht werden. Distanz zu lang: " + transfer.getTotalDistance());
 			}
 			unlinkWaypoint(addedWaypoint);
 			// }
@@ -460,4 +484,112 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		return resultTransfer;
 	}
 
+	@Override
+	public void createTravelOption(Transfer transfer) {
+
+		Transfer transferWithFavTrips = getTransferWithIntegratedFavoriteTrips(transfer);
+		if (transferWithFavTrips != null) {
+
+			for (FavoriteTrip favoriteTrip : getFavoriteTripsBySiteList(transferWithFavTrips.getSites())) {
+				if (getFreeCapacityForTrip(favoriteTrip, transferWithFavTrips, transfer).getBookedSeats() > 0) {
+					TravelOption travelOption = metadata.create(TravelOption.class);
+					User user = getUserByUsername(favoriteTrip.getCreatedBy());
+					if (user == null) {
+						// qwe user
+						user = dataManager.load(User.class).query("select u from sec$User u where u.login = 'qwe'")
+								.one();
+					}
+					travelOption.setFavoriteTrip(favoriteTrip);
+					travelOption.setTransfer(transfer);
+					travelOption.setStatus(TravelOptionStatus.Init);
+					travelOption.setSendSummery(favoriteTrip.getSendSummery());
+					dataManager.commit(travelOption);
+				}
+			}
+		}
+	}
+
+	@Inject
+	public EmailService emailService;
+
+	@Override
+	public void sendTravelOptions() {
+		try (Transaction tx = persistence.createTransaction()) {
+			@SuppressWarnings("unchecked")
+			List<TravelOption> optionList = persistence.getEntityManager()
+					.createQuery(
+							"select m from lineup$TravelOption m where m.status = :status and m.sendSummery = false")
+					.setParameter("status", TravelOptionStatus.Init)
+					.getResultList();
+
+			for (TravelOption travelOption : optionList) {
+				String email = getEmailByUserLogin(travelOption.getFavoriteTrip().getCreatedBy());
+				EmailInfo mail = new EmailInfo(email, "Testmessage",
+						travelOption.getTransfer().getNotificationMessage());
+
+				emailService.sendEmailAsync(mail);
+				travelOption.setStatus(TravelOptionStatus.Sent);
+				persistence.getEntityManager().persist(travelOption);
+				tx.commit();
+			}
+		}
+	}
+
+	private String getEmailByUserLogin(String createdBy) {
+		String one = dataManager.loadValue("select email from sec$User u where u.login = :login", String.class).one();
+		return one;
+	}
+
+	public Transfer getTransferWithIntegratedFavoriteTrips(Transfer transfer) {
+
+		List<Site> allPossibleSitesList = transfer.getSites();
+		allPossibleSitesList.addAll(getReachableSites(transfer));
+		List<FavoriteTrip> favList = getFavoriteTripsBySiteList(allPossibleSitesList);
+
+		for (FavoriteTrip favoriteTrip : favList) {
+			// nur den Start einbauen
+			Log.info("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
+			Transfer transferWithFirstSite = siteInRouteEinbauen(transfer, favoriteTrip.getStartSite());
+			if (transferWithFirstSite != null) {
+				Log.info("Transfer mit StartSite sieht so aus: " + transferWithFirstSite.getRouteShort());
+				// in den neuen Transfer die zweite Site einbauen
+				Transfer transferWithSecondSite = siteInRouteEinbauen(transferWithFirstSite,
+						favoriteTrip.getDestination());
+				if (transferWithSecondSite != null) {
+					Log.info("Transfer mit DestSite sieht so aus: " + transferWithSecondSite.getRouteShort());
+				}
+				return transferWithSecondSite;
+
+			}
+		}
+		return null;
+	}
+
+	private User getUserByUsername(String createdBy) {
+		try (Transaction tx = persistence.createTransaction()) {
+			String queryString = "select e from sec$User e where e.login = :login";
+
+			return persistence.getEntityManager().createQuery(queryString, User.class).setParameter("login", createdBy)
+					.getFirstResult();
+		}
+	}
+
+	private String getNotificationMessage(FavoriteTrip favoriteTrip, Transfer transfer) {
+		String message = "Sehr geehrte Dame und Herren \n\n";
+		message += "auf Ihrer gewünschten Strecke wurden freie Plätze gemeldet: \n\n";
+		message += transfer.getNotificationMessage() + "\n\n";
+
+		return message;
+	}
+
+	public List<FavoriteTrip> getFavoriteTripsBySiteList(List<Site> siteList) {
+		// Schnittmenge Favoriten und Sites des Transfers
+
+		List<UUID> collect = siteList.stream().map(Site::getId).collect(Collectors.toList());
+
+		return dataManager.load(FavoriteTrip.class)
+				.query("select f from lineup$FavoriteTrip f where f.startSite.id in :siteList and f.destination.id in :siteList")
+				.parameter("siteList", collect).list();
+
+	}
 }

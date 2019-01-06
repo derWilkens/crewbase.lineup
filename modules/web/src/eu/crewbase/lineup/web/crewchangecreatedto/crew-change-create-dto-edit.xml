@@ -41,7 +41,6 @@
     </dsContext>
     <dialogMode closeable="true"
                 forceDialog="true"
-                height="600"
                 resizable="true"
                 width="800"/>
     <layout expand="windowActions"
@@ -94,15 +93,15 @@
                          optionsDatasource="craftTypesDs"
                          property="craftType"/>
         </groupBox>
-        <groupBox caption="Booked Seats"
+        <groupBox caption="Free Seats"
                   orientation="horizontal"
                   spacing="true">
-            <lookupField id="bookedSeatsOutbound"
+            <lookupField id="freeSeatsOutbound"
                          caption="Outbound"
                          datasource="crewChangeCreateDTODs"
                          icon="font-icon:ARROW_UP"
                          property="bookedSeatsOutbound"/>
-            <lookupField id="bookedSeatsInbound"
+            <lookupField id="freeSeatsInbound"
                          caption="Inbound"
                          datasource="crewChangeCreateDTODs"
                          datatype="int"

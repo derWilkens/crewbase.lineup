@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,10 +31,12 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 /**
  * @author christian
  */
+@Listeners({"lineup_TransferCreateListener", "lineup_TransferCreateListener"})
 @PrimaryKeyJoinColumn(name = "ID", referencedColumnName = "ID")
 @Table(name = "LINEUP_TRANSFER")
 @Entity(name = "lineup$Transfer")
@@ -158,7 +162,7 @@ public class Transfer extends Standstill {
 
 	}
 
-	public String getRoute() {
+	public String getRouteShort() {
 		String route = "";
 		String delim = "";
 		Standstill currentStandstill = this.getAnchorWaypoint();
@@ -167,9 +171,23 @@ public class Transfer extends Standstill {
 			route = route + delim + currentStandstill.getSite().getItemDesignation();
 			currentStandstill = currentStandstill.getNextWaypoint();
 			if (currentStandstill == null) {
-				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
-				// geht zurück zum Anchorpoint
 				route = route + delim + anchorWaypoint.getSite().getItemDesignation();
+			}
+			delim = " - ";
+		} while (currentStandstill != null);
+		return route;
+	}
+	
+	public String getRoute() {
+		String route = "";
+		String delim = "";
+		Standstill currentStandstill = this.getAnchorWaypoint();
+		 
+		do {
+			route = route + delim + currentStandstill.getSite().getSiteName();
+			currentStandstill = currentStandstill.getNextWaypoint();
+			if (currentStandstill == null) {
+				route = route + delim + anchorWaypoint.getSite().getSiteName();
 			}
 			delim = " - ";
 		} while (currentStandstill != null);
@@ -190,16 +208,11 @@ public class Transfer extends Standstill {
 		} while (currentStandstill != null);
 		return siteList;
 	}
+	
 	public HashMap<UUID,Site> getSiteHash(){
-		HashMap<UUID,Site> siteHash = new HashMap<UUID,Site>();
-		Standstill currentStandstill = this.getAnchorWaypoint();
-		do {
-			siteHash.put(currentStandstill.getSite().getUuid(),currentStandstill.getSite());
-			currentStandstill = currentStandstill.getNextWaypoint();
-
-		} while (currentStandstill != null);
-		return siteHash;
+		return (HashMap<UUID, Site>) getSites().stream().collect(Collectors.toMap(p -> p.getId(), p -> p, (p1, p2) -> p1));
 	}
+	
 	public Transfer(List<Site> siteList) {
 		Standstill currentStandstill = null;
 		for (Site site : siteList) {
@@ -210,12 +223,11 @@ public class Transfer extends Standstill {
 				this.setAnchorWaypoint(awp);
 				currentStandstill = awp;
 				/**
+				 * @fixme das ist irgendwie keine gute Idee den letzten WP implizit mit dem ersten gleichzusetzen
 				 * die letzte Site ist eigentlich ein AWP - muss der noch
-				 * eingefügt werden?
+				 * eingefügt werden? Nee!
 				 */
-				// }else
-				// if(!tmpTransfer.getAnchorWaypoint().getSite().getId().equals(site.getId())){
-			} else {
+			} else if(!site.getId().equals(this.getAnchorWaypoint().getSite().getId())) {
 				Waypoint wp = new Waypoint();
 				wp.setSite(site);
 				currentStandstill.setNextWaypoint(wp);
@@ -228,5 +240,9 @@ public class Transfer extends Standstill {
 		Transfer copy = new Transfer(this.getSites());
 		copy.setCraftType(getCraftType());
 		return copy;
+	}
+
+	public String getNotificationMessage() {
+		return getAnchorWaypoint().getStartDateTime().toString() + " " + getRouteShort() + " Free Seats: " ;
 	}
 }

@@ -751,8 +751,30 @@ create table LINEUP_FAVORITE_TRIP (
     EXACT_MATCH boolean,
     DESTINATION_ID varchar(32) not null,
     EMAIL_NOTIFICATION boolean,
+    SEND_SUMMERY boolean,
     ROUND_TRIP boolean,
     --
     primary key (ID)
 )^
 -- end LINEUP_FAVORITE_TRIP
+
+-- begin LINEUP_TRAVEL_OPTION
+create table LINEUP_TRAVEL_OPTION (
+    ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
+    CLIENT integer not null,
+    --
+    TRANSFER_ID varchar(32),
+    FAVORITE_TRIP_ID varchar(32),
+    STATUS integer,
+    SEND_SUMMERY boolean,
+    --
+    primary key (ID)
+)^
+-- end LINEUP_TRAVEL_OPTION

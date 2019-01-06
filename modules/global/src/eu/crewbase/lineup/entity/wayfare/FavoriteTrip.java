@@ -45,8 +45,20 @@ public class FavoriteTrip extends StandardEntity {
     @Column(name = "EMAIL_NOTIFICATION")
     protected Boolean emailNotification;
 
+    @Column(name = "SEND_SUMMERY")
+    protected Boolean sendSummery;
+
     @Column(name = "ROUND_TRIP")
     protected Boolean roundTrip;
+
+    public void setSendSummery(Boolean sendSummery) {
+        this.sendSummery = sendSummery;
+    }
+
+    public Boolean getSendSummery() {
+        return sendSummery;
+    }
+
 
     public void setExactMatch(Boolean exactMatch) {
         this.exactMatch = exactMatch;

@@ -415,4 +415,9 @@
         <property name="modeOfTransfer"
                   view="_minimal"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+          name="mailNotification-manage">
+        <property name="transfer"
+                  view="_minimal"/>
+    </view>
 </views>

@@ -26,4 +26,8 @@ public interface CrewChangeService {
     public List<TripDTO> getGroupedTickets(Transfer transfer);
     public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips); 
     public TripDTO getFreeCapacityForTrip(FavoriteTrip desiredTrip,  Transfer transferWithFavTrips, Transfer transfer);
+    
+    public void createTravelOption(Transfer transfer);
+    public void sendTravelOptions();
+
 }

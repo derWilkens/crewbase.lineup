@@ -38,10 +38,27 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
     protected CraftType craftType;
 
     @MetaProperty
-    protected Integer bookedSeatsOutbound;
+    protected Integer freeSeatsOutbound;
 
     @MetaProperty
-    protected Integer bookedSeatsInbound;
+    protected Integer freeSeatsInbound;
+
+    public void setFreeSeatsOutbound(Integer freeSeatsOutbound) {
+        this.freeSeatsOutbound = freeSeatsOutbound;
+    }
+
+    public Integer getFreeSeatsOutbound() {
+        return freeSeatsOutbound;
+    }
+
+    public void setFreeSeatsInbound(Integer freeSeatsInbound) {
+        this.freeSeatsInbound = freeSeatsInbound;
+    }
+
+    public Integer getFreeSeatsInbound() {
+        return freeSeatsInbound;
+    }
+
 
     public void setDestinationSite(Site destinationSite) {
         this.destinationSite = destinationSite;
@@ -52,28 +69,12 @@ public class CrewChangeCreateDTO extends BaseUuidEntity {
     }
 
 
-    public void setBookedSeatsOutbound(Integer bookedSeatsOutbound) {
-        this.bookedSeatsOutbound = bookedSeatsOutbound;
-    }
-
-    public Integer getBookedSeatsOutbound() {
-        return bookedSeatsOutbound;
-    }
-
     public void setCraftType(CraftType craftType) {
         this.craftType = craftType;
     }
 
     public CraftType getCraftType() {
         return craftType;
-    }
-
-    public void setBookedSeatsInbound(Integer bookedSeatsInbound) {
-        this.bookedSeatsInbound = bookedSeatsInbound;
-    }
-
-    public Integer getBookedSeatsInbound() {
-        return bookedSeatsInbound;
     }
 
 
