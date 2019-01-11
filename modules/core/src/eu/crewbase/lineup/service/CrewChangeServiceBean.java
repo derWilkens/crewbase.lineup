@@ -20,10 +20,8 @@ import com.haulmont.cuba.core.global.Metadata;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import eu.crewbase.lineup.entity.dto.TripDTO;
-import eu.crewbase.lineup.entity.wayfare.AnchorWaypoint;
 import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
-import eu.crewbase.lineup.entity.wayfare.Standstill;
 import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
@@ -57,24 +55,26 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		transfer.setCraftType(dto.getCraftType());
 
 		/**
-		 * 2 Standard-Waypoints anlegen A - B - (A) Endpunkt ist implizit
+		 * 2 Standard-Waypoints anlegen A - B - A 
 		 */
-		AnchorWaypoint awp1 = dataManager.create(AnchorWaypoint.class);
+		Waypoint awp1 = dataManager.create(Waypoint.class);
 		awp1.setSite(dto.getDepartureSite());
-		awp1.setStartDateTime(dto.getStartDateTime());
+		awp1.setTakeOff(dto.getStartDateTime());
 		awp1.setTransfer(transfer);
-		transfer.setAnchorWaypoint(awp1);
-		// transfer.setNextWaypoint(awp1);
+		transfer.getWaypoints().add(awp1);
 
 		Waypoint wp1 = dataManager.create(Waypoint.class);
 		wp1.setSite(dto.getDestinationSite());
 		wp1.setTransfer(transfer);
-		// wp1.setNextWaypoint(awp1); geht nicht, weil der letzte Punkt
-		// grundsätzlich der erste ist - das ist aber ein Problem
+		transfer.getWaypoints().add(wp1);
+		
+		Waypoint wp2 = dataManager.create(Waypoint.class);
+		wp2.setSite(dto.getDepartureSite());
+		wp2.setTakeOff(dto.getStartDateTime());
+		wp2.setTransfer(transfer);
+		transfer.getWaypoints().add(wp2);
+		
 
-		awp1.setNextWaypoint(wp1);
-		awp1.setStartDateTime(dto.getStartDateTime());
-		wp1.setPreviousStandstill(awp1);
 		cc.getTransfers().add(transfer);
 		if (dto.getFreeSeatsOutbound() != null) {
 			createTickets(dto.getFreeSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
@@ -90,58 +90,6 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	}
 
-	private UUID tmp(CrewChangeCreateDTO dto) {
-
-		CrewChange cc = null;
-		try (Transaction tx = persistence.createTransaction()) {
-
-			/**
-			 * Crew Change
-			 */
-			cc = (CrewChange) metadata.create(CrewChange.class);
-			cc.setStartDate(dto.getStartDateTime());
-
-			/**
-			 * Transfer anlegen und verknüpfen
-			 */
-			Transfer transfer = metadata.create(Transfer.class);
-			transfer.setTransferOrderNo(1);
-			transfer.setCrewChange(cc);
-			transfer.setCraftType(dto.getCraftType());
-
-			/**
-			 * 2 Standard-Waypoints anlegen A - B - (A) Endpunkt ist implizit
-			 */
-			AnchorWaypoint awp1 = metadata.create(AnchorWaypoint.class);
-			awp1.setSite(dto.getDepartureSite());
-			awp1.setStartDateTime(dto.getStartDateTime());
-			awp1.setTransfer(transfer);
-			transfer.setAnchorWaypoint(awp1);
-			// transfer.setNextWaypoint(awp1);
-
-			Waypoint wp1 = metadata.create(Waypoint.class);
-			wp1.setSite(dto.getDestinationSite());
-			wp1.setTransfer(transfer);
-			// wp1.setNextWaypoint(awp1); geht nicht, weil der letzte Punkt
-			// grundsätzlich der erste ist - das ist aber ein Problem
-
-			awp1.setNextWaypoint(wp1);
-			awp1.setStartDateTime(dto.getStartDateTime());
-			wp1.setPreviousStandstill(awp1);
-			cc.getTransfers().add(transfer);
-			if (dto.getFreeSeatsOutbound() != null) {
-				createTickets(dto.getFreeSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
-			}
-			if (dto.getFreeSeatsInbound() != null) {
-				createTickets(dto.getFreeSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
-			}
-
-			persistence.getEntityManager().persist(cc);
-			tx.commit();
-		}
-		return cc.getId();
-	}
-
 	private void createTickets(int freeSeats, Site siteA, Site siteB, Transfer transfer) {
 		int amount = transfer.getCraftType().getSeats() - freeSeats;
 		for (int i = 0; i < amount; i++) {
@@ -151,57 +99,8 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			ticket.setDestinationSite(siteB);
 			transfer.getTickets().add(ticket);
 		}
-
 	}
 
-	@Override
-	public Waypoint addWaypoint(UUID transferId, UUID siteId, UUID prevStandstillId) {
-
-		Transfer transfer = null;
-		Waypoint waypoint = null;
-		try (Transaction tx = persistence.createTransaction()) {
-			transfer = persistence.getEntityManager().find(Transfer.class, transferId);
-			Site site = persistence.getEntityManager().find(Site.class, siteId);
-			Standstill prevStandstill = persistence.getEntityManager().find(Standstill.class, prevStandstillId);
-			waypoint = createWaypoint(transfer, site, prevStandstill);
-			tx.commit();
-		}
-		return waypoint;
-	}
-
-	private Waypoint createWaypoint(Transfer transfer, Site site, Standstill prevStandstill) {
-
-		// Neuen WP erstellen
-		Waypoint waypoint = metadata.create(Waypoint.class);
-		waypoint.setSite(site);
-		waypoint.linkWaypoint(prevStandstill);
-		log.debug(
-				"Waypoint " + site.getSiteName() + " hinter " + prevStandstill.getSite().getSiteName() + " eingefügt.");
-		return waypoint;
-	}
-
-
-
-	@Override
-	public void moveWaypoint(UUID waypointId, UUID newPrevStandstill) {
-		try (Transaction tx = persistence.createTransaction()) {
-			Waypoint waypoint = persistence.getEntityManager().find(Waypoint.class, waypointId);
-			Standstill prevStandstill = persistence.getEntityManager().find(Standstill.class, newPrevStandstill);
-			waypoint.unlink();
-			waypoint.linkWaypoint(prevStandstill);
-			tx.commit();
-		}
-	}
-
-	@Override
-	public void removeWaypoint(UUID waypointId) {
-		try (Transaction tx = persistence.createTransaction()) {
-			Waypoint waypoint = persistence.getEntityManager().find(Waypoint.class, waypointId);
-			waypoint.unlink();
-			persistence.getEntityManager().remove(waypoint);
-			tx.commit();
-		}
-	}
 
 	/**
 	 * Liefert zukünftige mögliche Mitfluggelegenheiten auf Basis meiner

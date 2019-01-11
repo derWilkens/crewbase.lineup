@@ -5,12 +5,12 @@ package eu.crewbase.lineup.entity.wayfare;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.faces.event.PreValidateEvent;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,9 +18,13 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import com.esotericsoftware.minlog.Log;
+import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -31,31 +35,33 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 /**
  * @author christian
  */
-@Listeners({"lineup_TransferCreateListener", "lineup_TransferCreateListener"})
-@PrimaryKeyJoinColumn(name = "ID", referencedColumnName = "ID")
+@Listeners({ "lineup_TransferListener" })
 @Table(name = "LINEUP_TRANSFER")
 @Entity(name = "lineup$Transfer")
-public class Transfer extends Standstill {
+public class Transfer extends StandardEntity {
 	private static final long serialVersionUID = -5709533341256299692L;
+	// private static final Logger log =
+	// LoggerFactory.getLogger(Transfer.class);
 
 	@Column(name = "TRANSFER_ORDER_NO", nullable = false)
 	protected Integer transferOrderNo;
 
 	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@OrderBy("posOrder")
+	@Composition
+	@OnDelete(DeletePolicy.CASCADE)
+	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
+	protected List<Waypoint> waypoints;
+
+	@Composition
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.CASCADE)
 	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
 	protected List<Ticket> tickets;
-
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "ANCHOR_WAYPOINT_ID")
-	@OnDeleteInverse(DeletePolicy.UNLINK)
-	@OnDelete(DeletePolicy.CASCADE)
-	protected AnchorWaypoint anchorWaypoint;
 
 	@OnDeleteInverse(DeletePolicy.CASCADE)
 	@OnDelete(DeletePolicy.UNLINK)
@@ -63,15 +69,15 @@ public class Transfer extends Standstill {
 	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = { "clear" })
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODE_OF_TRANSFER_ID")
@@ -81,8 +87,16 @@ public class Transfer extends Standstill {
 	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CRAFT_TYPE_ID")
+	@JoinColumn(name = "CRAFT_TYPE_ID")
 	protected CraftType craftType;
+
+	public void setWaypoints(List<Waypoint> waypoints) {
+		this.waypoints = waypoints;
+	}
+
+	public List<Waypoint> getWaypoints() {
+		return waypoints;
+	}
 
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
@@ -90,14 +104,6 @@ public class Transfer extends Standstill {
 
 	public List<Ticket> getTickets() {
 		return tickets;
-	}
-
-	public AnchorWaypoint getAnchorWaypoint() {
-		return anchorWaypoint;
-	}
-
-	public void setAnchorWaypoint(AnchorWaypoint anchorWaypoint) {
-		this.anchorWaypoint = anchorWaypoint;
 	}
 
 	public void setCraftType(CraftType craftType) {
@@ -118,6 +124,7 @@ public class Transfer extends Standstill {
 
 	public Transfer() {
 		this.tickets = new ArrayList<Ticket>();
+		this.waypoints = new ArrayList<Waypoint>();
 	}
 
 	public Integer getTransferOrderNo() {
@@ -146,103 +153,108 @@ public class Transfer extends Standstill {
 
 	public int getTotalDistance() {
 		int totalDistance = 0;
-		Standstill currentStandstill = this.getAnchorWaypoint();
-		Standstill nextStandstill = this.getAnchorWaypoint().nextWaypoint;
-		do {
-			totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(nextStandstill.getSite());
-			currentStandstill = nextStandstill;
-			nextStandstill = currentStandstill.getNextWaypoint();
-			if (nextStandstill == null) {
-				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
-				// geht zurück zum Anchorpoint
-				totalDistance = totalDistance + currentStandstill.getSite().getDistanceTo(anchorWaypoint.getSite());
-			}
-		} while (nextStandstill != null);
-		return totalDistance;
+		Waypoint preWaypoint = null;
+		Waypoint currentWaypoint = null;
 
+		Iterator<Waypoint> it = this.getWaypoints().iterator();
+		while (it.hasNext()) {
+			if (preWaypoint == null) {
+				preWaypoint = it.next();
+			} else if (it.hasNext()) {
+				currentWaypoint = it.next();
+				totalDistance = totalDistance + preWaypoint.getSite().getDistanceTo(currentWaypoint.getSite());
+				preWaypoint = currentWaypoint;
+			}
+
+		}
+		return totalDistance;
 	}
 
 	public String getRouteShort() {
 		String route = "";
 		String delim = "";
-		Standstill currentStandstill = this.getAnchorWaypoint();
-		 
-		do {
-			route = route + delim + currentStandstill.getSite().getItemDesignation();
-			currentStandstill = currentStandstill.getNextWaypoint();
-			if (currentStandstill == null) {
-				route = route + delim + anchorWaypoint.getSite().getItemDesignation();
-			}
+
+		for (Waypoint waypoint : this.getWaypoints()) {
+			route = route + delim + waypoint.getSite().getItemDesignation();
 			delim = " - ";
-		} while (currentStandstill != null);
+		}
 		return route;
 	}
-	
+
 	public String getRoute() {
 		String route = "";
 		String delim = "";
-		Standstill currentStandstill = this.getAnchorWaypoint();
-		 
-		do {
-			route = route + delim + currentStandstill.getSite().getSiteName();
-			currentStandstill = currentStandstill.getNextWaypoint();
-			if (currentStandstill == null) {
-				route = route + delim + anchorWaypoint.getSite().getSiteName();
-			}
+
+		for (Waypoint waypoint : this.getWaypoints()) {
+			route = route + delim + waypoint.getSite().getSiteName();
+			;
 			delim = " - ";
-		} while (currentStandstill != null);
+		}
 		return route;
 	}
 
 	public List<Site> getSites() {
-		List<Site> siteList = new ArrayList<Site>();
-		Standstill currentStandstill = this.getAnchorWaypoint();
-		do {
-			siteList.add(currentStandstill.getSite());
-			currentStandstill = currentStandstill.getNextWaypoint();
-			if (currentStandstill == null) {
-				// der letze Waypoint hat keinen NextWaypoint - aber die Tour
-				// geht zurück zum Anchorpoint
-				siteList.add(anchorWaypoint.getSite());
-			}
-		} while (currentStandstill != null);
-		return siteList;
+		return getWaypoints().stream().map(w -> w.getSite()).collect(Collectors.toList());
 	}
-	
-	public HashMap<UUID,Site> getSiteHash(){
-		return (HashMap<UUID, Site>) getSites().stream().collect(Collectors.toMap(p -> p.getId(), p -> p, (p1, p2) -> p1));
-	}
-	
-	public Transfer(List<Site> siteList) {
-		Standstill currentStandstill = null;
-		for (Site site : siteList) {
 
-			if (this.getAnchorWaypoint() == null) {
-				AnchorWaypoint awp = new AnchorWaypoint();
-				awp.setSite(site);
-				this.setAnchorWaypoint(awp);
-				currentStandstill = awp;
-				/**
-				 * @fixme das ist irgendwie keine gute Idee den letzten WP implizit mit dem ersten gleichzusetzen
-				 * die letzte Site ist eigentlich ein AWP - muss der noch
-				 * eingefügt werden? Nee!
-				 */
-			} else if(!site.getId().equals(this.getAnchorWaypoint().getSite().getId())) {
-				Waypoint wp = new Waypoint();
-				wp.setSite(site);
-				currentStandstill.setNextWaypoint(wp);
-				currentStandstill = wp;
-			}
+	public HashMap<UUID, Site> getSiteHash() {
+		HashMap<UUID, Site> resultMap = new HashMap<UUID, Site>();
+		// return (HashMap<UUID, Site>)
+		// getSites().stream().collect(Collectors.toMap(p.getId(), p -> p, (p1,
+		// p2) -> p1));
+		for (Waypoint waypoint : getWaypoints()) {
+			resultMap.put(waypoint.getSite().getId(), waypoint.getSite());
+		}
+		return resultMap;
+	}
+
+	public void remove(Waypoint waypoint) {
+		waypoint.posOrder = null;
+		this.waypoints.remove(waypoint);
+		renumber();
+	}
+
+	public void renumber() {
+		for (Waypoint waypoint : this.getWaypoints()) {
+			waypoint.setPosOrder(this.getWaypoints().indexOf(waypoint));
 		}
 	}
 
-	public Transfer getTransientCopy() {
-		Transfer copy = new Transfer(this.getSites());
-		copy.setCraftType(getCraftType());
-		return copy;
+	// Wegpunkt wird so eingesetzt, dass die Strecke minimal ist
+	// @fixme optimum wird erreicht, wenn PAX-Reisedauer UND Strecke minimal ist
+	public boolean addWaypointShortestWay(Waypoint waypoint) {
+
+		waypoint.setTransfer(this);
+		int len = this.getWaypoints().size();
+		int optimalPosition = 0;
+
+		CraftType craft = this.getCraftType();
+		int minDistance = craft.getMaxRange();
+
+		for (int i = 1; i < len; i++) {
+
+			this.getWaypoints().add(i, waypoint);
+			Log.info(this.getRouteShort() + " Dist: " + this.getTotalDistance());
+
+			// neue Distanz ist erreichbar und kleiner als optimum? Else
+			// Wegpunkt wieder rausnehmen
+			if (this.getTotalDistance() < craft.getMaxRange() && this.getTotalDistance() < minDistance) {
+				minDistance = this.getTotalDistance();
+				optimalPosition = i;
+			}
+			this.getWaypoints().remove(waypoint);
+		}
+
+		if (optimalPosition > 0) {
+			this.getWaypoints().add(optimalPosition, waypoint);
+			return true;
+		}
+		return false;
 	}
 
-	public String getNotificationMessage() {
-		return getAnchorWaypoint().getStartDateTime().toString() + " " + getRouteShort() + " Free Seats: " ;
+	public void bookTravelOption(TravelOption entity) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

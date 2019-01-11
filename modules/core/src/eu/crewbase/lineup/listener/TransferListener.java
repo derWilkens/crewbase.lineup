@@ -18,16 +18,20 @@ import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.service.CrewChangeService;
+import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 
-@Component("lineup_TransferCreateListener")
-public class TransferCreateListener implements AfterInsertEntityListener<Transfer> {
-
-	@Inject
-	private CrewChangeService crewChangeService;
+@Component("lineup_TransferListener")
+public class TransferListener implements AfterInsertEntityListener<Transfer>, AfterUpdateEntityListener<Transfer> {
 
 	@Override
 	public void onAfterInsert(Transfer transfer, Connection connection) {
-		//crewChangeService.createMailNotifycations(transfer);
+		transfer.renumber();
 	}
+
+    @Override
+    public void onAfterUpdate(Transfer entity, Connection connection) {
+    	entity.renumber();
+    }
+
 
 }

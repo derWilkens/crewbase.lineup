@@ -21,7 +21,9 @@
                 <field property="takeOff"/>
                 <field property="orderNo"/>
                 <field property="stopoverTime"/>
-                <field property="previousStandstill"/>
+                <field property="site"/>
+                <field property="transfer"/>
+                <field property="posOrder"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

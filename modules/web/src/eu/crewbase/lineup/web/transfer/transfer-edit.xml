@@ -10,7 +10,11 @@
                     class="eu.crewbase.lineup.entity.wayfare.Transfer"
                     view="transfer-edit-view">
             <collectionDatasource id="waypointListDs"
-                                  property="waypointList"/>
+                                  property="tickets"/>
+            <datasource id="headWaypointDs"
+                        property="headWaypoint"/>
+            <collectionDatasource id="waypointsDs"
+                                  property="waypoints"/>
         </datasource>
         <collectionDatasource id="operatedBiesDs"
                               class="eu.crewbase.lineup.entity.coredata.Company"
@@ -28,10 +32,19 @@
         </collectionDatasource>
         <collectionDatasource id="craftTypesDs"
                               class="eu.crewbase.lineup.entity.coredata.CraftType"
-                              view="_minimal">
-            <![CDATA[select e from lineup$CraftType e]]>
+                              view="_minimal"/>
+        <collectionDatasource id="sitesDs"
+                              class="eu.crewbase.lineup.entity.coredata.Site"
+                              view="siteSelect">
+            <query>
+                <![CDATA[select e from lineup$Site e]]>
+            </query>
         </collectionDatasource>
     </dsContext>
+    <actions>
+        <action id="addSelectedSite"
+                invoke="onAddSelectedSite"/>
+    </actions>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="windowActions"
@@ -39,7 +52,6 @@
         <fieldGroup id="fieldGroup"
                     datasource="transferDs">
             <column width="250px">
-                <field property="client"/>
                 <field property="transferOrderNo"/>
                 <field optionsDatasource="operatedBiesDs"
                        property="operatedBy"/>
@@ -47,9 +59,31 @@
                        property="modeOfTransfer"/>
                 <field optionsDatasource="craftTypesDs"
                        property="craftType"/>
-                <field property="anchorWaypoint"/>
             </column>
         </fieldGroup>
+        <groupBox id="waypointsBox"
+                  caption="msg://eu.crewbase.lineup.entity.wayfare/Transfer.waypoints">
+            <table id="waypointsTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="takeOff"/>
+                    <column id="stopoverTime"/>
+                    <column id="posOrder"/>
+                </columns>
+                <rows datasource="waypointsDs"/>
+                <buttonsPanel>
+                    <button action="waypointsTable.create"/>
+                    <button action="waypointsTable.edit"/>
+                    <button action="waypointsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
         <groupBox id="waypointListBox"
                   caption="msg://eu.crewbase.lineup.entity/Transfer.waypointList">
             <table id="waypointListTable"
@@ -74,6 +108,12 @@
                 </buttonsPanel>
             </table>
         </groupBox>
+        <lookupField id="siteLookup"
+                     captionProperty="shortItemDesignation"
+                     optionsDatasource="sitesDs"/>
+        <button id="tempAddWaypoint"
+                action="addSelectedSite"
+                caption="Add selected Site"/>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

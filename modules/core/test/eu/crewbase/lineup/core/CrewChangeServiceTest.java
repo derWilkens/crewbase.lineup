@@ -3,8 +3,9 @@ package eu.crewbase.lineup.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.core.app.EmailService;
 import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.EmailInfo;
 import com.haulmont.cuba.core.global.UserSessionSource;
 
 import eu.crewbase.lineup.LineupTestContainer;
@@ -28,13 +27,12 @@ import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import eu.crewbase.lineup.entity.dto.TripDTO;
-import eu.crewbase.lineup.entity.wayfare.AnchorWaypoint;
 import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
-import eu.crewbase.lineup.entity.wayfare.TravelOption;
-import eu.crewbase.lineup.entity.wayfare.TravelOptionStatus;
 import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
+import eu.crewbase.lineup.entity.wayfare.TravelOption;
+import eu.crewbase.lineup.entity.wayfare.TravelOptionStatus;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 import eu.crewbase.lineup.service.CrewChangeService;
 import eu.crewbase.lineup.service.TravelOptionService;
@@ -54,15 +52,15 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	public void setUp() throws Exception {
 		super.setUp();
 		AppBeans.get(UserSessionSource.class).getUserSession().setAttribute("client_id", 1);
-		
+
 		try (Transaction tx = persistence.createTransaction()) {
-			
+
 			List<CrewChange> ccList = persistence.getEntityManager()
 					.createQuery("select cc from lineup$CrewChange cc", CrewChange.class).getResultList();
 			for (CrewChange crewChange : ccList) {
 				persistence.getEntityManager().remove(crewChange);
 			}
-			
+
 			List<Site> siteList = persistence.getEntityManager().createQuery("select s from lineup$Site s", Site.class)
 					.getResultList();
 			for (Site site : siteList) {
@@ -111,9 +109,11 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	@After
 	public void tearDown() throws Exception {
-		if(ccId != null){
-		dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
+		if (ccId != null) {
+			//dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
+			deleteRecord("LINEUP_CREW_CHANGE", ccId);
 		}
+		
 		// dataManager.remove(bwal);
 		// dataManager.remove(dwal);
 		// dataManager.remove(emdn);
@@ -134,14 +134,15 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		ccId = createCC(0, 0);
 		Transfer transfer;
 
-		try (Transaction tx = persistence.createTransaction()) {
-
-			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
-			transfer = cc.getTransfers().get(0);
-
-		}
 		// EMDN - BWAL + DWAL
-		service.addWaypoint(transfer.getUuid(), dwal.getUuid(), transfer.getAnchorWaypoint().getNextWaypoint().getId());
+		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
+		Waypoint wpDwal = metadata.create(Waypoint.class);
+		wpDwal.setSite(dwal);
+		wpDwal.setTransfer(transfer);
+		dataManager.commit(wpDwal);
+		transfer.getWaypoints().add(2, wpDwal);
+		dataManager.commit(transfer);
 
 		try (Transaction tx = persistence.createTransaction()) {
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
@@ -168,27 +169,36 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	}
 
 	@Test
-	public void testremoveWaypoint() {
+	public void testRemoveWaypoint() {
 		ccId = createCC(0, 0);
 		Transfer transfer;
-		AnchorWaypoint awp1;
+		Waypoint awp1;
+
+		Waypoint wpDwal = metadata.create(Waypoint.class);
+
+		// EMDN - BWAL + DWAL
+		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
+		wpDwal.setSite(dwal);
+		wpDwal.setTransfer(transfer);
+		dataManager.commit(wpDwal);
+		transfer.getWaypoints().add(2, wpDwal);
+		dataManager.commit(transfer);
+
+		assertEquals("EMDN - BWAL - DWAL - EMDN", transfer.getRouteShort());
 
 		try (Transaction tx = persistence.createTransaction()) {
 
-			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
-			transfer = cc.getTransfers().get(0);
-
-		}
-		service.addWaypoint(transfer.getUuid(), dwal.getUuid(), transfer.getAnchorWaypoint().getNextWaypoint().getId());
-
-		try (Transaction tx = persistence.createTransaction()) {
-
-			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+			cc = entityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDN - BWAL - DWAL - EMDN", transfer.getRouteShort());
+			tx.commit();
 		}
 
-		service.removeWaypoint(transfer.getAnchorWaypoint().getNextWaypoint().getId());
+		Waypoint remove = transfer.getWaypoints().remove(1);
+		dataManager.remove(remove);
+		assertEquals("EMDN - DWAL - EMDN", transfer.getRouteShort());
+		// dataManager.commit(transfer);
 
 		try (Transaction tx = persistence.createTransaction()) {
 
@@ -212,9 +222,16 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 		}
-
+		Waypoint wpDwal = metadata.create(Waypoint.class);
 		// DWAL dem Transfer hinzufügen
-		service.addWaypoint(transfer.getUuid(), dwal.getUuid(), transfer.getAnchorWaypoint().getNextWaypoint().getId());
+		// EMDN - BWAL + DWAL
+		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
+		wpDwal.setSite(dwal);
+		wpDwal.setTransfer(transfer);
+		dataManager.commit(wpDwal);
+		transfer.getWaypoints().add(2, wpDwal);
+		dataManager.commit(transfer);
 
 		try (Transaction tx = persistence.createTransaction()) {
 
@@ -288,13 +305,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		assertEquals(2, bookedSeatsMap.get(bwal.getUuid()).intValue());
 		assertNull(bookedSeatsMap.get(dwal.getUuid()));
 
-		//List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
+		// List<TripDTO> myTrips = service.getMyTrips(new Date(), new Date());
 		// es werden die booked seats ausgegen nicht die verfügbaren
-		//assertTrue(myTrips.get(0).getTransfer().getId().equals(transfer.getId()));
+		// assertTrue(myTrips.get(0).getTransfer().getId().equals(transfer.getId()));
 
-		//for (TripDTO tripDTO : myTrips) {
-		//	log.debug(tripDTO.toString());
-		//}
+		// for (TripDTO tripDTO : myTrips) {
+		// log.debug(tripDTO.toString());
+		// }
 
 	}
 
@@ -313,27 +330,36 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		// erstmal einen WP hinzufügen
 		// EMDN - BWAL + DWAL
-		service.addWaypoint(transfer.getUuid(), dwal.getUuid(), transfer.getAnchorWaypoint().getNextWaypoint().getId());
+		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
+		Waypoint wpDwal = metadata.create(Waypoint.class);
+		wpDwal.setSite(dwal);
+		wpDwal.setTransfer(transfer);
+		dataManager.commit(wpDwal);
+		transfer.getWaypoints().add(2, wpDwal);
+		dataManager.commit(transfer);
 
 		// neu laden
-		AnchorWaypoint awp1;
+		Waypoint awp1;
 		Waypoint wpBwal;
-		Waypoint wpDwal;
 
 		try (Transaction tx = persistence.createTransaction()) {
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDN - BWAL - DWAL - EMDN", transfer.getRouteShort());
 
-			awp1 = transfer.getAnchorWaypoint();
-			wpBwal = awp1.getNextWaypoint();
+			awp1 = transfer.getWaypoints().get(0);
+			wpBwal = transfer.getWaypoints().get(1);
 			assertEquals(wpBwal.getSite().getItemDesignation(), "BWAL");
-			wpDwal = wpBwal.getNextWaypoint();
+			wpDwal = transfer.getWaypoints().get(2);
 			assertEquals(wpDwal.getSite().getItemDesignation(), "DWAL");
 			distance = transfer.getTotalDistance();
 			assertTrue(distance > 0);
 		}
-		service.moveWaypoint(wpDwal.getId(), awp1.getId());
+		int oldIndex = transfer.getWaypoints().indexOf(wpBwal);
+		int newIndex = oldIndex + 1;
+		Collections.swap(transfer.getWaypoints(), oldIndex, newIndex);
+		dataManager.commit(transfer);
 
 		try (Transaction tx = persistence.createTransaction()) {
 			// neu laden
@@ -363,14 +389,14 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			trip1.setDestination(dwal);
 			trip1.setEmailNotification(true);
 			entityManager().persist(trip1);
-			
+
 			// erzeugt eine travelOption
 			FavoriteTrip trip2 = metadata.create(FavoriteTrip.class);
 			trip2.setStartSite(emdn);
 			trip2.setDestination(dwal);
 			trip2.setEmailNotification(false);
 			entityManager().persist(trip2);
-			
+
 			// erzeugt keine travelOption, weil dwbe außerhalb der Reichweite
 			FavoriteTrip trip3 = metadata.create(FavoriteTrip.class);
 			trip3.setStartSite(emdn);
@@ -382,19 +408,19 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		// CC erstellen EMDN - BWAL
 		ccId = createCC(6, 6);
+
 		Transfer transfer;
 		try (Transaction tx = persistence.createTransaction()) {
 			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDN - BWAL - EMDN", transfer.getRouteShort());
 		}
-		
+
 		tos.sendTravelOptionNotification();
-		
+
 		List<TravelOption> list = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.transfer.id = :transferId")
-				.parameter("transferId", transfer.getId())
-				.view("mailNotification-manage").list();
+				.parameter("transferId", transfer.getId()).view("mailNotification-manage").list();
 
 		assertEquals(2, list.size());
 		TravelOption notif = list.get(0);
@@ -402,6 +428,35 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		assertNotNull(notif.getTransfer());
 		assertNotNull(notif.getFavoriteTrip());
 
+	}
+
+	@Test
+	public void testBookSeats() {
+		try (Transaction tx = persistence.createTransaction()) {
+			FavoriteTrip trip1 = metadata.create(FavoriteTrip.class);
+			// erzeugt eine travelOption
+			trip1.setStartSite(emdn);
+			trip1.setDestination(dwal);
+			trip1.setEmailNotification(true);
+			entityManager().persist(trip1);
+			tx.commit();
+		}
+		// CC erstellen EMDN - BWAL
+		ccId = createCC(6, 6);
+
+		Transfer transfer;
+		try (Transaction tx = persistence.createTransaction()) {
+			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+			transfer = cc.getTransfers().get(0);
+			assertEquals("EMDN - BWAL - EMDN", transfer.getRouteShort());
+		}
+
+		TravelOption travelOption = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.transfer.crewChange.id = :ccId")
+				.parameter("ccId", ccId).one();
+		travelOption.setBookedSeats(2);
+		travelOption.setStatus(TravelOptionStatus.Approved);
+		dataManager.commit(travelOption);
 	}
 
 	private UUID createCC(int freeSeatsWay1, int freeSeatsWay2) {
@@ -416,7 +471,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		return service.createCrewChange(dto);
 
 	}
-	
+
 	private CraftType createCraftType() {
 		CraftType ct = null;
 		try (Transaction tx = persistence.createTransaction()) {
@@ -442,16 +497,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	private void validateTransfer(Transfer transfer) {
 		assertNotNull(transfer);
-		assertNotNull(transfer.getAnchorWaypoint());
 		assertNotNull(transfer.getCraftType());
-		AnchorWaypoint awp1 = transfer.getAnchorWaypoint();
+		Waypoint awp1 = transfer.getWaypoints().get(0);
 		assertEquals(awp1.getSite().getItemDesignation(), "EMDN");
 
-		Waypoint wp1 = awp1.getNextWaypoint();
+		Waypoint wp1 = transfer.getWaypoints().get(1);
 		assertNotNull(wp1);
 		assertEquals(wp1.getSite().getItemDesignation(), "BWAL");
-		assertNull(wp1.getNextWaypoint());
-		assertEquals(wp1.getPreviousStandstill().getSite().getItemDesignation(), "EMDN");
 
 		assertTrue(transfer.getTotalDistance() > 100);
 		assertEquals("EMDN - BWAL - EMDN", transfer.getRouteShort());

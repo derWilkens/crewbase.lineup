@@ -666,9 +666,15 @@ create table LINEUP_THIRD_CLASS (
 -- begin LINEUP_TRANSFER
 create table LINEUP_TRANSFER (
     ID varchar(32),
+    VERSION integer not null,
+    CREATE_TS datetime(3),
+    CREATED_BY varchar(50),
+    UPDATE_TS datetime(3),
+    UPDATED_BY varchar(50),
+    DELETE_TS datetime(3),
+    DELETED_BY varchar(50),
     --
     TRANSFER_ORDER_NO integer not null,
-    ANCHOR_WAYPOINT_ID varchar(32),
     CREW_CHANGE_ID varchar(32),
     OPERATED_BY_ID varchar(32),
     MODE_OF_TRANSFER_ID varchar(32),
@@ -680,26 +686,6 @@ create table LINEUP_TRANSFER (
 -- begin LINEUP_WAYPOINT
 create table LINEUP_WAYPOINT (
     ID varchar(32),
-    --
-    TAKE_OFF time(3),
-    PREVIOUS_STANDSTILL_ID varchar(32),
-    STOPOVER_TIME integer,
-    --
-    primary key (ID)
-)^
--- end LINEUP_WAYPOINT
--- begin LINEUP_ANCHOR_WAYPOINT
-create table LINEUP_ANCHOR_WAYPOINT (
-    ID varchar(32),
-    --
-    START_DATE_TIME datetime(3),
-    --
-    primary key (ID)
-)^
--- end LINEUP_ANCHOR_WAYPOINT
--- begin LINEUP_STANDSTILL
-create table LINEUP_STANDSTILL (
-    ID varchar(32),
     VERSION integer not null,
     CREATE_TS datetime(3),
     CREATED_BY varchar(50),
@@ -707,15 +693,17 @@ create table LINEUP_STANDSTILL (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
-    DTYPE varchar(31),
     --
     SITE_ID varchar(32),
+    TAKE_OFF time(3),
+    STOPOVER_TIME integer,
+    POS_ORDER integer,
     TRANSFER_ID varchar(32),
-    NEXT_WAYPOINT_ID varchar(32),
     --
     primary key (ID)
 )^
--- end LINEUP_STANDSTILL
+-- end LINEUP_WAYPOINT
+
 -- begin LINEUP_TICKET
 create table LINEUP_TICKET (
     ID varchar(32),

@@ -1,0 +1,2 @@
+alter table LINEUP_WAYPOINT add constraint FK_LINEUP_WAYPOINT_ON_SITE foreign key (SITE_ID) references LINEUP_SITE(ID);
+create index IDX_LINEUP_WAYPOINT_ON_SITE on LINEUP_WAYPOINT (SITE_ID);

@@ -13,20 +13,19 @@
                                   property="transfers"/>
         </datasource>
     </dsContext>
-    <dialogMode forceDialog="true"
-                height="AUTO"
-                width="600"/>
+    <dialogMode height="600"
+                width="800"/>
     <layout expand="windowActions"
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="crewChangeDs">
             <column width="250px">
                 <field property="client"/>
-                <field property="flightDate"/>
+                <field property="startDate"/>
             </column>
         </fieldGroup>
         <groupBox id="transfersBox"
-                  caption="msg://eu.crewbase.lineup.entity/CrewChange.transfers">
+                  caption="msg://eu.crewbase.lineup.entity.wayfare/CrewChange.transfers">
             <table id="transfersTable"
                    height="200px"
                    width="100%">
@@ -36,13 +35,10 @@
                     <action id="remove"/>
                 </actions>
                 <columns>
-                    <column id="id"/>
-                    <column id="transferOrderNo"/>
                     <column id="operatedBy"/>
-                    <column id="waypointList"/>
                     <column id="modeOfTransfer"/>
+                    <column id="transferOrderNo"/>
                     <column id="craftType"/>
-                    <column id="anchorWaypoint"/>
                 </columns>
                 <rows datasource="transfersDs"/>
                 <buttonsPanel>

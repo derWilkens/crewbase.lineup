@@ -101,8 +101,6 @@
             template="eu/crewbase/lineup/web/waypoint/waypoint-browse.xml"/>
     <screen id="lineup$Waypoint.edit"
             template="eu/crewbase/lineup/web/waypoint/waypoint-edit.xml"/>
-    <screen id="lineup$CrewChange.browse"
-            template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
     <screen id="lineup$CraftType.edit"
             template="eu/crewbase/lineup/web/crafttype/craft-type-edit.xml"/>
     <screen id="lineup$ModeOfTransfer.browse"
@@ -115,4 +113,6 @@
             template="eu/crewbase/lineup/web/sitecategory/site-category-edit.xml"/>
     <screen id="lineup$Site.browse"
             template="eu/crewbase/lineup/web/site/site-browse.xml"/>
+    <screen id="lineup$CrewChange.browse"
+            template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
 </screen-config>

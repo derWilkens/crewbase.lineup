@@ -13,7 +13,9 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
+@Listeners("lineup_TravelOptionListener")
 @NamePattern(" %s|transfer")
 @Table(name = "LINEUP_TRAVEL_OPTION")
 @Entity(name = "lineup$TravelOption")

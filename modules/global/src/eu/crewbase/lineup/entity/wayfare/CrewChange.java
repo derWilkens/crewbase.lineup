@@ -17,7 +17,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -37,10 +36,11 @@ public class CrewChange extends StandardClientEntity {
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
+    @OnDeleteInverse(DeletePolicy.UNLINK)
     @OrderBy("transferOrderNo")
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
-    @OneToMany(mappedBy = "crewChange", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "crewChange", cascade = CascadeType.PERSIST)
     protected List<Transfer> transfers;
     
     public void setStartDate(Date startDate) {

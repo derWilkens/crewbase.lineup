@@ -31,12 +31,14 @@
                 <action id="remove"/>
             </actions>
             <columns>
-                <column id="client"/>
+ 
                 <column id="transferOrderNo"/>
                 <column id="operatedBy"/>
                 <column id="modeOfTransfer"/>
                 <column id="craftType"/>
                 <column id="anchorWaypoint"/>
+                <column id="counter"/>
+
             </columns>
             <rows datasource="transfersDs"/>
             <rowsCount/>

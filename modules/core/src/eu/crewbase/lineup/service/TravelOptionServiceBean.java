@@ -25,7 +25,6 @@ import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.TripDTO;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
-import eu.crewbase.lineup.entity.wayfare.Standstill;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.TravelOption;
 import eu.crewbase.lineup.entity.wayfare.TravelOptionStatus;
@@ -33,7 +32,7 @@ import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 @Service(TravelOptionService.NAME)
 public class TravelOptionServiceBean implements TravelOptionService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(TravelOptionServiceBean.class);
 
 	@Inject
@@ -45,7 +44,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 
 	@Inject
 	public EmailService emailService;
-	
+
 	@Override
 	public void createTravelOption(Transfer transfer) {
 
@@ -69,7 +68,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			}
 		}
 	}
-	
+
 	@Override
 	public void sendTravelOptionNotification() {
 		try (Transaction tx = persistence.createTransaction()) {
@@ -77,13 +76,11 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			List<TravelOption> optionList = persistence.getEntityManager()
 					.createQuery(
 							"select m from lineup$TravelOption m where m.status = :status and m.favoriteTrip.sendSummery = false")
-					.setParameter("status", TravelOptionStatus.Init)
-					.getResultList();
+					.setParameter("status", TravelOptionStatus.Init).getResultList();
 
 			for (TravelOption travelOption : optionList) {
 				String email = getEmailByUserLogin(travelOption.getFavoriteTrip().getCreatedBy());
-				EmailInfo mail = new EmailInfo(email, "Testmessage",
-						travelOption.getTransfer().getNotificationMessage());
+				EmailInfo mail = new EmailInfo(email, "Testmessage", travelOption.getTransfer().toString());
 
 				emailService.sendEmailAsync(mail);
 				travelOption.setStatus(TravelOptionStatus.Sent);
@@ -92,6 +89,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			}
 		}
 	}
+
 	@Override
 	public List<Site> getReachableSites(UUID transferId) {
 		List<Site> siteResultList = null;
@@ -109,6 +107,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		}
 		return siteResultList;
 	}
+
 	public List<FavoriteTrip> getFavoriteTripsBySiteList(List<Site> siteList) {
 		// Schnittmenge Favoriten und Sites des Transfers
 
@@ -118,8 +117,8 @@ public class TravelOptionServiceBean implements TravelOptionService {
 				.query("select f from lineup$FavoriteTrip f where f.startSite.id in :siteList and f.destination.id in :siteList")
 				.parameter("siteList", collect).list();
 
-	}	
-	
+	}
+
 	/**
 	 * Es werden die Tickets gruppiert nach Sites selektiert -> Tickets bilden
 	 * Strecken ab mit entsprechenden gebuchten Plätzen
@@ -158,6 +157,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		log.info(tmp.toString());
 		return tmp;
 	}
+
 	public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips) {
 
 		HashMap<UUID, Integer> resultCapaMap = new HashMap<UUID, Integer>();
@@ -172,9 +172,12 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
 			// zu, wenn Site = destination -> PAX steigen aus
 			boolean onboard = false;
-			Standstill currentStandstill = transferWithFavTrips.getAnchorWaypoint();
-			while (currentStandstill != null) {
-				Site site = currentStandstill.getSite();
+			
+			
+			// den letzten Waypoint nicht mehr berücksichtigen
+			for (int i = 0; i < transferWithFavTrips.getWaypoints().size() - 1; i++) {
+				Waypoint waypoint = transferWithFavTrips.getWaypoints().get(i);
+				Site site = waypoint.getSite();
 
 				if (site.getId().equals(ticketGroup.getSiteB().getId()) && onboard) {
 					onboard = false;
@@ -187,11 +190,11 @@ public class TravelOptionServiceBean implements TravelOptionService {
 					resultCapaMap.put(site.getId(), currentSeats + ticketGroup.getBookedSeats());
 					onboard = true;
 				}
-				currentStandstill = currentStandstill.getNextWaypoint();
 			}
 		}
 		return resultCapaMap;
 	}
+
 	public List<TripDTO> getGroupedTickets(Transfer transfer) {
 		List<TripDTO> resultList = new ArrayList<TripDTO>();
 		try (Transaction tx = persistence.createTransaction()) {
@@ -211,6 +214,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		}
 		return resultList;
 	}
+
 	public List<Site> getReachableSites(Transfer transfer) {
 		List<Site> siteResultList;
 		siteResultList = new ArrayList<Site>();
@@ -226,101 +230,52 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		// - Liste der vorhandenen Sites übergeben
 
 		// jede site an jeder position einfügen und Gesamtdistanz ausrechnen
-
+		log.debug("Vor Site add/remove " + transfer.getRouteShort());
 		for (Site site : siteList) {
-			Standstill currentStandstill = transfer.getAnchorWaypoint();
-
-			do {
-				Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
-				Waypoint addedWaypoint = createWaypoint(transfer, site, currentStandstill);
-				currentStandstill = nextOriginalWaypoint;
-				Log.info(transfer.getRouteShort() + " Dist: " + transfer.getTotalDistance() + " MaxRange:"
-						+ craft.getMaxRange());
-				if (transfer.getTotalDistance() < craft.getMaxRange()) {
-					siteResultList.add(site);
-					addedWaypoint.unlink();
-					break; // wenn die Site an einer Stelle grundsätzlich
-							// eingefügt werden kann ist es gut gewesen.
-				}
-				addedWaypoint.unlink();
-			} while (currentStandstill != null);
+			Waypoint addedWaypoint = createWaypoint(site);
+			if (transfer.addWaypointShortestWay(addedWaypoint)) {
+				siteResultList.add(site);
+				transfer.remove(addedWaypoint);
+			}
+			log.debug("Nachdem Site add/remove " + transfer.getRouteShort());
 		}
 		return siteResultList;
 	}
-	private Waypoint createWaypoint(Transfer transfer, Site site, Standstill prevStandstill) {
 
+	private Waypoint createWaypoint(Site site) {
 		// Neuen WP erstellen
 		Waypoint waypoint = metadata.create(Waypoint.class);
 		waypoint.setSite(site);
-		waypoint.linkWaypoint(prevStandstill);
-		log.debug(
-				"Waypoint " + site.getSiteName() + " hinter " + prevStandstill.getSite().getSiteName() + " eingefügt.");
 		return waypoint;
 	}
+
 	public Transfer getTransferWithIntegratedFavoriteTrips(Transfer transfer) {
 
+		// Im Transfer sowie schon enthaltene Sites
 		List<Site> allPossibleSitesList = transfer.getSites();
+
+		// welche können noch zusätzlich erreicht werden
 		allPossibleSitesList.addAll(getReachableSites(transfer));
+
 		List<FavoriteTrip> favList = getFavoriteTripsBySiteList(allPossibleSitesList);
 
 		for (FavoriteTrip favoriteTrip : favList) {
 			// nur den Start einbauen
 			Log.info("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
-			Transfer transferWithFirstSite = siteInRouteEinbauen(transfer, favoriteTrip.getStartSite());
-			if (transferWithFirstSite != null) {
-				Log.info("Transfer mit StartSite sieht so aus: " + transferWithFirstSite.getRouteShort());
-				// in den neuen Transfer die zweite Site einbauen
-				Transfer transferWithSecondSite = siteInRouteEinbauen(transferWithFirstSite,
-						favoriteTrip.getDestination());
-				if (transferWithSecondSite != null) {
-					Log.info("Transfer mit DestSite sieht so aus: " + transferWithSecondSite.getRouteShort());
-				}
-				return transferWithSecondSite;
 
+			if (transfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getStartSite()))) {
+				Log.info("Transfer mit StartSite sieht so aus: " + transfer.getRouteShort());
+				// in den neuen Transfer die zweite Site einbauen
+
+				if (transfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getDestination()))) {
+					Log.info("Transfer mit DestSite sieht so aus: " + transfer.getRouteShort());
+				}
+				return transfer;
 			}
 		}
 		return null;
 	}
-	private Transfer siteInRouteEinbauen(Transfer transfer, Site siteA) {
 
-		// Ist Site schon drin? Dann einfach Kopie zurück
-		if (transfer.getSiteHash().containsKey(siteA.getId())) {
-			return transfer.getTransientCopy();
-		}
-
-		// List<Site> minSiteList = null;
-		Transfer resultTransfer = null;
-		CraftType craft = transfer.getCraftType();
-
-		int minDistance = craft.getMaxRange();
-		Standstill currentStandstill = transfer.getAnchorWaypoint();
-
-		do {
-			Waypoint nextOriginalWaypoint = currentStandstill.getNextWaypoint();
-			// if (currentStandstill.getSite().getId().equals(siteA.getId())) {
-			Waypoint addedWaypoint = createWaypoint(transfer, siteA, currentStandstill);
-			Log.info(transfer.getRouteShort() + " Dist: " + transfer.getTotalDistance());
-			if (transfer.getTotalDistance() < craft.getMaxRange()) {
-				// siteResultList.add(site);
-				if (transfer.getTotalDistance() < minDistance) {
-					minDistance = transfer.getTotalDistance();
-					resultTransfer = new Transfer(transfer.getSites());
-					resultTransfer.setCraftType(craft);
-				}
-
-				// unlinkWaypoint(addedWaypoint);
-			} else {
-				log.debug("Site " + siteA.getSiteName() + " kann nicht erreicht werden. Distanz zu lang: "
-						+ transfer.getTotalDistance());
-			}
-			addedWaypoint.unlink();
-			// }
-			currentStandstill = nextOriginalWaypoint;
-		} while (currentStandstill != null);
-		// }
-
-		return resultTransfer;
-	}
 	private String getEmailByUserLogin(String createdBy) {
 		String one = dataManager.loadValue("select email from sec$User u where u.login = :login", String.class).one();
 		return one;
@@ -335,14 +290,16 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		}
 	}
 
-
-
-
 	private String getNotificationMessage(FavoriteTrip favoriteTrip, Transfer transfer) {
 		String message = "Sehr geehrte Dame und Herren \n\n";
 		message += "auf Ihrer gewünschten Strecke wurden freie Plätze gemeldet: \n\n";
-		message += transfer.getNotificationMessage() + "\n\n";
+		message += transfer.toString() + "\n\n";
 
 		return message;
+	}
+
+	@Override
+	public void bookSeats(TravelOption entity) {
+		entity.getTransfer().bookTravelOption(entity);
 	}
 }

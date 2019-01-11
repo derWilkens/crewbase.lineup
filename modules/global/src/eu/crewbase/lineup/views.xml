@@ -10,13 +10,15 @@
         </property>
         <property name="craftType"
                   view="_minimal"/>
-        <property name="anchorWaypoint"
+        <property name="tickets"
                   view="_minimal"/>
+        <property name="waypoints"
+                  view="_local"/>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-browser-view">
-        <property name="previousStandstill"
+        <property name="site"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.coredata.Site"
@@ -327,7 +329,8 @@
     <view class="eu.crewbase.lineup.entity.wayfare.CrewChange"
           extends="_local"
           name="crewChange-transfer-waypoint-edit-view">
-        <property name="transfers"
+        <property fetch="JOIN"
+                  name="transfers"
                   view="_minimal">
             <property name="operatedBy"
                       view="_minimal"/>
@@ -355,7 +358,7 @@
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"
           name="waypoint-view-edit">
-        <property name="previousStandstill"
+        <property name="site"
                   view="_minimal"/>
     </view>
     <view class="eu.crewbase.lineup.entity.tmp.FirstClass"
@@ -418,6 +421,32 @@
     <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
           name="mailNotification-manage">
         <property name="transfer"
+                  view="_minimal"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.CrewChange"
+          name="crewChange-full">
+        <property name="startDate"/>
+        <property name="transfers"
+                  view="_minimal">
+            <property name="transferOrderNo"/>
+            <property name="tickets"
+                      view="_minimal"/>
+            <property name="operatedBy"
+                      view="_minimal"/>
+            <property name="modeOfTransfer"
+                      view="_minimal"/>
+            <property name="craftType"
+                      view="_minimal"/>
+        </property>
+    </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
+          extends="_local"
+          name="transfer-temp">
+        <property name="modeOfTransfer"
+                  view="_minimal"/>
+        <property name="craftType"
+                  view="_minimal"/>
+        <property name="waypoints"
                   view="_minimal"/>
     </view>
 </views>
