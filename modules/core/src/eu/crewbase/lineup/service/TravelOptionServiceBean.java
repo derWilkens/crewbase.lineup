@@ -47,7 +47,15 @@ public class TravelOptionServiceBean implements TravelOptionService {
 
 	@Override
 	public void createTravelOption(Transfer transfer) {
-
+		//@fixme: aus der Service Methodensignatur muss klar sein, ob die Methode im Context einer Transaktion ausgeführt wird
+		//oder musss überall eine neue Transaktion geholt werden? 
+		//Grundsätzlich wird der dataManager verwendet. D.h. es kann nicht davon ausgegangen werden, dass Attribute
+		//außerhalb der View verfügbar sind.
+		//evtl. wäre es eine Option nur die UUID des entsprechenden Objektes zu übergeben, dann wird das Objekt innerhalb der
+		//Methode auf jeden Fall neu geladen.
+		//gibt es evtl. Vorbilder im Cookbook?
+		
+		transfer = dataManager.load(Transfer.class).id(transfer.getId()).view("transfer-full").one();
 		Transfer transferWithFavTrips = getTransferWithIntegratedFavoriteTrips(transfer);
 		if (transferWithFavTrips != null) {
 
@@ -251,7 +259,9 @@ public class TravelOptionServiceBean implements TravelOptionService {
 
 	public Transfer getTransferWithIntegratedFavoriteTrips(Transfer transfer) {
 
-		// Im Transfer sowie schon enthaltene Sites
+		transfer = dataManager.load(Transfer.class).id(transfer.getId()).view("transfer-full").one();
+		
+		// die im Transfer sowie schon enthaltene Sites
 		List<Site> allPossibleSitesList = transfer.getSites();
 
 		// welche können noch zusätzlich erreicht werden

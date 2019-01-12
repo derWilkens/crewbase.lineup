@@ -100,13 +100,13 @@
                          caption="Outbound"
                          datasource="crewChangeCreateDTODs"
                          icon="font-icon:ARROW_UP"
-                         property="bookedSeatsOutbound"/>
+                         property="freeSeatsOutbound"/>
             <lookupField id="freeSeatsInbound"
                          caption="Inbound"
                          datasource="crewChangeCreateDTODs"
                          datatype="int"
                          icon="font-icon:ARROW_DOWN"
-                         property="bookedSeatsInbound"/>
+                         property="freeSeatsInbound"/>
         </groupBox>
         <frame id="windowActions"
                screen="editWindowActions"/>

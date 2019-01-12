@@ -441,12 +441,20 @@
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
-          name="transfer-temp">
+          name="transfer-full">
         <property name="modeOfTransfer"
                   view="_minimal"/>
         <property name="craftType"
                   view="_minimal"/>
         <property name="waypoints"
+                  view="_minimal">
+            <property name="site"
+                      view="_minimal">
+                <property name="itemDesignation"/>
+                <property name="shortItemDesignation"/>
+            </property>
+        </property>
+        <property name="tickets"
                   view="_minimal"/>
     </view>
 </views>

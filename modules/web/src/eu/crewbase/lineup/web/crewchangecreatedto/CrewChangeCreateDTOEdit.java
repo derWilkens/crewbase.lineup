@@ -23,9 +23,9 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 	@Inject
 	protected LookupField craftType;
 	@Inject
-	protected LookupField bookedSeatsOutbound;
+	protected LookupField freeSeatsOutbound;
 	@Inject
-	protected LookupField bookedSeatsInbound;
+	protected LookupField freeSeatsInbound;
 	@Inject
 	protected OptionsGroup modeOfTransfer;
 	@Inject
@@ -49,8 +49,8 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 					for (int i = 0; i <= craftType.getSeats(); i++) {
 						list.add(i);
 					}
-					bookedSeatsOutbound.setOptionsList(list);
-					bookedSeatsInbound.setOptionsList(list);
+					freeSeatsOutbound.setOptionsList(list);
+					freeSeatsInbound.setOptionsList(list);
 				}
 			}
 		});

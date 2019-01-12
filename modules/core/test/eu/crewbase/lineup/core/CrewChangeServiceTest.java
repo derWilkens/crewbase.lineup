@@ -56,18 +56,18 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		try (Transaction tx = persistence.createTransaction()) {
 
 			List<CrewChange> ccList = persistence.getEntityManager()
-					.createQuery("select cc from lineup$CrewChange cc", CrewChange.class).getResultList();
+					.createQuery("select cc from lineup$CrewChange cc where cc.created_by = 'test admin'", CrewChange.class).getResultList();
 			for (CrewChange crewChange : ccList) {
 				persistence.getEntityManager().remove(crewChange);
 			}
 
-			List<Site> siteList = persistence.getEntityManager().createQuery("select s from lineup$Site s", Site.class)
+			List<Site> siteList = persistence.getEntityManager().createQuery("select s from lineup$Site s where s.created_by = 'test admin'", Site.class)
 					.getResultList();
 			for (Site site : siteList) {
 				persistence.getEntityManager().remove(site);
 			}
 			List<FavoriteTrip> favList = persistence.getEntityManager()
-					.createQuery("select s from lineup$FavoriteTrip s", FavoriteTrip.class).getResultList();
+					.createQuery("select s from lineup$FavoriteTrip s where s.created_by = 'test admin'" , FavoriteTrip.class).getResultList();
 			for (FavoriteTrip fav : favList) {
 				persistence.getEntityManager().remove(fav);
 			}
@@ -110,10 +110,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	@After
 	public void tearDown() throws Exception {
 		if (ccId != null) {
-			//dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
-			deleteRecord("LINEUP_CREW_CHANGE", ccId);
+			dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
+//			try (Transaction tx = persistence.getTransaction()) {
+//				deleteRecord("LINEUP_CREW_CHANGE", ccId);
+//				tx.commit();
+//			}
 		}
-		
+
 		// dataManager.remove(bwal);
 		// dataManager.remove(dwal);
 		// dataManager.remove(emdn);
@@ -135,7 +138,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		Transfer transfer;
 
 		// EMDN - BWAL + DWAL
-		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+		transfer = dataManager.load(Transfer.class).view("transfer-full")
 				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
 		Waypoint wpDwal = metadata.create(Waypoint.class);
 		wpDwal.setSite(dwal);
@@ -177,7 +180,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		Waypoint wpDwal = metadata.create(Waypoint.class);
 
 		// EMDN - BWAL + DWAL
-		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+		transfer = dataManager.load(Transfer.class).view("transfer-full")
 				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
 		wpDwal.setSite(dwal);
 		wpDwal.setTransfer(transfer);
@@ -225,7 +228,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		Waypoint wpDwal = metadata.create(Waypoint.class);
 		// DWAL dem Transfer hinzufügen
 		// EMDN - BWAL + DWAL
-		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+		transfer = dataManager.load(Transfer.class).view("transfer-full")
 				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
 		wpDwal.setSite(dwal);
 		wpDwal.setTransfer(transfer);
@@ -330,7 +333,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		// erstmal einen WP hinzufügen
 		// EMDN - BWAL + DWAL
-		transfer = dataManager.load(Transfer.class).view("transfer-temp")
+		transfer = dataManager.load(Transfer.class).view("transfer-full")
 				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
 		Waypoint wpDwal = metadata.create(Waypoint.class);
 		wpDwal.setSite(dwal);

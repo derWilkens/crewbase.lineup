@@ -37,7 +37,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 	@Inject
 	private Metadata metadata;
 	@Inject
-	private TravelOptionService tos;
+	private TravelOptionService travelOptionService;
 
 	@Override
 	public UUID createCrewChange(CrewChangeCreateDTO dto) {
@@ -85,7 +85,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		dataManager.commit(cc);
 		Transfer one = dataManager.load(Transfer.class).id(transfer.getId()).one();
 
-		tos.createTravelOption(one);
+		travelOptionService.createTravelOption(one);
 		return cc.getId();
 
 	}

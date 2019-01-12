@@ -69,15 +69,15 @@ public class Transfer extends StandardEntity {
 	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "lookup" })
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
+    @OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
 
-	@Lookup(type = LookupType.DROPDOWN, actions = { "clear" })
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
+    @OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODE_OF_TRANSFER_ID")
