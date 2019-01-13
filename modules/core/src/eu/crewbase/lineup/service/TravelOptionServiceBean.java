@@ -36,31 +36,32 @@ public class TravelOptionServiceBean implements TravelOptionService {
 	private static final Logger log = LoggerFactory.getLogger(TravelOptionServiceBean.class);
 
 	@Inject
-	private Persistence persistence;
+	public Persistence persistence;
 	@Inject
-	private DataManager dataManager;
+	public DataManager dataManager;
 	@Inject
-	private Metadata metadata;
+	public Metadata metadata;
 
 	@Inject
 	public EmailService emailService;
+	@Inject
+	public TransferService transferService;
 
 	@Override
-	public void createTravelOption(Transfer transfer) {
-		//@fixme: aus der Service Methodensignatur muss klar sein, ob die Methode im Context einer Transaktion ausgeführt wird
-		//oder musss überall eine neue Transaktion geholt werden? 
-		//Grundsätzlich wird der dataManager verwendet. D.h. es kann nicht davon ausgegangen werden, dass Attribute
-		//außerhalb der View verfügbar sind.
-		//evtl. wäre es eine Option nur die UUID des entsprechenden Objektes zu übergeben, dann wird das Objekt innerhalb der
-		//Methode auf jeden Fall neu geladen.
-		//gibt es evtl. Vorbilder im Cookbook?
-		
-		transfer = dataManager.load(Transfer.class).id(transfer.getId()).view("transfer-full").one();
+	public void createTravelOptions(UUID transferId) {
+
+		Transfer transfer = dataManager.load(Transfer.class).id(transferId).view("transfer-full").one();
+		int capa = transfer.getCraftType().getSeats();
 		Transfer transferWithFavTrips = getTransferWithIntegratedFavoriteTrips(transfer);
+
 		if (transferWithFavTrips != null) {
 
 			for (FavoriteTrip favoriteTrip : getFavoriteTripsBySiteList(transferWithFavTrips.getSites())) {
-				if (getFreeCapacityForTrip(favoriteTrip, transferWithFavTrips, transfer).getBookedSeats() > 0) {
+
+				TripDTO tripDTO = getFreeCapacityForTrip(transferWithFavTrips, favoriteTrip.getStartSite(),
+						favoriteTrip.getDestination());
+
+				if (tripDTO.getBookedSeats() > 0) {
 					TravelOption travelOption = metadata.create(TravelOption.class);
 					User user = getUserByUsername(favoriteTrip.getCreatedBy());
 					if (user == null) {
@@ -71,9 +72,36 @@ public class TravelOptionServiceBean implements TravelOptionService {
 					travelOption.setFavoriteTrip(favoriteTrip);
 					travelOption.setTransfer(transfer);
 					travelOption.setStatus(TravelOptionStatus.Init);
+					travelOption.setBookedSeats(tripDTO.getBookedSeats());
+					travelOption.setAvailableSeats(capa - tripDTO.getBookedSeats());
 					dataManager.commit(travelOption);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Zu einem Transfer werden für alle TravelOptions die noch verfügbaren
+	 * Seats neu berechnet
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public void updateTravelOptions(UUID transferId) {
+		try (Transaction tx = persistence.createTransaction()) {
+			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
+			int capa = transfer.getCraftType().getSeats();
+
+			List<TravelOption> travelOptions = persistence.getEntityManager()
+					.createQuery("select t from lineup$TravelOption t where t.transfer.id = :transferId")
+					.setParameter("transferId", transferId).getResultList();
+
+			for (TravelOption travelOption : travelOptions) {
+				TripDTO tripDTO = getFreeCapacityForTrip(transfer, travelOption.getFavoriteTrip().getStartSite(),
+						travelOption.getFavoriteTrip().getDestination());
+				travelOption.setAvailableSeats(capa - tripDTO.getBookedSeats());
+				persistence.getEntityManager().persist(travelOption);
+			}
+			tx.commit();
 		}
 	}
 
@@ -96,6 +124,36 @@ public class TravelOptionServiceBean implements TravelOptionService {
 				tx.commit();
 			}
 		}
+	}
+
+	@Override
+	public void bookSeats(UUID travelOptionId, int bookedSeats) {
+		TravelOption travelOption = dataManager.load(TravelOption.class).id(travelOptionId).one();
+		travelOption.setStatus(TravelOptionStatus.Requested);
+		travelOption.setBookedSeats(bookedSeats);
+		dataManager.commit(travelOption);
+	}
+
+	/**
+	 * Die Buchung der Sitzplätze wird in der Traveloption bestätigt die
+	 * available Seats der weiteren TravelOptions werden aktualisiert
+	 */
+	@Override
+	public void approveBooking(UUID travelOptionId) {
+		TravelOption travelOption;
+		try (Transaction tx = persistence.createTransaction()) {
+			travelOption = persistence.getEntityManager().find(TravelOption.class, travelOptionId);
+			travelOption.setStatus(TravelOptionStatus.Approved);
+			persistence.getEntityManager().persist(travelOption);
+			tx.commit();
+		}
+		// Tickets für transfer erstellen
+		transferService.createTickets(travelOption.getTransfer().getId(), travelOption.getFavoriteTrip().getStartSite(),
+				travelOption.getFavoriteTrip().getDestination(), travelOption.getBookedSeats());
+
+		// TravelOptionen aktualisieren
+		updateTravelOptions(travelOption.getTransfer().getId());
+
 	}
 
 	@Override
@@ -133,23 +191,22 @@ public class TravelOptionServiceBean implements TravelOptionService {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public TripDTO getFreeCapacityForTrip(FavoriteTrip desiredTrip, Transfer transferWithFavTrips, Transfer transfer) {
+	public TripDTO getFreeCapacityForTrip(Transfer transfer, Site siteA, Site siteB) {
 
 		List<TripDTO> groupedTickets = getGroupedTickets(transfer);
-		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets, transferWithFavTrips);
+		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets, transfer);
 
 		// dann über Fav-Strecke und Result iterieren
 		int capa = transfer.getCraftType().getSeats();
-		capa = 12;
 		int minAvailable = capa;
 		// den kompletten Transfer durchlaufen und die minimale Kapazität auf
 		// der desiredRoute ermitteln
-		for (Site favSite : transferWithFavTrips.getSites()) {
+		for (Site favSite : transfer.getSites()) {
 			boolean onboard = false;
-			if (favSite.getId().equals(desiredTrip.getStartSite().getId())) {
+			if (favSite.getId().equals(siteA.getId())) {
 				onboard = true;
 			}
-			if (favSite.getId().equals(desiredTrip.getDestination().getId())) {
+			if (favSite.getId().equals(siteB.getId())) {
 				onboard = false;
 			}
 			if (onboard && capaMap.get(favSite.getId()) != null && capaMap.get(favSite.getId()) < minAvailable) {
@@ -159,8 +216,8 @@ public class TravelOptionServiceBean implements TravelOptionService {
 
 		TripDTO tmp = new TripDTO();
 		tmp.setBookedSeats(minAvailable);
-		tmp.setSiteA(desiredTrip.getStartSite());
-		tmp.setSiteB(desiredTrip.getDestination());
+		tmp.setSiteA(siteA);
+		tmp.setSiteB(siteB);
 		tmp.setTransfer(transfer);
 		log.info(tmp.toString());
 		return tmp;
@@ -173,15 +230,14 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		// über die tickets iterieren
 
 		for (TripDTO ticketGroup : groupedTickets) {
-			log.debug("Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - "
+			log.debug("Booked Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - "
 					+ ticketGroup.getSiteB().getItemDesignation() + ": " + ticketGroup.getBookedSeats());
 
 			// capaMap enthält booked seats beim Verlassen der Site:
 			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
 			// zu, wenn Site = destination -> PAX steigen aus
 			boolean onboard = false;
-			
-			
+
 			// den letzten Waypoint nicht mehr berücksichtigen
 			for (int i = 0; i < transferWithFavTrips.getWaypoints().size() - 1; i++) {
 				Waypoint waypoint = transferWithFavTrips.getWaypoints().get(i);
@@ -260,7 +316,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 	public Transfer getTransferWithIntegratedFavoriteTrips(Transfer transfer) {
 
 		transfer = dataManager.load(Transfer.class).id(transfer.getId()).view("transfer-full").one();
-		
+
 		// die im Transfer sowie schon enthaltene Sites
 		List<Site> allPossibleSitesList = transfer.getSites();
 
@@ -308,8 +364,4 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		return message;
 	}
 
-	@Override
-	public void bookSeats(TravelOption entity) {
-		entity.getTransfer().bookTravelOption(entity);
-	}
 }

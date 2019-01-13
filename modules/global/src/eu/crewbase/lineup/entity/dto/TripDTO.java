@@ -26,16 +26,21 @@ public class TripDTO extends BaseUuidEntity {
 	@MetaProperty
 	protected Site siteB;
 
-	@MetaProperty
-	protected Integer bookedSeats;
+	
+	
+	
 
-	public void setBookedSeats(Integer bookedSeats) {
-		this.bookedSeats = bookedSeats;
-	}
+    @MetaProperty
+    protected Integer bookedSeats;
 
-	public Integer getBookedSeats() {
-		return bookedSeats;
-	}
+    public void setBookedSeats(Integer bookedSeats) {
+        this.bookedSeats = bookedSeats;
+    }
+
+    public Integer getBookedSeats() {
+        return bookedSeats;
+    }
+
 
 	public void setCrewChange(CrewChange crewChange) {
 		this.crewChange = crewChange;

@@ -42,11 +42,12 @@ public class LineupTestContainer extends TestContainer {
         appPropertiesFiles = Arrays.asList(
                 // List the files defined in your web.xml
                 // in appPropertiesConfig context parameter of the core module
-                "eu/crewbase/lineup/app.properties",
+                "eu/crewbase/lineup/app.properties"
                 // Add this file which is located in CUBA and defines some properties
                 // specifically for test environment. You can replace it with your own
                 // or add another one in the end.
-                "test-app.properties");
+                ,"test-app.properties"
+                );
         initDbProperties();
     }
 

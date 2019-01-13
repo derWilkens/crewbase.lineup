@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.traveloption.TravelOptionBrowse"
+        focusComponent="travelOptionsTable"
+        lookupComponent="travelOptionsTable"
+        messagesPack="eu.crewbase.lineup.web.traveloption">
+    <dsContext>
+        <groupDatasource id="travelOptionsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+                         view="mailNotification-manage">
+            <query>
+                <![CDATA[select e from lineup$TravelOption e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="travelOptionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="travelOptionsTable"
+                datasource="travelOptionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="travelOptionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="transfer"/>
+                <column id="bookedSeats"/>
+                <column id="favoriteTrip"/>
+                <column id="status"/>
+                <column id="availableSeats"/>
+            </columns>
+            <rows datasource="travelOptionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="travelOptionsTable.create"/>
+                <button id="editBtn"
+                        action="travelOptionsTable.edit"/>
+                <button id="removeBtn"
+                        action="travelOptionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

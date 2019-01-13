@@ -422,6 +422,11 @@
           name="mailNotification-manage">
         <property name="transfer"
                   view="_minimal"/>
+        <property name="bookedSeats"/>
+        <property name="favoriteTrip"
+                  view="_minimal"/>
+        <property name="status"/>
+        <property name="availableSeats"/>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.CrewChange"
           name="crewChange-full">
@@ -445,7 +450,9 @@
         <property name="modeOfTransfer"
                   view="_minimal"/>
         <property name="craftType"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="maxRange"/>
+        </property>
         <property name="waypoints"
                   view="_minimal">
             <property name="site"
@@ -457,4 +464,7 @@
         <property name="tickets"
                   view="_minimal"/>
     </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+          extends="_local"
+          name="travelOption-manage"/>
 </views>

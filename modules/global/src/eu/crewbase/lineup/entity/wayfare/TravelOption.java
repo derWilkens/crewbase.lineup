@@ -1,21 +1,17 @@
 package eu.crewbase.lineup.entity.wayfare;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import com.haulmont.cuba.security.entity.User;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
-import java.util.Date;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import javax.persistence.Table;
 
-@Listeners("lineup_TravelOptionListener")
+import com.haulmont.chile.core.annotations.NamePattern;
+
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+
+//@Listeners("lineup_TravelOptionListener")
 @NamePattern(" %s|transfer")
 @Table(name = "LINEUP_TRAVEL_OPTION")
 @Entity(name = "lineup$TravelOption")
@@ -26,6 +22,9 @@ public class TravelOption extends StandardClientEntity {
     @JoinColumn(name = "TRANSFER_ID")
     protected Transfer transfer;
 
+    @Column(name = "AVAILABLE_SEATS")
+    protected Integer availableSeats;
+
     @Column(name = "BOOKED_SEATS")
     protected Integer bookedSeats;
 
@@ -35,6 +34,16 @@ public class TravelOption extends StandardClientEntity {
 
     @Column(name = "STATUS")
     protected Integer status;
+
+
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public Integer getAvailableSeats() {
+        return availableSeats;
+    }
+
 
     public void setBookedSeats(Integer bookedSeats) {
         this.bookedSeats = bookedSeats;

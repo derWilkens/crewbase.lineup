@@ -31,13 +31,15 @@ public class CrewChangeServiceBean implements CrewChangeService {
 	private static final Logger log = LoggerFactory.getLogger(CrewChangeServiceBean.class);
 
 	@Inject
-	private Persistence persistence;
+	public Persistence persistence;
 	@Inject
-	private DataManager dataManager;
+	public DataManager dataManager;
 	@Inject
-	private Metadata metadata;
+	public Metadata metadata;
 	@Inject
-	private TravelOptionService travelOptionService;
+	public TravelOptionService travelOptionService;
+	@Inject
+	public TransferService transferService;
 
 	@Override
 	public UUID createCrewChange(CrewChangeCreateDTO dto) {
@@ -55,7 +57,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		transfer.setCraftType(dto.getCraftType());
 
 		/**
-		 * 2 Standard-Waypoints anlegen A - B - A 
+		 * 2 Standard-Waypoints anlegen A - B - A
 		 */
 		Waypoint awp1 = dataManager.create(Waypoint.class);
 		awp1.setSite(dto.getDepartureSite());
@@ -67,30 +69,31 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		wp1.setSite(dto.getDestinationSite());
 		wp1.setTransfer(transfer);
 		transfer.getWaypoints().add(wp1);
-		
+
 		Waypoint wp2 = dataManager.create(Waypoint.class);
 		wp2.setSite(dto.getDepartureSite());
 		wp2.setTakeOff(dto.getStartDateTime());
 		wp2.setTransfer(transfer);
 		transfer.getWaypoints().add(wp2);
-		
 
 		cc.getTransfers().add(transfer);
+		dataManager.commit(cc);
+		
 		if (dto.getFreeSeatsOutbound() != null) {
-			createTickets(dto.getFreeSeatsOutbound(), dto.getDepartureSite(), dto.getDepartureSite(), transfer);
+			transferService.createTickets(transfer.getId(), dto.getDepartureSite(), dto.getDepartureSite(),
+					transfer.getCraftType().getSeats() - dto.getFreeSeatsOutbound());
 		}
 		if (dto.getFreeSeatsInbound() != null) {
-			createTickets(dto.getFreeSeatsInbound(), dto.getDestinationSite(), dto.getDepartureSite(), transfer);
+			transferService.createTickets(transfer.getId(), dto.getDestinationSite(), dto.getDepartureSite(),
+					transfer.getCraftType().getSeats() - dto.getFreeSeatsInbound());
 		}
-		dataManager.commit(cc);
-		Transfer one = dataManager.load(Transfer.class).id(transfer.getId()).one();
-
-		travelOptionService.createTravelOption(one);
+		travelOptionService.createTravelOptions(transfer.getId());
+		
 		return cc.getId();
 
 	}
 
-	private void createTickets(int freeSeats, Site siteA, Site siteB, Transfer transfer) {
+	private void createTicketsX(int freeSeats, Site siteA, Site siteB, Transfer transfer) {
 		int amount = transfer.getCraftType().getSeats() - freeSeats;
 		for (int i = 0; i < amount; i++) {
 			Ticket ticket = metadata.create(Ticket.class);
@@ -100,7 +103,6 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			transfer.getTickets().add(ticket);
 		}
 	}
-
 
 	/**
 	 * Liefert zukünftige mögliche Mitfluggelegenheiten auf Basis meiner
@@ -147,13 +149,15 @@ public class CrewChangeServiceBean implements CrewChangeService {
 				for (Transfer transfer : cc.getTransfers()) {
 					for (FavoriteTrip favoriteTrip : favList) {
 						// nur den Start einbauen
-						Transfer transferWithFirstSite = null;//siteInRouteEinbauen(transfer, favoriteTrip.getStartSite());
+						Transfer transferWithFirstSite = null;// siteInRouteEinbauen(transfer,
+																// favoriteTrip.getStartSite());
 						if (transferWithFirstSite != null) {
 							// in den neuen Transfer die zweite Site einbauen
-							Transfer transferWithFavTrips = null;//siteInRouteEinbauen(transferWithFirstSite,favoriteTrip.getDestination());
+							Transfer transferWithFavTrips = null;// siteInRouteEinbauen(transferWithFirstSite,favoriteTrip.getDestination());
 
 							if (transferWithFavTrips != null) {
-								//resultList.add(getFreeCapacityForTrip(favoriteTrip, transferWithFavTrips, transfer));
+								// resultList.add(getFreeCapacityForTrip(favoriteTrip,
+								// transferWithFavTrips, transfer));
 							}
 						}
 					}
@@ -164,18 +168,5 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		return resultList;
 
 	}
-
-
-
-
-
-
-
-	
-
-
-
-
-
 
 }
