@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import com.haulmont.chile.core.annotations.NamePattern;
 
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import java.util.List;
+import javax.persistence.OneToMany;
 
 //@Listeners("lineup_TravelOptionListener")
 @NamePattern(" %s|transfer")
@@ -32,8 +34,20 @@ public class TravelOption extends StandardClientEntity {
     @JoinColumn(name = "FAVORITE_TRIP_ID")
     protected FavoriteTrip favoriteTrip;
 
+    @OneToMany(mappedBy = "travelOption")
+    protected List<Ticket> bookedTickets;
+
     @Column(name = "STATUS")
     protected Integer status;
+
+
+    public void setBookedTickets(List<Ticket> bookedTickets) {
+        this.bookedTickets = bookedTickets;
+    }
+
+    public List<Ticket> getBookedTickets() {
+        return bookedTickets;
+    }
 
 
     public void setAvailableSeats(Integer availableSeats) {

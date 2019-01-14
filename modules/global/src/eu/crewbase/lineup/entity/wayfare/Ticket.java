@@ -47,6 +47,19 @@ public class Ticket extends StandardEntity {
     @JoinColumn(name = "PASSENGER_ID")
     protected AppUser passenger;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRAVEL_OPTION_ID")
+    protected TravelOption travelOption;
+
+    public void setTravelOption(TravelOption travelOption) {
+        this.travelOption = travelOption;
+    }
+
+    public TravelOption getTravelOption() {
+        return travelOption;
+    }
+
+
     public void setTransfer(Transfer transfer) {
         this.transfer = transfer;
     }

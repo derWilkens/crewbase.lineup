@@ -16,6 +16,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.wayfare.Ticket;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
+import eu.crewbase.lineup.entity.wayfare.TravelOption;
 
 @Service(TransferService.NAME)
 public class TransferServiceBean implements TransferService {
@@ -33,19 +34,30 @@ public class TransferServiceBean implements TransferService {
 
 	@Override
 	public void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats) {
+		createTickets(transferId, siteA, siteB, bookedSeats, null);
+	}
+
+	@Override
+	public void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats, UUID travelOptionId) {
 		try (Transaction tx = persistence.createTransaction()) {
 			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
+			TravelOption travelOption = null;
+			if (travelOptionId != null) {
+				travelOption = persistence.getEntityManager().find(TravelOption.class, travelOptionId);
+			}
 
 			for (int i = 0; i < bookedSeats; i++) {
 				Ticket ticket = metadata.create(Ticket.class);
 				ticket.setTransfer(transfer);
 				ticket.setStartSite(siteA);
 				ticket.setDestinationSite(siteB);
+				ticket.setTravelOption(travelOption);
 				transfer.getTickets().add(ticket);
 			}
 			persistence.getEntityManager().persist(transfer);
 			tx.commit();
 		}
+
 	}
 
 }

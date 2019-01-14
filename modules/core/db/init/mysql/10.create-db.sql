@@ -719,6 +719,7 @@ create table LINEUP_TICKET (
     START_SITE_ID varchar(32) not null,
     DESTINATION_SITE_ID varchar(32) not null,
     PASSENGER_ID varchar(32),
+    TRAVEL_OPTION_ID varchar(32),
     --
     primary key (ID)
 )^

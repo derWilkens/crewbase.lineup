@@ -149,7 +149,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		}
 		// Tickets für transfer erstellen
 		transferService.createTickets(travelOption.getTransfer().getId(), travelOption.getFavoriteTrip().getStartSite(),
-				travelOption.getFavoriteTrip().getDestination(), travelOption.getBookedSeats());
+				travelOption.getFavoriteTrip().getDestination(), travelOption.getBookedSeats(), travelOption.getId());
 
 		// TravelOptionen aktualisieren
 		updateTravelOptions(travelOption.getTransfer().getId());

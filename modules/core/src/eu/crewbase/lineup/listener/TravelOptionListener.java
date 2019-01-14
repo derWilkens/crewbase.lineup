@@ -1,9 +1,5 @@
 package eu.crewbase.lineup.listener;
 
-import javax.inject.Inject;
-
-import org.springframework.stereotype.Component;
-
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 

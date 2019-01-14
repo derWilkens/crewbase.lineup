@@ -499,6 +499,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		try (Transaction tx = persistence.createTransaction()) {
 			TravelOption to = entityManager().find(TravelOption.class, travelOption.getId());
 			assertEquals(2, to.getBookedSeats().intValue());
+			assertEquals(2, to.getBookedTickets().size());
 			assertEquals(TravelOptionStatus.Approved, to.getStatus());
 			transfer = persistence.getEntityManager().find(Transfer.class, transfer.getId());
 			assertEquals(14, transfer.getTickets().size());

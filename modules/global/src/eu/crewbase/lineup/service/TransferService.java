@@ -8,4 +8,5 @@ public interface TransferService {
     String NAME = "lineup_TransferService";
     
     public void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats);
+    public void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats, UUID travelOptionId);
 }
