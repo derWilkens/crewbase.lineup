@@ -162,7 +162,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	@Test
 	public void testCreateCrewChange() {
 
-		// Hin 2 frei, Rück 3 frei von 10 -> 8+7 --> 15 Tickets
+		// Hin 2 frei, Rück 3 frei von 12 -> 8+7 --> 19 Tickets
 		ccId = createCC(2, 3);
 		validateCrewChange(ccId);
 	}
@@ -481,7 +481,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDE - BWBE - EMDE", transfer.getRouteShort());
-			assertEquals(8, transfer.getTickets().size());
+			assertEquals(12, transfer.getTickets().size());
 		}
 
 		TravelOption travelOption = dataManager.load(TravelOption.class)
@@ -490,9 +490,9 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		travelOptionService.bookSeats(travelOption.getId(), 2);
 		try (Transaction tx = persistence.createTransaction()) {
-			TravelOption to = entityManager().find(TravelOption.class, travelOption.getId());
-			assertEquals(2, to.getBookedSeats().intValue());
-			assertEquals(TravelOptionStatus.Requested, to.getStatus());
+			travelOption = entityManager().find(TravelOption.class, travelOption.getId());
+			assertEquals(2, travelOption.getBookedSeats().intValue());
+			assertEquals(TravelOptionStatus.Requested, travelOption.getStatus());
 		}
 
 		travelOptionService.approveBooking(travelOption.getId());
@@ -501,7 +501,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			assertEquals(2, to.getBookedSeats().intValue());
 			assertEquals(TravelOptionStatus.Approved, to.getStatus());
 			transfer = persistence.getEntityManager().find(Transfer.class, transfer.getId());
-			assertEquals(10, transfer.getTickets().size());
+			assertEquals(14, transfer.getTickets().size());
 		}
 
 	}
@@ -524,7 +524,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		dto.setStartDateTime(new Date());
 		dto.setDepartureSite(emde);
 		dto.setDestinationSite(bwbe);
-		dto.setCraftType(getCraftTypeByType("AW123"));
+		dto.setCraftType(getCraftTypeByType("AW139"));
 		dto.setFreeSeatsOutbound(freeSeatsWay1);
 		dto.setFreeSeatsInbound(freeSeatsWay2);
 
@@ -571,7 +571,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 				.createQuery("select t from lineup$Ticket t where t.transfer.id = :transferId", Ticket.class)
 				.setParameter("transferId", transfer.getId());
 		List<Ticket> ticketList = query.getResultList();
-		assertEquals(15, ticketList.size());
+		assertEquals(19, ticketList.size());
 	}
 
 }
