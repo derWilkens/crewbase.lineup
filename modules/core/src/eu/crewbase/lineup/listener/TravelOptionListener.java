@@ -23,8 +23,9 @@ public class TravelOptionListener implements BeforeUpdateEntityListener<TravelOp
     	}
       	
       	else if(!oldItem.getStatus().equals(TravelOptionStatus.Requested) && entity.getStatus().equals(TravelOptionStatus.Requested)){
-    		//notifyScheduler
-      		
+    		//notifyScheduler 
+      		//dem Dispatcher eine Mail senden, um über neuen Request zu informieren
+      		//service.notifyDispatcher(entity);
     	}
     	//Approved
       	else if(!oldItem.getStatus().equals(TravelOptionStatus.Approved) && entity.getStatus().equals(TravelOptionStatus.Approved)){

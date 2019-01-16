@@ -80,13 +80,14 @@ public class CrewChangeServiceBean implements CrewChangeService {
 		dataManager.commit(cc);
 		
 		if (dto.getFreeSeatsOutbound() != null) {
-			transferService.createTickets(transfer.getId(), dto.getDepartureSite(), dto.getDepartureSite(),
+			transferService.createTickets(transfer.getId(), dto.getDepartureSite(), dto.getDestinationSite(),
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsOutbound());
 		}
 		if (dto.getFreeSeatsInbound() != null) {
 			transferService.createTickets(transfer.getId(), dto.getDestinationSite(), dto.getDepartureSite(),
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsInbound());
 		}
+		//@fixme: das darf gerne zum TransferListener
 		travelOptionService.createTravelOptions(transfer.getId());
 		
 		return cc.getId();

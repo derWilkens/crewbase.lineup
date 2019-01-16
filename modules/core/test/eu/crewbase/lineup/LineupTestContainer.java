@@ -1,22 +1,20 @@
 package eu.crewbase.lineup;
 
-import com.haulmont.bali.util.Dom4j;
-import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.testsupport.TestContainer;
-
-import eu.crewbase.lineup.service.CrewChangeService;
-import eu.crewbase.lineup.service.EntityService;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.junit.ClassRule;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.haulmont.bali.util.Dom4j;
+import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.Metadata;
+
+import eu.crewbase.lineup.service.EntityService;
 
 public class LineupTestContainer extends TestContainer {
 
@@ -29,7 +27,7 @@ public class LineupTestContainer extends TestContainer {
 	protected EntityService entityService;
 	
 	public LineupTestContainer() {
-        super();
+				
         appComponents = new ArrayList<>(Arrays.asList(
                 "com.haulmont.cuba"
                 // add CUBA premium add-ons here

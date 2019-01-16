@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,6 +54,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
+		log.warn("GEHT LOS!");
 		AppBeans.get(UserSessionSource.class).getUserSession().setAttribute("client_id", 1);
 
 		try (Transaction tx = persistence.createTransaction()) {
@@ -507,17 +506,65 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	}
 
-	private FavoriteTrip createFavoriteTrip() {
+	@Test
+	public void testApproveBooking() {
+		List<TravelOption> delList = dataManager.load(TravelOption.class).list();
+		for (TravelOption travelOption : delList) {
+			deleteRecord(travelOption);
+			dataManager.commit(travelOption);
+		}
+
+		// FT erstellen EMDE - DWAL
+		FavoriteTrip favTrip1 = createFavoriteTrip(emde, dwal);
+		FavoriteTrip favTrip2 = createFavoriteTrip(emde, bwbe);
+		// CC erstellen EMDE - BWBE
+		ccId = createCC(6, 6);
+
+		List<TravelOption> travelOptionList = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.transfer.crewChange.id = :ccId")
+				.parameter("ccId", ccId).list();
+		assertEquals(2, travelOptionList.size());
+
+		TravelOption travelOption1 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip1.getId()).one();
+		TravelOption travelOption2 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip2.getId()).one();
+
+		assertEquals(6, travelOption1.getAvailableSeats().intValue());
+		assertEquals(6, travelOption2.getAvailableSeats().intValue());
+
+		travelOptionService.bookSeats(travelOption1.getId(), 2);
+		travelOptionService.approveBooking(travelOption1.getId());
+
+		travelOption1 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip1.getId()).one();
+		travelOption2 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip2.getId()).one();
+		assertEquals(4, travelOption1.getAvailableSeats().intValue());
+		assertEquals(4, travelOption2.getAvailableSeats().intValue());
+
+	}
+
+	private FavoriteTrip createFavoriteTrip(Site siteA, Site siteB) {
 		FavoriteTrip trip1 = metadata.create(FavoriteTrip.class);
 		try (Transaction tx = persistence.createTransaction()) {
 			// erzeugt eine travelOption
-			trip1.setStartSite(emde);
-			trip1.setDestination(dwal);
+			trip1.setStartSite(siteA);
+			trip1.setDestination(siteB);
 			trip1.setEmailNotification(true);
 			entityManager().persist(trip1);
 			tx.commit();
 		}
 		return trip1;
+
+	}
+
+	private FavoriteTrip createFavoriteTrip() {
+		return createFavoriteTrip(emde, dwal);
 	}
 
 	private UUID createCC(int freeSeatsWay1, int freeSeatsWay2) {

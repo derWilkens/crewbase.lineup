@@ -3,6 +3,8 @@ package eu.crewbase.lineup.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -56,7 +58,9 @@ public class TravelOptionServiceBean implements TravelOptionService {
 
 		if (transferWithFavTrips != null) {
 
-			for (FavoriteTrip favoriteTrip : getFavoriteTripsBySiteList(transferWithFavTrips.getSites())) {
+			log.debug("TransferWithFavSites: " + transferWithFavTrips.getRouteShort());
+			List<FavoriteTrip> favoriteTripsBySiteList = getFavoriteTripsBySiteList(transferWithFavTrips.getSiteHash());
+			for (FavoriteTrip favoriteTrip : favoriteTripsBySiteList) {
 
 				TripDTO tripDTO = getFreeCapacityForTrip(transferWithFavTrips, favoriteTrip.getStartSite(),
 						favoriteTrip.getDestination());
@@ -174,10 +178,10 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		return siteResultList;
 	}
 
-	public List<FavoriteTrip> getFavoriteTripsBySiteList(List<Site> siteList) {
+	public List<FavoriteTrip> getFavoriteTripsBySiteList(HashMap<UUID, Site> siteHash) {
 		// Schnittmenge Favoriten und Sites des Transfers
 
-		List<UUID> collect = siteList.stream().map(Site::getId).collect(Collectors.toList());
+		Set<UUID> collect = siteHash.keySet(); // stream().map(Site::getId).collect(Collectors.toList());
 
 		return dataManager.load(FavoriteTrip.class)
 				.query("select f from lineup$FavoriteTrip f where f.startSite.id in :siteList and f.destination.id in :siteList")
@@ -197,32 +201,47 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets, transfer);
 
 		// dann über Fav-Strecke und Result iterieren
-		int capa = transfer.getCraftType().getSeats();
-		int minAvailable = capa;
+		// int capa = transfer.getCraftType().getSeats();
+		int bookedSeats = 0;
 		// den kompletten Transfer durchlaufen und die minimale Kapazität auf
 		// der desiredRoute ermitteln
-		for (Site favSite : transfer.getSites()) {
-			boolean onboard = false;
-			if (favSite.getId().equals(siteA.getId())) {
-				onboard = true;
-			}
-			if (favSite.getId().equals(siteB.getId())) {
-				onboard = false;
-			}
-			if (onboard && capaMap.get(favSite.getId()) != null && capaMap.get(favSite.getId()) < minAvailable) {
-				minAvailable = minAvailable - capaMap.get(favSite.getId());
+		// Route: A (5) - B(5+2) - C(-5) - D(+10) - E
+		// Kapa Strecke C - E ? Booked C (2) ...
+
+		for (Waypoint waypoint : transfer.getWaypoints()) {
+			if (!transfer.isLastWaypoint(waypoint)) {
+				Site favSite = waypoint.getSite();
+
+				boolean onboard = false;
+				if (favSite.getId().equals(siteA.getId())) {
+					onboard = true;
+				}
+				if (favSite.getId().equals(siteB.getId())) {
+					onboard = false;
+					log.debug(favSite.getItemDesignation() + ": an Bord: " + bookedSeats);
+					break;
+				}
+				// es sind welche zugestiegen, hochzählen
+				if (onboard && capaMap.get(favSite.getId()) != null && capaMap.get(favSite.getId()) > bookedSeats) {
+					bookedSeats = bookedSeats + capaMap.get(favSite.getId());
+				}
+				
 			}
 		}
 
 		TripDTO tmp = new TripDTO();
-		tmp.setBookedSeats(minAvailable);
+		tmp.setBookedSeats(bookedSeats);
 		tmp.setSiteA(siteA);
 		tmp.setSiteB(siteB);
 		tmp.setTransfer(transfer);
-		log.info(tmp.toString());
+		log.debug("Booked in total: " + tmp.toString() + " | Transfer: " + transfer.getRouteShort());
 		return tmp;
 	}
 
+	/**
+	 * Für jede Site werden die Booked Seats berechnet. Für Ticketgruppe wird
+	 * die Strecke durchlaufen und die besetzten Plätze aufaddiert.
+	 */
 	public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips) {
 
 		HashMap<UUID, Integer> resultCapaMap = new HashMap<UUID, Integer>();
@@ -238,7 +257,8 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			// zu, wenn Site = destination -> PAX steigen aus
 			boolean onboard = false;
 
-			// den letzten Waypoint nicht mehr berücksichtigen
+			// den letzten Waypoint nicht mehr berücksichtigen, weil die Site
+			// normalerweise identisch mit dem Start ist
 			for (int i = 0; i < transferWithFavTrips.getWaypoints().size() - 1; i++) {
 				Waypoint waypoint = transferWithFavTrips.getWaypoints().get(i);
 				Site site = waypoint.getSite();
@@ -246,12 +266,13 @@ public class TravelOptionServiceBean implements TravelOptionService {
 				if (site.getId().equals(ticketGroup.getSiteB().getId()) && onboard) {
 					onboard = false;
 				} else if (site.getId().equals(ticketGroup.getSiteA().getId()) || onboard) {
-					int currentSeats = 0;
+					int currentBookedSeats = 0;
 					if (resultCapaMap.containsKey(site.getId())) {
-						currentSeats = resultCapaMap.get(site.getId());
+						currentBookedSeats = resultCapaMap.get(site.getId());
 					}
-					log.debug("Site: " + site.getItemDesignation() + " Seats to add: " + ticketGroup.getBookedSeats());
-					resultCapaMap.put(site.getId(), currentSeats + ticketGroup.getBookedSeats());
+					log.debug("Site: " + site.getItemDesignation() + " Seats already Booked: " + currentBookedSeats
+							+ ", Seats to add: " + ticketGroup.getBookedSeats());
+					resultCapaMap.put(site.getId(), currentBookedSeats + ticketGroup.getBookedSeats());
 					onboard = true;
 				}
 			}
@@ -277,6 +298,16 @@ public class TravelOptionServiceBean implements TravelOptionService {
 			}
 		}
 		return resultList;
+	}
+
+	private Map<UUID, Site> getReachableSitesHash(Transfer transfer) {
+		Map<UUID, Site> resultHash = new HashMap<UUID, Site>();
+		List<Site> siteResultList = getReachableSites(transfer);
+		for (Site site : siteResultList) {
+			log.debug("ReachableSite: " + site.getItemDesignation());
+			resultHash.put(site.getId(), site);
+		}
+		return resultHash;
 	}
 
 	public List<Site> getReachableSites(Transfer transfer) {
@@ -318,28 +349,31 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		transfer = dataManager.load(Transfer.class).id(transfer.getId()).view("transfer-full").one();
 
 		// die im Transfer sowie schon enthaltene Sites
-		List<Site> allPossibleSitesList = transfer.getSites();
+		// List<Site> allPossibleSitesList = transfer.getSites();
+		HashMap<UUID, Site> siteHash = transfer.getSiteHash();
 
 		// welche können noch zusätzlich erreicht werden
-		allPossibleSitesList.addAll(getReachableSites(transfer));
+		// allPossibleSitesList.addAll(getReachableSites(transfer));
+		siteHash.putAll(getReachableSitesHash(transfer));
 
-		List<FavoriteTrip> favList = getFavoriteTripsBySiteList(allPossibleSitesList);
+		List<FavoriteTrip> favList = getFavoriteTripsBySiteList(siteHash);
 
 		for (FavoriteTrip favoriteTrip : favList) {
+
 			// nur den Start einbauen
-			Log.info("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
+			Log.debug("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
 
 			if (transfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getStartSite()))) {
-				Log.info("Transfer mit StartSite sieht so aus: " + transfer.getRouteShort());
+				Log.debug("Transfer mit StartSite sieht so aus: " + transfer.getRouteShort());
 				// in den neuen Transfer die zweite Site einbauen
 
 				if (transfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getDestination()))) {
-					Log.info("Transfer mit DestSite sieht so aus: " + transfer.getRouteShort());
+					Log.debug("Transfer mit DestSite sieht so aus: " + transfer.getRouteShort());
 				}
-				return transfer;
+				// return transfer;
 			}
 		}
-		return null;
+		return transfer;
 	}
 
 	private String getEmailByUserLogin(String createdBy) {

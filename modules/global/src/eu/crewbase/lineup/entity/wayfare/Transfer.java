@@ -223,6 +223,11 @@ public class Transfer extends StandardEntity {
 	// @fixme optimum wird erreicht, wenn PAX-Reisedauer UND Strecke minimal ist
 	public boolean addWaypointShortestWay(Waypoint waypoint) {
 
+		//schon drin, also true zurück
+		if(this.getSiteHash().containsKey(waypoint.getSite().getId())){
+			return true;
+		}
+		
 		waypoint.setTransfer(this);
 		int len = this.getWaypoints().size();
 		int optimalPosition = 0;
@@ -254,6 +259,10 @@ public class Transfer extends StandardEntity {
 	public void bookTravelOption(TravelOption entity) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public boolean isLastWaypoint(Waypoint waypoint) {
+		return this.getWaypoints().get(this.getWaypoints().size()-1).equals(waypoint);
 	}
 
 }
