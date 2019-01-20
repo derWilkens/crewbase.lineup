@@ -22,10 +22,12 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 /**
  * @author christian
  */
+@Listeners("lineup_CrewChangeListener")
 @Table(name = "LINEUP_CREW_CHANGE")
 @Entity(name = "lineup$CrewChange")
 public class CrewChange extends StandardClientEntity {

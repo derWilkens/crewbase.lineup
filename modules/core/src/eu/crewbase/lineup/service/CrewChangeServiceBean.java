@@ -43,42 +43,48 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	@Override
 	public UUID createCrewChange(CrewChangeCreateDTO dto) {
-
 		CrewChange cc = null;
-		cc = dataManager.create(CrewChange.class);
-		cc.setStartDate(dto.getStartDateTime());
-
-		/**
-		 * Transfer anlegen und verknüpfen
-		 */
 		Transfer transfer = dataManager.create(Transfer.class);
-		transfer.setTransferOrderNo(1);
-		transfer.setCrewChange(cc);
-		transfer.setCraftType(dto.getCraftType());
 
-		/**
-		 * 2 Standard-Waypoints anlegen A - B - A
-		 */
-		Waypoint awp1 = dataManager.create(Waypoint.class);
-		awp1.setSite(dto.getDepartureSite());
-		awp1.setTakeOff(dto.getStartDateTime());
-		awp1.setTransfer(transfer);
-		transfer.getWaypoints().add(awp1);
+		try (Transaction tx = persistence.getTransaction()) {
+			cc = dataManager.create(CrewChange.class);
+			cc.setStartDate(dto.getStartDateTime());
 
-		Waypoint wp1 = dataManager.create(Waypoint.class);
-		wp1.setSite(dto.getDestinationSite());
-		wp1.setTransfer(transfer);
-		transfer.getWaypoints().add(wp1);
+			persistence.getEntityManager().persist(cc);
 
-		Waypoint wp2 = dataManager.create(Waypoint.class);
-		wp2.setSite(dto.getDepartureSite());
-		wp2.setTakeOff(dto.getStartDateTime());
-		wp2.setTransfer(transfer);
-		transfer.getWaypoints().add(wp2);
+			/**
+			 * Transfer anlegen und verknüpfen
+			 */
+			transfer.setTransferOrderNo(1);
+			transfer.setCrewChange(cc);
+			transfer.setCraftType(dto.getCraftType());
 
-		cc.getTransfers().add(transfer);
-		dataManager.commit(cc);
-		
+			/**
+			 * 2 Standard-Waypoints anlegen A - B - A
+			 */
+			Waypoint awp1 = dataManager.create(Waypoint.class);
+			awp1.setSite(dto.getDepartureSite());
+			awp1.setTakeOff(dto.getStartDateTime());
+			awp1.setTransfer(transfer);
+			transfer.getWaypoints().add(awp1);
+
+			Waypoint wp1 = dataManager.create(Waypoint.class);
+			wp1.setSite(dto.getDestinationSite());
+			wp1.setTransfer(transfer);
+			transfer.getWaypoints().add(wp1);
+
+			Waypoint wp2 = dataManager.create(Waypoint.class);
+			wp2.setSite(dto.getDepartureSite());
+			wp2.setTakeOff(dto.getStartDateTime());
+			wp2.setTransfer(transfer);
+			transfer.getWaypoints().add(wp2);
+
+			cc.getTransfers().add(transfer);
+			persistence.getEntityManager().persist(transfer);
+
+			tx.commit();
+		}
+
 		if (dto.getFreeSeatsOutbound() != null) {
 			transferService.createTickets(transfer.getId(), dto.getDepartureSite(), dto.getDestinationSite(),
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsOutbound());
@@ -87,9 +93,10 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			transferService.createTickets(transfer.getId(), dto.getDestinationSite(), dto.getDepartureSite(),
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsInbound());
 		}
-		//@fixme: das darf gerne zum TransferListener
-		travelOptionService.createTravelOptions(transfer.getId());
-		
+		// @fixme: das darf gerne zum TransferListener, auch das funktioniert
+		// irgendwie nicht
+		//travelOptionService.createTravelOptions(transfer.getId());
+
 		return cc.getId();
 
 	}

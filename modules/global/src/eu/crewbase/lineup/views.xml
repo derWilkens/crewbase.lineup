@@ -467,4 +467,15 @@
     <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
           extends="_local"
           name="travelOption-manage"/>
+    <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
+          extends="_local"
+          name="transfer-temp">
+        <property name="waypoints"
+                  view="_minimal">
+            <property name="site"
+                      view="_minimal"/>
+            <property name="stopoverTime"/>
+            <property name="posOrder"/>
+        </property>
+    </view>
 </views>

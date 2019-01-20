@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
+import javax.persistence.OneToMany;
 
 @NamePattern("%s - %s|startSite,destination")
 @Table(name = "LINEUP_FAVORITE_TRIP")
@@ -50,6 +51,18 @@ public class FavoriteTrip extends StandardEntity {
 
     @Column(name = "ROUND_TRIP")
     protected Boolean roundTrip;
+
+    @OneToMany(mappedBy = "favoriteTrip")
+    protected List<TravelOption> travelOption;
+
+    public void setTravelOption(List<TravelOption> travelOption) {
+        this.travelOption = travelOption;
+    }
+
+    public List<TravelOption> getTravelOption() {
+        return travelOption;
+    }
+
 
     public void setSendSummery(Boolean sendSummery) {
         this.sendSummery = sendSummery;
@@ -122,6 +135,8 @@ public class FavoriteTrip extends StandardEntity {
 		}
 		return false;
 	}
-
+	public String toString(){
+		return "FavTrip: " + startSite.getItemDesignation() + " - " + destination.getItemDesignation();
+	}
 
 }

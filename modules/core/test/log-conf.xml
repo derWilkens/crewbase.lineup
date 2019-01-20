@@ -48,7 +48,7 @@
 
     <logger name="eclipselink" level="ERROR"/>
 
-    <logger name="eclipselink.sql" level="INFO"/>
+    <logger name="eclipselink.sql" level="warn"/> <!-- an aus -->  
 
     <logger name="org.springframework" level="WARN"/>
 

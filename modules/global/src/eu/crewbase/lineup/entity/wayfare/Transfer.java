@@ -20,6 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.esotericsoftware.minlog.Log;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.StandardEntity;
@@ -34,6 +37,7 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.dto.TripDTO;
 
 /**
  * @author christian
@@ -43,6 +47,7 @@ import eu.crewbase.lineup.entity.coredata.Site;
 @Entity(name = "lineup$Transfer")
 public class Transfer extends StandardEntity {
 	private static final long serialVersionUID = -5709533341256299692L;
+	private static final Logger log = LoggerFactory.getLogger(Transfer.class);
 	// private static final Logger log =
 	// LoggerFactory.getLogger(Transfer.class);
 
@@ -164,7 +169,6 @@ public class Transfer extends StandardEntity {
 				totalDistance = totalDistance + preWaypoint.getSite().getDistanceTo(currentWaypoint.getSite());
 				preWaypoint = currentWaypoint;
 			}
-
 		}
 		return totalDistance;
 	}
@@ -207,12 +211,6 @@ public class Transfer extends StandardEntity {
 		return resultMap;
 	}
 
-	public void remove(Waypoint waypoint) {
-		waypoint.posOrder = null;
-		this.waypoints.remove(waypoint);
-		renumber();
-	}
-
 	public void renumber() {
 		for (Waypoint waypoint : this.getWaypoints()) {
 			waypoint.setPosOrder(this.getWaypoints().indexOf(waypoint));
@@ -223,11 +221,11 @@ public class Transfer extends StandardEntity {
 	// @fixme optimum wird erreicht, wenn PAX-Reisedauer UND Strecke minimal ist
 	public boolean addWaypointShortestWay(Waypoint waypoint) {
 
-		//schon drin, also true zurück
-		if(this.getSiteHash().containsKey(waypoint.getSite().getId())){
-			return true;
+		// schon drin, also true zurück
+		if (this.getSiteHash().containsKey(waypoint.getSite().getId())) {
+			return false;
 		}
-		
+
 		waypoint.setTransfer(this);
 		int len = this.getWaypoints().size();
 		int optimalPosition = 0;
@@ -238,7 +236,7 @@ public class Transfer extends StandardEntity {
 		for (int i = 1; i < len; i++) {
 
 			this.getWaypoints().add(i, waypoint);
-			Log.info(this.getRouteShort() + " Dist: " + this.getTotalDistance());
+			Log.debug(this.getRouteShort() + " Dist: " + this.getTotalDistance());
 
 			// neue Distanz ist erreichbar und kleiner als optimum? Else
 			// Wegpunkt wieder rausnehmen
@@ -250,19 +248,118 @@ public class Transfer extends StandardEntity {
 		}
 
 		if (optimalPosition > 0) {
-			this.getWaypoints().add(optimalPosition, waypoint);
+			this.addWaypointAt(waypoint, optimalPosition);
 			return true;
 		}
 		return false;
 	}
 
-	public void bookTravelOption(TravelOption entity) {
-		// TODO Auto-generated method stub
-
+	public boolean addWaypointAt(Waypoint waypoint, int position) {
+		waypoint.setTransfer(this);
+		this.getWaypoints().add(position, waypoint);
+		if(this.getTotalDistance() > this.getCraftType().getMaxRange()){
+			this.getWaypoints().remove(position);
+			return false;
+		}
+		this.renumber();
+		return true;
 	}
 
 	public boolean isLastWaypoint(Waypoint waypoint) {
-		return this.getWaypoints().get(this.getWaypoints().size()-1).equals(waypoint);
+		return this.getWaypoints().get(this.getWaypoints().size() - 1).equals(waypoint);
 	}
+	
+	/**
+	 * Es werden die Tickets gruppiert nach Sites übergeben -> Tickets bilden
+	 * Strecken ab mit entsprechenden gebuchten Plätzen
+	 * 
+	 */
+	public int getFreeCapacityForTrip(List<TripDTO> groupedTickets, TravelOption travelOption) {
+		return getFreeCapacityForTrip(groupedTickets, travelOption.getFavoriteTrip().getStartSite(),
+						travelOption.getFavoriteTrip().getDestination());
+	}
+	public Integer getFreeCapacityForTrip(List<TripDTO> groupedTickets, FavoriteTrip favoriteTrip) {
+		return getFreeCapacityForTrip(groupedTickets, favoriteTrip.getStartSite(),
+				favoriteTrip.getDestination());
+	}
+	public int getFreeCapacityForTrip(List<TripDTO> groupedTickets, Site siteA, Site siteB) {
+
+		HashMap<UUID, Integer> capaMap = getBookedSeatsMap(groupedTickets);
+
+		// dann über Fav-Strecke und Result iterieren
+		// int capa = transfer.getCraftType().getSeats();
+		int bookedSeats = 0;
+		// den kompletten Transfer durchlaufen und die minimale Kapazität auf
+		// der desiredRoute ermitteln
+		// Route: A (5) - B(5+2) - C(-5) - D(+10) - E
+		// Kapa Strecke C - E ? Booked C (2) ...
+
+		for (Waypoint waypoint : this.getWaypoints()) {
+			if (!this.isLastWaypoint(waypoint)) {
+				Site favSite = waypoint.getSite();
+
+				boolean onboard = false;
+				if (favSite.getId().equals(siteA.getId())) {
+					onboard = true;
+				}
+				if (favSite.getId().equals(siteB.getId())) {
+					onboard = false;
+					log.debug(favSite.getItemDesignation() + ": an Bord: " + bookedSeats);
+					break;
+				}
+				// es sind welche zugestiegen, hochzählen
+				if (onboard && capaMap.get(favSite.getId()) != null && capaMap.get(favSite.getId()) > bookedSeats) {
+					bookedSeats = bookedSeats + capaMap.get(favSite.getId());
+				}
+
+			}
+		}
+
+		log.debug("Booked in total: " + bookedSeats + " | Transfer: " + this.getRouteShort());
+		return bookedSeats;
+	}
+	
+	/**
+	 * Für jede Site werden die Booked Seats berechnet. Für Ticketgruppe wird
+	 * die Strecke durchlaufen und die besetzten Plätze aufaddiert.
+	 */
+	public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets) {
+
+		HashMap<UUID, Integer> resultCapaMap = new HashMap<UUID, Integer>();
+
+		// über die tickets iterieren
+
+		for (TripDTO ticketGroup : groupedTickets) {
+			log.debug("Booked Tickets " + ticketGroup.getSiteA().getItemDesignation() + " - "
+					+ ticketGroup.getSiteB().getItemDesignation() + ": " + ticketGroup.getBookedSeats());
+
+			// capaMap enthält booked seats beim Verlassen der Site:
+			// über die Strecke iterieren, wenn site = startSite -> PAX steigen
+			// zu, wenn Site = destination -> PAX steigen aus
+			boolean onboard = false;
+
+			// den letzten Waypoint nicht mehr berücksichtigen, weil die Site
+			// normalerweise identisch mit dem Start ist
+			for (int i = 0; i < this.getWaypoints().size() - 1; i++) {
+				Waypoint waypoint = this.getWaypoints().get(i);
+				Site site = waypoint.getSite();
+
+				if (site.getId().equals(ticketGroup.getSiteB().getId()) && onboard) {
+					onboard = false;
+				} else if (site.getId().equals(ticketGroup.getSiteA().getId()) || onboard) {
+					int currentBookedSeats = 0;
+					if (resultCapaMap.containsKey(site.getId())) {
+						currentBookedSeats = resultCapaMap.get(site.getId());
+					}
+					log.debug("Site: " + site.getItemDesignation() + " Seats already Booked: " + currentBookedSeats
+							+ ", Seats to add: " + ticketGroup.getBookedSeats());
+					resultCapaMap.put(site.getId(), currentBookedSeats + ticketGroup.getBookedSeats());
+					onboard = true;
+				}
+			}
+		}
+		return resultCapaMap;
+	}
+
 
 }
