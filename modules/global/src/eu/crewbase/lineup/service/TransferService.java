@@ -15,6 +15,8 @@ public interface TransferService {
 
 	boolean addWaypoint(UUID transferId, UUID siteId, int position);
 
+	boolean moveWaypoint(UUID transferId, UUID siteId, int position);
+
 	void removeWaypoint(UUID transferId, UUID siteId);
 
 	void removeWaypoint(UUID transferId, int position);

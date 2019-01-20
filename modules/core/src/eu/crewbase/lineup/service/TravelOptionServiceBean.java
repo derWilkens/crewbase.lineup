@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.esotericsoftware.minlog.Log;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.app.EmailService;
@@ -312,14 +311,14 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		for (FavoriteTrip favoriteTrip : favList) {
 
 			// nur den Start einbauen
-			Log.debug("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
+			log.debug("Start Site einbauen: " + favoriteTrip.getStartSite().getSiteName());
 
 			if (resultTransfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getStartSite()))) {
-				Log.debug("Transfer mit StartSite sieht so aus: " + resultTransfer.getRouteShort());
+				log.debug("Transfer mit StartSite sieht so aus: " + resultTransfer.getRouteShort());
 				// in den neuen Transfer die zweite Site einbauen
 
 				if (resultTransfer.addWaypointShortestWay(createWaypoint(favoriteTrip.getDestination()))) {
-					Log.debug("Transfer mit DestSite sieht so aus: " + resultTransfer.getRouteShort());
+					log.debug("Transfer mit DestSite sieht so aus: " + resultTransfer.getRouteShort());
 				}
 			}
 		}

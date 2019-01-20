@@ -357,6 +357,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		ccId = createCC(0, 0);
 		int distance = 0;
 		Transfer transfer;
+		
 		try (Transaction tx = persistence.createTransaction()) {
 
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
@@ -364,44 +365,30 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			assertEquals("EMDE - BWBE - EMDE", transfer.getRouteShort());
 		}
 
-		// erstmal einen WP hinzufügen
-		// EMDE - BWBE + DWAL
-		transfer = dataManager.load(Transfer.class).view("transfer-full")
-				.query("select t from lineup$Transfer t where t.crewChange.id = :ccId").parameter("ccId", ccId).one();
-		Waypoint wpDwal = metadata.create(Waypoint.class);
-		wpDwal.setSite(dwal);
-		wpDwal.setTransfer(transfer);
-		dataManager.commit(wpDwal);
-		transfer.getWaypoints().add(2, wpDwal);
-		dataManager.commit(transfer);
-
-		// neu laden
-		Waypoint awp1;
-		Waypoint wpBWBE;
-
+		transferService.addWaypoint(transfer.getId(), dwal.getId());
+		
 		try (Transaction tx = persistence.createTransaction()) {
-			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+
+			cc = entityManager().find(CrewChange.class, ccId);
+			transfer = cc.getTransfers().get(0);
+
+			assertEquals("EMDE - DWAL - BWBE - EMDE", transfer.getRouteShort());
+			tx.commit();
+		}
+		
+		transferService.moveWaypoint(transfer.getId(), bwbe.getId(), 1);
+		
+		try (Transaction tx = persistence.createTransaction()) {
+
+			cc = entityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDE - BWBE - DWAL - EMDE", transfer.getRouteShort());
-
-			awp1 = transfer.getWaypoints().get(0);
-			wpBWBE = transfer.getWaypoints().get(1);
-			assertEquals(wpBWBE.getSite().getItemDesignation(), "BWBE");
-			wpDwal = transfer.getWaypoints().get(2);
-			assertEquals(wpDwal.getSite().getItemDesignation(), "DWAL");
-			distance = transfer.getTotalDistance();
-			assertTrue(distance > 0);
+			tx.commit();
 		}
-		int oldIndex = transfer.getWaypoints().indexOf(wpBWBE);
-		int newIndex = oldIndex + 1;
-		Collections.swap(transfer.getWaypoints(), oldIndex, newIndex);
-		dataManager.commit(transfer);
+		
 
-		try (Transaction tx = persistence.createTransaction()) {
-			// neu laden
-			transfer = persistence.getEntityManager().find(Transfer.class, transfer.getId());
-			assertEquals("EMDE - DWAL - BWBE - EMDE", transfer.getRouteShort());
-		}
+		//Collections.swap(transfer.getWaypoints(), oldIndex, newIndex);
+		
 	}
 
 	/**

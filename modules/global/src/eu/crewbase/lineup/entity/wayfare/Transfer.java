@@ -223,7 +223,7 @@ public class Transfer extends StandardEntity {
 
 		// schon drin, also true zurück
 		if (this.getSiteHash().containsKey(waypoint.getSite().getId())) {
-			return false;
+			return true; //auch wenns eigentlich falsch istg
 		}
 
 		waypoint.setTransfer(this);

@@ -1,5 +1,7 @@
 package eu.crewbase.lineup.service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
@@ -105,7 +107,6 @@ public class TransferServiceBean implements TransferService {
 			travelOptionService.updateTravelOptions(transferId);
 			return waypointAdded;
 		}
-
 	}
 
 	@Override
@@ -124,7 +125,27 @@ public class TransferServiceBean implements TransferService {
 			return waypointAdded; 
 		}
 	}
-
+	
+	@Override
+	public boolean moveWaypoint(UUID transferId, UUID siteId, int position) {
+		try (Transaction tx = persistence.createTransaction()) {
+			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
+			for (Waypoint waypoint : transfer.getWaypoints()) {
+				if (waypoint.getSite().getId().equals(siteId)) {
+					transfer.getWaypoints().remove(waypoint);
+					transfer.getWaypoints().add(position, waypoint);
+					//Collections.swap(list, i, j);
+					transfer.renumber();
+					break;
+				}
+			}
+			persistence.getEntityManager().persist(transfer);
+			tx.commit();
+			travelOptionService.updateTravelOptions(transferId);
+		}
+		return false;
+	}
+	
 	@Override
 	public void removeWaypoint(UUID transferId, UUID siteId) {
 		try (Transaction tx = persistence.createTransaction()) {
@@ -154,5 +175,4 @@ public class TransferServiceBean implements TransferService {
 		}
 
 	}
-
 }
