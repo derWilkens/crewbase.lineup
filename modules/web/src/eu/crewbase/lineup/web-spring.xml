@@ -34,6 +34,8 @@
                        value="eu.crewbase.lineup.service.TravelOptionService"/>
                 <entry key="lineup_TransferService"
                        value="eu.crewbase.lineup.service.TransferService"/>
+                <entry key="lineup_DeepLinkService"
+                       value="eu.crewbase.lineup.service.DeepLinkService"/>
             </map>
         </property>
     </bean>

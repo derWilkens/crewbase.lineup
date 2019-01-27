@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.favoritetrip.FavoriteTripBrowse"
+        focusComponent="favoriteTripsTable"
+        lookupComponent="favoriteTripsTable"
+        messagesPack="eu.crewbase.lineup.web.favoritetrip">
+    <dsContext>
+        <groupDatasource id="favoriteTripsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
+                         view="favoriteTrip-manage">
+            <query>
+                <![CDATA[select e from lineup$FavoriteTrip e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="favoriteTripsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="favoriteTripsTable"
+                datasource="favoriteTripsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="favoriteTripsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="startSite"/>
+                <column id="destination"/>
+                <column id="emailNotification"/>
+                <column id="sendSummery"/>
+            </columns>
+            <rows datasource="favoriteTripsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="favoriteTripsTable.create"/>
+                <button id="editBtn"
+                        action="favoriteTripsTable.edit"/>
+                <button id="removeBtn"
+                        action="favoriteTripsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

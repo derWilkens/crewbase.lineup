@@ -1,13 +1,11 @@
 package eu.crewbase.lineup.core;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +27,6 @@ import eu.crewbase.lineup.LineupTestContainer;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
-import eu.crewbase.lineup.entity.dto.TripDTO;
 import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
 import eu.crewbase.lineup.entity.wayfare.Ticket;

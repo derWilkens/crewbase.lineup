@@ -133,7 +133,7 @@ configure(coreModule) {
         host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'lineup'
+        dbPassword = 'Lineup:)1'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 
@@ -142,7 +142,7 @@ configure(coreModule) {
         host = 'localhost:3306'
         dbName = 'lineup'
         dbUser = 'lineup'
-        dbPassword = 'lineup'
+        dbPassword = 'Lineup:)1'
         connectionParams = '?useSSL=false&allowMultiQueries=true'
     }
 }
@@ -258,14 +258,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
 }
 
-task buildWar(type: CubaWarBuilding) {
-    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
-    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
-    appProperties = ['cuba.automaticDatabaseUpdate' : true]
-    includeContextXml = true
-    includeJdbcDriver = true
-    appHome = 'app_home'
-}
+
 
 task buildUberJar(type: CubaUberJarBuilding) {
     singleJar = true

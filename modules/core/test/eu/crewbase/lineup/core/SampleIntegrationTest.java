@@ -1,6 +1,8 @@
 package eu.crewbase.lineup.core;
 
 import eu.crewbase.lineup.LineupTestContainer;
+import eu.crewbase.lineup.service.DeepLinkService;
+
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
@@ -26,12 +28,14 @@ public class SampleIntegrationTest {
     private Metadata metadata;
     private Persistence persistence;
     private DataManager dataManager;
+    private DeepLinkService deepLinkService;
 
     @Before
     public void setUp() throws Exception {
         metadata = cont.metadata();
         persistence = cont.persistence();
         dataManager = AppBeans.get(DataManager.class);
+        deepLinkService = AppBeans.get(DeepLinkService.class);
     }
 
     @After
@@ -48,6 +52,7 @@ public class SampleIntegrationTest {
             List<User> users = query.getResultList();
             tx.commit();
             assertEquals(1, users.size());
+            System.out.println(deepLinkService.generateDeepLinkForEntity(users.get(0)));
         }
     }
 }

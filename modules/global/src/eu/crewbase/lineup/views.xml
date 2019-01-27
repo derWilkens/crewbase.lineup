@@ -478,4 +478,13 @@
             <property name="posOrder"/>
         </property>
     </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
+          name="favoriteTrip-manage">
+        <property name="startSite"
+                  view="_minimal"/>
+        <property name="destination"
+                  view="_minimal"/>
+        <property name="emailNotification"/>
+        <property name="sendSummery"/>
+    </view>
 </views>
