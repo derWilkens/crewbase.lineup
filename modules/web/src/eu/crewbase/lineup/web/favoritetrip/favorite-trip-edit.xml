@@ -11,14 +11,14 @@
                     view="favoriteTrip-manage"/>
         <collectionDatasource id="startSitesDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="_minimal">
+                              view="siteSelect">
             <query>
-                <![CDATA[select e from lineup$Site e]]>
+                <![CDATA[select e from lineup$Site e ]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="destinationsDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="_minimal">
+                              view="siteSelect">
             <query>
                 <![CDATA[select e from lineup$Site e]]>
             </query>

@@ -19,11 +19,12 @@ import javax.validation.constraints.NotNull;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.chile.core.annotations.NamePattern;
 import javax.persistence.OneToMany;
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 
 @NamePattern("%s - %s|startSite,destination")
 @Table(name = "LINEUP_FAVORITE_TRIP")
 @Entity(name = "lineup$FavoriteTrip")
-public class FavoriteTrip extends StandardEntity {
+public class FavoriteTrip extends StandardClientEntity {
     private static final long serialVersionUID = -1426158774165112345L;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {"lookup", "clear"})

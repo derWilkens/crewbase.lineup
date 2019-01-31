@@ -3,32 +3,30 @@
     <item insertBefore="administration"
           screen="lineup$CrewChangeCreateDTO.edit"/>
     <item insertBefore="administration"
+          screen="lineup$TravelOption.browse"/>
+    <item insertBefore="administration"
           screen="lineup$FavoriteTrip.browse"/>
     <menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
-        <item screen="rota-timeline"/>
-        <item id="emlTime"
-              screen="eml-timeline"/>
-        <item screen="CampaignPlan"/>
+        <!--         <item screen="CampaignPlan"/> -->
         <item screen="lineup$Transfer.browse"/>
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
-        <item screen="lineup$TravelOption.browse"/>
+        <item screen="lineup$Ticket.browse"/>
     </menu>
     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
-        <item screen="lineup$NumberRangeRule.browse"/>
-        <item screen="lineup$SiteRoleRule.browse"/>
+        <!--         <item screen="lineup$NumberRangeRule.browse"/>
+        <item screen="lineup$SiteRoleRule.browse"/> -->
         <item screen="lineup$CrewChange.overview"/>
     </menu>
-    <menu id="capDB"
+    <!--     <menu id="capDB"
           icon="font-icon:GRADUATION_CAP"
           insertBefore="administration">
         <item screen="lineup$RoleQualificationType.browse"/>
-    </menu>
-    <menu id="favorites"
+    </menu>    <menu id="favorites"
           icon="font-icon:STAR"
           insertBefore="administration">
         <item screen="lineup$PeriodTemplate.browse"/>
@@ -37,15 +35,15 @@
         <item id="lineup$UserPreference.browse"/>
         <item screen="lineup$SitePeriod.choose"/>
         <item screen="lineup$EmlSite.choose"/>
-    </menu>
-    <menu id="admintools"
+    </menu> -->
+    <!--     <menu id="admintools"
           icon="font-icon:COGS"
           insertBefore="administration">
         <item screen="importUsers"/>
         <item screen="importPeriods"/>
         <item screen="lineup$PeriodImportStage.browse"/>
         <item screen="lineup$UserImportStage.browse"/>
-    </menu>
+    </menu> -->
     <menu id="masterdata"
           icon="font-icon:TABLE"
           insertBefore="administration">

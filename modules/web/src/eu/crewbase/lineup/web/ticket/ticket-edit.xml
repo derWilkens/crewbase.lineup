@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.ticket.TicketEdit"
+        datasource="ticketDs"
+        focusComponent="fieldGroup"
+        messagesPack="eu.crewbase.lineup.web.ticket">
+    <dsContext>
+        <datasource id="ticketDs"
+                    class="eu.crewbase.lineup.entity.wayfare.Ticket"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="ticketDs">
+            <column width="250px"/>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

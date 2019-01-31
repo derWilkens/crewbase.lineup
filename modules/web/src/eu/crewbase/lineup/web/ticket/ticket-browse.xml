@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.ticket.TicketBrowse"
+        focusComponent="ticketsTable"
+        lookupComponent="ticketsTable"
+        messagesPack="eu.crewbase.lineup.web.ticket">
+    <dsContext>
+        <groupDatasource id="ticketsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.Ticket"
+                         view="_local">
+            <query>
+                <![CDATA[select e from lineup$Ticket e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="ticketsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="ticketsTable"
+                datasource="ticketsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="ticketsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+            </columns>
+            <rows datasource="ticketsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="ticketsTable.create"/>
+                <button id="editBtn"
+                        action="ticketsTable.edit"/>
+                <button id="removeBtn"
+                        action="ticketsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

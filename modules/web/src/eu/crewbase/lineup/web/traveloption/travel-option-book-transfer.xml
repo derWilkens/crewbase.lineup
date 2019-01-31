@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="eu.crewbase.lineup.web.traveloption.TravelOptionBookTransfer"
+        datasource="travelOptionDs"
+        messagesPack="eu.crewbase.lineup.web.traveloption">
+    <dsContext>
+        <datasource id="travelOptionDs"
+                    class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+                    view="travelOption-bookTransfer"/>
+    </dsContext>
+    <actions>
+        <action id="bookSeats"
+                icon="SHOPPING_CART"
+                invoke="bookSeats"/>
+        <action id="cancel"
+                invoke="onCancel"/>
+    </actions>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="400"/>
+    <layout spacing="true">
+        <groupBox orientation="horizontal">
+            <label id="favTrip"
+                   stylename="h1"/>
+        </groupBox>
+        <groupBox caption="Take Off"
+                  icon="PLANE"
+                  orientation="horizontal"
+                  spacing="true">
+            <label id="transferDate"
+                   stylename="bold"/>
+            <label id="takeOff"
+                   stylename="bold"/>
+        </groupBox>
+        <groupBox caption="Seats"
+                  orientation="horizontal"
+                  spacing="true">
+            <textField id="availableSeats"
+                       caption="Available "
+                       datasource="travelOptionDs"
+                       editable="false"
+                       property="availableSeats"/>
+            <lookupField id="bookedSeats"
+                         caption="Booking Qty."/>
+        </groupBox>
+        <hbox spacing="true">
+            <button action="bookSeats"
+                    caption="BOOK"
+                    stylename="friendly"/>
+            <button action="cancel"
+                    caption="Cancel"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://browseCaption"
-        class="eu.crewbase.lineup.web.traveloption.TravelOptionBrowse"
+        class="eu.crewbase.lineup.web.traveloption.TravelOptionList"
         focusComponent="travelOptionsTable"
         lookupComponent="travelOptionsTable"
         messagesPack="eu.crewbase.lineup.web.traveloption">
     <dsContext>
         <groupDatasource id="travelOptionsDs"
                          class="eu.crewbase.lineup.entity.wayfare.TravelOption"
-                         view="mailNotification-manage">
+                         view="travelOption-bookTransfer">
             <query>
                 <![CDATA[select e from lineup$TravelOption e]]>
             </query>
         </groupDatasource>
     </dsContext>
+    <actions>
+        <action id="openBookingDialog"
+                invoke="onOpenBookingDialog"/>
+    </actions>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="travelOptionsTable"
@@ -26,27 +30,32 @@
         <groupTable id="travelOptionsTable"
                     width="100%">
             <actions>
-                <action id="create"/>
                 <action id="edit"/>
-                <action id="remove"/>
             </actions>
             <columns>
-                <column id="transfer"/>
-                <column id="bookedSeats"/>
-                <column id="favoriteTrip"/>
-                <column id="status"/>
+                <column id="client"/>
+                <column id="transferDate"
+                        caption="msg://TransferDate"
+                        generator="generateTransferDateCell"/>
+                <column id="transferTakeOff"
+                        caption="msg://takeOff"
+                        generator="generateTransferTakeOffCell"/>
+                <column id="favoriteTrip"
+                        generator="generateFavoriteTripCell"/>
                 <column id="availableSeats"/>
+                <column id="bookedSeats"/>
+                <column id="status"
+                        caption="msg://BookingStatus"/>
+                <column id="bookTransfer"
+                        caption="."
+                        generator="generateBookTransferCell"/>
             </columns>
             <rows datasource="travelOptionsDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn"
-                        action="travelOptionsTable.create"/>
                 <button id="editBtn"
                         action="travelOptionsTable.edit"/>
-                <button id="removeBtn"
-                        action="travelOptionsTable.remove"/>
             </buttonsPanel>
         </groupTable>
     </layout>

@@ -466,7 +466,21 @@
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
           extends="_local"
-          name="travelOption-manage"/>
+          name="travelOption-manage">
+        <property name="transfer"
+                  view="_minimal">
+            <property name="operatedBy"
+                      view="_minimal"/>
+            <property name="modeOfTransfer"
+                      view="_minimal"/>
+            <property name="craftType"
+                      view="_minimal"/>
+            <property name="waypoints"
+                      view="_minimal"/>
+        </property>
+        <property name="favoriteTrip"
+                  view="_minimal"/>
+    </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
           name="transfer-temp">
@@ -481,10 +495,46 @@
     <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
           name="favoriteTrip-manage">
         <property name="startSite"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="itemDesignation"/>
+        </property>
         <property name="destination"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="itemDesignation"/>
+        </property>
         <property name="emailNotification"/>
         <property name="sendSummery"/>
+    </view>
+    <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+          extends="_local"
+          name="travelOption-bookTransfer">
+        <property name="transfer"
+                  view="_minimal">
+            <property name="waypoints"
+                      view="_minimal">
+                <property name="site"
+                          view="_minimal">
+                    <property name="itemDesignation"/>
+                </property>
+                <property name="posOrder"/>
+            </property>
+            <property name="modeOfTransfer"
+                      view="_minimal"/>
+            <property name="crewChange"
+                      view="_minimal">
+                <property name="startDate"/>
+            </property>
+        </property>
+        <property name="favoriteTrip"
+                  view="_minimal">
+            <property name="startSite"
+                      view="_minimal">
+                <property name="itemDesignation"/>
+            </property>
+            <property name="destination"
+                      view="_minimal">
+                <property name="itemDesignation"/>
+            </property>
+        </property>
     </view>
 </views>

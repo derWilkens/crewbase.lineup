@@ -735,6 +735,7 @@ create table LINEUP_FAVORITE_TRIP (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
+    CLIENT integer not null,
     --
     START_SITE_ID varchar(32) not null,
     EXACT_MATCH boolean,

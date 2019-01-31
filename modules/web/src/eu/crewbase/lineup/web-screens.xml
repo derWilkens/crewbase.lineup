@@ -115,12 +115,16 @@
             template="eu/crewbase/lineup/web/site/site-browse.xml"/>
     <screen id="lineup$CrewChange.browse"
             template="eu/crewbase/lineup/web/crewchange/crew-change-browse.xml"/>
-    <screen id="lineup$TravelOption.browse"
-            template="eu/crewbase/lineup/web/traveloption/travel-option-browse.xml"/>
-    <screen id="lineup$TravelOption.edit"
-            template="eu/crewbase/lineup/web/traveloption/travel-option-edit.xml"/>
     <screen id="lineup$FavoriteTrip.browse"
             template="eu/crewbase/lineup/web/favoritetrip/favorite-trip-browse.xml"/>
     <screen id="lineup$FavoriteTrip.edit"
             template="eu/crewbase/lineup/web/favoritetrip/favorite-trip-edit.xml"/>
+    <screen id="lineup$TravelOption.browse"
+            template="eu/crewbase/lineup/web/traveloption/travel-option-list.xml"/>
+    <screen id="lineup$TravelOption.edit"
+            template="eu/crewbase/lineup/web/traveloption/travel-option-book-transfer.xml"/>
+    <screen id="lineup$Ticket.browse"
+            template="eu/crewbase/lineup/web/ticket/ticket-browse.xml"/>
+    <screen id="lineup$Ticket.edit"
+            template="eu/crewbase/lineup/web/ticket/ticket-edit.xml"/>
 </screen-config>
