@@ -673,6 +673,7 @@ create table LINEUP_TRANSFER (
     UPDATED_BY varchar(50),
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
+    CLIENT integer not null,
     --
     TRANSFER_ORDER_NO integer not null,
     CREW_CHANGE_ID varchar(32),

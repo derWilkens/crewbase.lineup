@@ -6,34 +6,67 @@
         lookupComponent="travelOptionsTable"
         messagesPack="eu.crewbase.lineup.web.traveloption">
     <dsContext>
-        <groupDatasource id="travelOptionsDs"
+        <groupDatasource id="availableTicketsDs"
                          class="eu.crewbase.lineup.entity.wayfare.TravelOption"
                          view="travelOption-bookTransfer">
             <query>
-                <![CDATA[select e from lineup$TravelOption e]]>
+                <![CDATA[select e from lineup$TravelOption e 
+where e.favoriteTrip.client = :session$client_id 
+and e.status <= 30
+and e.availableSeats > 0 
+and e.transfer.client <> :session$client_id 
+]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="myBookingsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+                         view="travelOption-bookTransfer">
+            <query>
+                <![CDATA[select e from lineup$TravelOption e 
+where e.favoriteTrip.client = :session$client_id 
+and e.status > 10
+and e.transfer.client <> :session$client_id 
+]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="approveBookingsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+                         view="travelOption-bookTransfer">
+            <query>
+                <![CDATA[select e from lineup$TravelOption e 
+where e.status = 30 and e.transfer.client = :session$client_id 
+]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="overviewBookingsDs"
+                         class="eu.crewbase.lineup.entity.wayfare.TravelOption"
+                         view="travelOption-bookTransfer">
+            <query>
+                <![CDATA[select e from lineup$TravelOption e 
+where e.status > 10 
+and e.transfer.client = :session$client_id 
+]]>
             </query>
         </groupDatasource>
     </dsContext>
     <actions>
         <action id="openBookingDialog"
                 invoke="onOpenBookingDialog"/>
+        <action id="openApprovalDialog"
+                invoke="onOpenApprovalDialog"/>
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="travelOptionsTable"
-            spacing="true">
-        <filter id="filter"
-                applyTo="travelOptionsTable"
-                datasource="travelOptionsDs">
-            <properties include=".*"/>
-        </filter>
+    <layout spacing="true">
         <groupTable id="travelOptionsTable"
+                    height="100%"
                     width="100%">
             <actions>
                 <action id="edit"/>
             </actions>
             <columns>
                 <column id="client"/>
+                <column id="transfer.client"/>
                 <column id="transferDate"
                         caption="msg://TransferDate"
                         generator="generateTransferDateCell"/>
@@ -50,13 +83,7 @@
                         caption="."
                         generator="generateBookTransferCell"/>
             </columns>
-            <rows datasource="travelOptionsDs"/>
-            <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="editBtn"
-                        action="travelOptionsTable.edit"/>
-            </buttonsPanel>
+            <rows datasource="availableTicketsDs"/>
         </groupTable>
     </layout>
 </window>

@@ -38,6 +38,7 @@ import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.dto.TripDTO;
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 
 /**
  * @author christian
@@ -45,7 +46,7 @@ import eu.crewbase.lineup.entity.dto.TripDTO;
 @Listeners({ "lineup_TransferListener" })
 @Table(name = "LINEUP_TRANSFER")
 @Entity(name = "lineup$Transfer")
-public class Transfer extends StandardEntity {
+public class Transfer extends StandardClientEntity {
 	private static final long serialVersionUID = -5709533341256299692L;
 	private static final Logger log = LoggerFactory.getLogger(Transfer.class);
 	// private static final Logger log =

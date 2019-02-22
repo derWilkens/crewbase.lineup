@@ -127,4 +127,6 @@
             template="eu/crewbase/lineup/web/ticket/ticket-browse.xml"/>
     <screen id="lineup$Ticket.edit"
             template="eu/crewbase/lineup/web/ticket/ticket-edit.xml"/>
+    <screen id="loginWindow"
+            template="eu/crewbase/lineup/gui/screens/ext-loginWindow.xml"/>
 </screen-config>

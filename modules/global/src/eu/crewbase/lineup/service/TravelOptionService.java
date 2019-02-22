@@ -17,6 +17,7 @@ public interface TravelOptionService {
     public void sendTravelOptionNotification();
     public void bookSeats(UUID travelOptionId, int numberOfSeats);
     public void approveBooking(UUID travelOptionId);
+	public void declineBooking(UUID travelOptionId);
     
     //public List<TripDTO> getGroupedTickets(Transfer transfer);
     //public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips); 

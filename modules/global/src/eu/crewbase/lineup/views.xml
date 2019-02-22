@@ -507,7 +507,8 @@
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.TravelOption"
           extends="_local"
-          name="travelOption-bookTransfer">
+          name="travelOption-bookTransfer"
+          systemProperties="true">
         <property name="transfer"
                   view="_minimal">
             <property name="waypoints"
@@ -524,6 +525,7 @@
                       view="_minimal">
                 <property name="startDate"/>
             </property>
+            <property name="client"/>
         </property>
         <property name="favoriteTrip"
                   view="_minimal">

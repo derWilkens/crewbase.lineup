@@ -347,4 +347,16 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		return message;
 	}
 
+	@Override
+	public void declineBooking(UUID travelOptionId) {
+		TravelOption travelOption;
+		try (Transaction tx = persistence.createTransaction()) {
+			travelOption = persistence.getEntityManager().find(TravelOption.class, travelOptionId);
+			travelOption.setStatus(TravelOptionStatus.Rejected);
+			persistence.getEntityManager().persist(travelOption);
+			tx.commit();
+		}
+		
+	}
+
 }

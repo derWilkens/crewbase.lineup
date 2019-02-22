@@ -52,11 +52,7 @@
                 <dateField id="fligthDate"
                            datasource="crewChangeCreateDTODs"
                            property="startDateTime"
-                           resolution="DAY"
                            responsive="true"/>
-                <timeField id="takeOff"
-                           datasource="crewChangeCreateDTODs"
-                           property="startDateTime"/>
             </groupBox>
             <groupBox caption="Trip"
                       orientation="horizontal"

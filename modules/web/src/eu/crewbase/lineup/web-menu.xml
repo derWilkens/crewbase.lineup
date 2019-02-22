@@ -1,27 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <item insertBefore="administration"
+    <item icon="GROUP"
+          insertBefore="administration"
           screen="lineup$CrewChangeCreateDTO.edit"/>
-    <item insertBefore="administration"
-          screen="lineup$TravelOption.browse"/>
-    <item insertBefore="administration"
+    <item id="bookTickets"
+          icon="CART_PLUS"
+          insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="availableTicketsDs"/>
+        <param name="windowLabel"
+               value="availableTickets"/>
+    </item>
+    <item id="approveBookings"
+          icon="font-icon:CHECK_SQUARE_O"
+          insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="approveBookingsDs"/>
+        <param name="windowLabel"
+               value="approveBookings"/>
+    </item>
+    <item id="myBookings"
+          icon="font-icon:CALENDAR_CHECK_O"
+          insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="myBookingsDs"/>
+        <param name="windowLabel"
+               value="myBookings"/>
+    </item>
+    <item id="overviewBookings"
+          icon="PAPER_PLANE_O"
+          insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="overviewBookingsDs"/>
+        <param name="windowLabel"
+               value="overviewBookings"/>
+    </item>
+    <item icon="STAR"
+          insertBefore="administration"
           screen="lineup$FavoriteTrip.browse"/>
-    <menu id="lineUp"
+    <!--     <menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
-        <!--         <item screen="CampaignPlan"/> -->
+                <item screen="CampaignPlan"/>
         <item screen="lineup$Transfer.browse"/>
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
         <item screen="lineup$Ticket.browse"/>
-    </menu>
-    <menu id="crewChange"
+    </menu> -->
+    <!--     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
-        <!--         <item screen="lineup$NumberRangeRule.browse"/>
-        <item screen="lineup$SiteRoleRule.browse"/> -->
+                <item screen="lineup$NumberRangeRule.browse"/>
+        <item screen="lineup$SiteRoleRule.browse"/>
         <item screen="lineup$CrewChange.overview"/>
-    </menu>
+    </menu> -->
     <!--     <menu id="capDB"
           icon="font-icon:GRADUATION_CAP"
           insertBefore="administration">
