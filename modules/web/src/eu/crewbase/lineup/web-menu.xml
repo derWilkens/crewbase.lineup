@@ -87,9 +87,11 @@
             <item screen="lineup$CraftType.browse"/>
             <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
+        <item screen="lineup$Site.browse"/>
+        <!-- 
         <menu id="Sites">
             <item screen="lineup$SiteCategory.browse"/>
-            <item screen="lineup$Site.browse"/>
         </menu>
+         -->
     </menu>
 </menu-config>

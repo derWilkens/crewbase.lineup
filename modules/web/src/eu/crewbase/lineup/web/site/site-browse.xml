@@ -10,7 +10,7 @@
                          class="eu.crewbase.lineup.entity.coredata.Site"
                          view="site-manage">
             <query>
-                <![CDATA[select e from lineup$Site e]]>
+                <![CDATA[select e from lineup$Site e order by e.siteName]]>
             </query>
         </groupDatasource>
     </dsContext>

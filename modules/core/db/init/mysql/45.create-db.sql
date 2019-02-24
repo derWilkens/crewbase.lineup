@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.25, for Win64 (x86_64)
 --
 -- Host: localhost    Database: lineup
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.25-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,7 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `sec_group_hierarchy`
+-- Dumping data for table `SEC_GROUP_HIERARCHY`
 --
 -- WHERE:  created_by is not NULL
 
@@ -27,7 +27,7 @@ INSERT INTO `SEC_GROUP_HIERARCHY` VALUES ('2b2a145726725e7dadb4463686a30fd0','20
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_user_setting`
+-- Dumping data for table `SEC_USER_SETTING`
 --
 -- WHERE:  created_by is not NULL
 
@@ -46,4 +46,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-01 14:28:40
+-- Dump completed on 2019-02-24  9:12:13

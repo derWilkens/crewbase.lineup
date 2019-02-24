@@ -6,7 +6,7 @@
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password="lineup"
+              password="Lineup:)1"
               type="javax.sql.DataSource"
               url="jdbc:mysql://localhost/lineup?useSSL=false&amp;allowMultiQueries=true"
               username="lineup"/>

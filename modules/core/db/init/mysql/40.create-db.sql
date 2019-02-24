@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.25, for Win64 (x86_64)
 --
 -- Host: localhost    Database: lineup
 -- ------------------------------------------------------
--- Server version	5.7.17-log
+-- Server version	5.7.25-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,7 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `sec_constraint`
+-- Dumping data for table `SEC_CONSTRAINT`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -27,7 +27,7 @@ INSERT INTO `SEC_CONSTRAINT` VALUES ('5dec7a21f2b47858140a8047b4bbe4b2','2016-05
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_filter`
+-- Dumping data for table `SEC_FILTER`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -37,7 +37,7 @@ LOCK TABLES `SEC_FILTER` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_group`
+-- Dumping data for table `SEC_GROUP`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -48,7 +48,7 @@ INSERT INTO `SEC_GROUP` VALUES ('1f02f531d6d99abdff0d4a64a47d5486','2016-05-09 1
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_permission`
+-- Dumping data for table `SEC_PERMISSION`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -59,7 +59,7 @@ INSERT INTO `SEC_PERMISSION` VALUES ('2116a40259679bd103edd56707004579','2016-05
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_role`
+-- Dumping data for table `SEC_ROLE`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -70,7 +70,7 @@ INSERT INTO `SEC_ROLE` VALUES ('4082fc82562a346cfddb6cca3a88d500','2016-05-09 12
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_session_attr`
+-- Dumping data for table `SEC_SESSION_ATTR`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -81,7 +81,7 @@ INSERT INTO `SEC_SESSION_ATTR` VALUES ('4921539c93c481b7f1616e84cb7abbeb','2016-
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_user`
+-- Dumping data for table `SEC_USER`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -92,7 +92,7 @@ INSERT INTO `SEC_USER` VALUES ('0a5104fda2a77c48af601cd45771b21f','2018-12-30 22
 UNLOCK TABLES;
 
 --
--- Dumping data for table `sec_user_role`
+-- Dumping data for table `SEC_USER_ROLE`
 --
 -- WHERE:  created_by is not NULL and delete_ts is null
 
@@ -111,4 +111,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-01 14:28:40
+-- Dump completed on 2019-02-24  9:12:13

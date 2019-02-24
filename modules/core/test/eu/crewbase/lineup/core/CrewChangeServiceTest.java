@@ -26,6 +26,7 @@ import com.haulmont.cuba.security.entity.User;
 import eu.crewbase.lineup.LineupTestContainer;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.coredata.SiteCategory;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import eu.crewbase.lineup.entity.wayfare.CrewChange;
 import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
@@ -131,12 +132,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		}
 	}
 
-	private Site createSite(String name, String itemDesignation, double lat, double lon) {
+	private Site createSite(String name, String itemDesignation, double lat, double lon, SiteCategory category) {
 		Site site1 = metadata.create(Site.class);
 		site1.setSiteName(name);
 		site1.setItemDesignation(itemDesignation);
 		site1.setLatitude(lat);
 		site1.setLongitude(lon);
+		site1.setSiteCategory(category);
 		dataManager.commit(site1);
 		return site1;
 	}
