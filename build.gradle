@@ -28,7 +28,7 @@ def coreModule = project(":${modulePrefix}-core")
 def guiModule = project(":${modulePrefix}-gui")
 def webModule = project(":${modulePrefix}-web")
 def webThemesModule= project(":${modulePrefix}-web-themes")
-def polymerClientModule = project(":${modulePrefix}-polymer-client")
+
 
 def servletApi = 'javax.servlet:javax.servlet-api:3.1.0'
 
@@ -239,71 +239,13 @@ configure(webThemesModule) {
     }
 }
 
-configure(polymerClientModule) {
-    apply(plugin: 'cuba')
-    apply(plugin: 'idea')
-    apply(plugin: 'eclipse')
-    apply(plugin: 'war')
-    apply(plugin: 'maven')
-
-    def frontAppDir = "${modulePrefix}-front"
-
-    task installGenerators(type: NpmTask) {
-        workingDir = file('generation')
-        args = ['install']
-        inputs.file 'generation/package.json'
-        outputs.dir 'generation/node_modules'
-    }
-
-    task listGenerators(type: NodeTask, dependsOn: installGenerators) {
-        script = file("generation/node_modules/@cuba-platform/front-generator/bin/gen-cuba-front")
-        args = ['list', '-s', 'generation/generators.json']
-        outputs.file 'generation/generators.json'
-    }
-
-    
-    def mainBuildDir = 'build/es6-unbundled'
-
-    task installBowerPackages(type: NodeTask, dependsOn: npmInstall) {
-        script = file("node_modules/bower/bin/bower")
-        args = ['install','-F']
-        inputs.file "bower.json"
-        outputs.dir "bower_components"
-    }
-
-    task buildPolymer(type: NpmTask, dependsOn: installBowerPackages) {
-        args = ['run','build']
-        inputs.files fileTree('./') {
-            exclude 'build'
-        }
-        outputs.dir "build"
-    }
-
-    assemble.dependsOn buildPolymer
-
-    task deployUnbundled(type: Copy) {
-        from file('./')
-        include 'bower_components/**'
-        include 'src/**'
-        into "$cuba.tomcat.dir/webapps/$frontAppDir"
-    }
-
-    task deploy(type: Copy, dependsOn: [assemble, deployUnbundled]) {
-        from file(mainBuildDir)
-        into "$cuba.tomcat.dir/webapps/$frontAppDir"
-    }
-
-    war {
-        from file(mainBuildDir)
-    }
-}
 
 
 task undeploy(type: Delete, dependsOn: ":${modulePrefix}-web:cleanConf") {
     delete("$cuba.tomcat.dir/shared")
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}-core")
     delete("$cuba.tomcat.dir/webapps/${modulePrefix}")
-    delete("$cuba.tomcat.dir/webapps/${modulePrefix}-front")
+
 }
 
 task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefix}-web:deploy"], description: 'Redeploys applications and restarts local Tomcat') {
