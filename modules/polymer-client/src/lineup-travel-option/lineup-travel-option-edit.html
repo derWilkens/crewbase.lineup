@@ -1,0 +1,126 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/cuba-app/cuba-localize-behavior.html">
+<link rel="import" href="../../bower_components/cuba-ui/cuba-entity-edit-view-behavior.html">
+<link rel="import" href="../../bower_components/cuba-data/cuba-entity.html">
+<link rel="import" href="../../bower_components/cuba-form/cuba-entity-form.html">
+<link rel="import" href="../../bower_components/cuba-styles/cuba-styles.html">
+
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="lineup-travel-option-edit">
+  <template>
+    <style include="cuba-styles"></style>
+    <style include="shared-styles"></style>
+    <style>
+      paper-card {
+        display: block;
+      }
+    </style>
+
+    <cuba-entity entity-name="lineup$TravelOption" entity-id="[[entityId]]" view="travelOption-bookTransfer" data="{{entity}}"></cuba-entity>
+    <cuba-entity-form id="form"
+                      entity-name="lineup$TravelOption"
+                      entity="{{entity}}"
+                      on-cuba-form-response="_onSuccess"
+                      on-cuba-form-error="_onError"
+                      server-errors="{{serverErrors}}">
+      <paper-card>
+        <div class="card-content">
+          <vaadin-form-layout>
+
+<vaadin-text-field type="number"
+                   value="{{entity.availableSeats}}"
+                   label="[[msg('availableSeats')]]"
+                   
+                   error-message="[[serverErrors.availableSeats]]"
+                   invalid="[[_isInvalid(serverErrors.availableSeats)]]">
+</vaadin-text-field>
+
+<vaadin-text-field type="number"
+                   value="{{entity.bookedSeats}}"
+                   label="[[msg('bookedSeats')]]"
+                   
+                   error-message="[[serverErrors.bookedSeats]]"
+                   invalid="[[_isInvalid(serverErrors.bookedSeats)]]">
+</vaadin-text-field>
+
+<vaadin-combo-box label="[[msg('status')]]"
+                  items="[[enumValues('eu.crewbase.lineup.entity.wayfare.TravelOptionStatus')]]"
+                  value="{{entity.status}}"
+                  error-message="[[serverErrors.status]]"
+                  invalid="[[_isInvalid(serverErrors.status)]]"
+                  >
+</vaadin-combo-box>
+
+<cuba-lookup picked-entity="{{entity.transfer}}">
+  <div slot="dropdown">
+    <cuba-entities entity-name="lineup$Transfer" view="_minimal" data="{{entity_transferOptions}}"></cuba-entities>
+    <vaadin-combo-box label="[[msg('transfer')]]"
+                      items="[[entity_transferOptions]]"
+                      selected-item="{{entity.transfer}}"
+                      item-label-path="_instanceName"
+                      item-value-path="id"
+                      value="[[entity.transfer.id]]"
+                      
+                      error-message="[[serverErrors.transfer]]"
+                      invalid="[[_isInvalid(serverErrors.transfer)]]">
+    </vaadin-combo-box>
+  </div>
+</cuba-lookup>
+
+<cuba-lookup picked-entity="{{entity.favoriteTrip}}">
+  <div slot="dropdown">
+    <cuba-entities entity-name="lineup$FavoriteTrip" view="_minimal" data="{{entity_favoriteTripOptions}}"></cuba-entities>
+    <vaadin-combo-box label="[[msg('favoriteTrip')]]"
+                      items="[[entity_favoriteTripOptions]]"
+                      selected-item="{{entity.favoriteTrip}}"
+                      item-label-path="_instanceName"
+                      item-value-path="id"
+                      value="[[entity.favoriteTrip.id]]"
+                      
+                      error-message="[[serverErrors.favoriteTrip]]"
+                      invalid="[[_isInvalid(serverErrors.favoriteTrip)]]">
+    </vaadin-combo-box>
+  </div>
+</cuba-lookup>
+          </vaadin-form-layout>
+        </div>
+        <div class="card-actions">
+          <vaadin-button on-tap="_delete" hidden$="[[!entityId]]">
+            [[msg('Delete')]]
+          </vaadin-button>
+          <vaadin-button on-tap="_cancel">
+            [[msg('Cancel')]]
+          </vaadin-button>
+          <vaadin-button on-tap="_save">
+            [[msg('Save')]]
+          </vaadin-button>
+        </div>
+      </paper-card>
+    </cuba-entity-form>
+
+    <vaadin-notification id="errorMessage" position="bottom-end">
+      <template>
+        [[msg('Failed to save')]]
+      </template>
+    </vaadin-notification>
+
+  </template>
+  <script>
+    {
+      /**
+       * @extends {Polymer.Element}
+       * @appliesMixin CubaLocalizeBehavior
+       * @appliesMixin CubaEntityEditViewBehavior
+       */
+      class LineupTravelOptionEdit extends Polymer.mixinBehaviors([CubaLocalizeBehavior, CubaEntityEditViewBehavior], Polymer.Element) {
+
+        static get is() { return 'lineup-travel-option-edit'; }
+
+      }
+
+      customElements.define(LineupTravelOptionEdit.is, LineupTravelOptionEdit);
+    }
+  </script>
+</dom-module>

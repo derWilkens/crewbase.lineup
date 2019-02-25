@@ -354,6 +354,11 @@
                   view="_minimal">
             <property name="startDate"/>
         </property>
+        <property name="waypoints"
+                  view="_minimal">
+            <property name="site"
+                      view="_minimal"/>
+        </property>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Waypoint"
           extends="_local"

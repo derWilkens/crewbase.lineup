@@ -1,0 +1,45 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="lineup-locale-select">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    
+  </template>
+  <script>
+    {
+      /**
+       * @extends {Polymer.Element}
+       */
+      class LineupLocaleSelect extends Polymer.Element {
+        static get is() {
+          return 'lineup-locale-select';
+        }
+
+        static get properties() {
+          return {
+            locale: {
+              type: String,
+              value: function () {
+                return cuba.getApp().locale;
+              }
+            }
+          }
+        }
+
+        _changeLocale(event) {
+          cuba.getApp().locale = event.detail.value;
+        }
+      }
+
+      customElements.define(LineupLocaleSelect.is, LineupLocaleSelect);
+    }
+  </script>
+</dom-module>
