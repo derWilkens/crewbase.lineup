@@ -5,6 +5,7 @@
             name="global">
         <artifact appJar="true"
                   name="lineup-global"/>
+        <artifact name="lineup-core" classifier="db" ext="zip" configuration="dbscripts"/>
         <property name="cuba.persistenceConfig"
                   value="+eu/crewbase/lineup/persistence.xml"/>
         <property name="cuba.metadataConfig"
@@ -41,6 +42,7 @@
                   configuration="webcontent"
                   ext="zip"
                   name="lineup-web"/>
+        <artifact name="lineup-web" configuration="themes" ext="jar"/>
         <property name="cuba.springContextConfig"
                   value="+eu/crewbase/lineup/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"

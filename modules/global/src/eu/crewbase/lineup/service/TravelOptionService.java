@@ -11,13 +11,13 @@ import eu.crewbase.lineup.entity.wayfare.TravelOption;
 public interface TravelOptionService {
     String NAME = "lineup_TravelOptionService";
     
-    public List<Site> getReachableSites(UUID transferId);
-    public List<TravelOption> createTravelOptions(UUID transferId);
-    public List<TravelOption> updateTravelOptions(UUID transferId);
-    public void sendTravelOptionNotification();
-    public void bookSeats(UUID travelOptionId, int numberOfSeats);
-    public void approveBooking(UUID travelOptionId);
-	public void declineBooking(UUID travelOptionId);
+    List<Site> getReachableSites(UUID transferId);
+    List<TravelOption> createTravelOptions(UUID transferId);
+    List<TravelOption> updateTravelOptions(UUID transferId);
+    void sendTravelOptionNotification();
+    void bookSeats(UUID travelOptionId, int numberOfSeats);
+    void approveBooking(UUID travelOptionId);
+	void declineBooking(UUID travelOptionId);
     
     //public List<TripDTO> getGroupedTickets(Transfer transfer);
     //public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets, Transfer transferWithFavTrips); 

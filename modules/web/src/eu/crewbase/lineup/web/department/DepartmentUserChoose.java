@@ -33,30 +33,23 @@ public class DepartmentUserChoose extends AbstractWindow {
 	public void init(Map<String, Object> params) {
 
 
-			departmentsDs.refresh();
-			List<UserPreference> preferredRotaplanDepartments = preferencesService
-					.getPreferences(UserPreferencesContext.RotaplanDepartments);
-			depTreeTable.expandAll();
+		departmentsDs.refresh();
+		List<UserPreference> preferredRotaplanDepartments = preferencesService
+				.getPreferences(UserPreferencesContext.RotaplanDepartments);
+		depTreeTable.expandAll();
 
-		
+
 		depTreeTable.addGeneratedColumn("selected", entity -> {
 			CheckBox checkBox = departmentSelectedComponentsFactory.createComponent(CheckBox.class);
 
 			presetDepartementTreeCheckboxes(preferredRotaplanDepartments, entity, checkBox);
-			checkBox.addValueChangeListener(new ValueChangeListener() {
-
-				@Override
-				public void valueChanged(ValueChangeEvent e) {
-					e.getPrevValue();
-					e.getValue();
-					
-					if (checkBox.isChecked()) {
-						preferencesService.createPreference(UserPreferencesContext.RotaplanDepartments,
-								depTreeTable.getSingleSelected().getId(), null);
-					} else {
-						preferencesService.deletePreferenceByEntity(UserPreferencesContext.RotaplanDepartments,
-								depTreeTable.getSingleSelected().getId());
-					}
+			checkBox.addValueChangeListener(e->{
+				if (checkBox.isChecked()) {
+					preferencesService.createPreference(UserPreferencesContext.RotaplanDepartments,
+							depTreeTable.getSingleSelected().getId(), null);
+				} else {
+					preferencesService.deletePreferenceByEntity(UserPreferencesContext.RotaplanDepartments,
+							depTreeTable.getSingleSelected().getId());
 				}
 			});
 			return checkBox;
@@ -64,7 +57,7 @@ public class DepartmentUserChoose extends AbstractWindow {
 	}
 
 	private void presetDepartementTreeCheckboxes(List<UserPreference> preferredRotaplanDepartments, Department entity,
-			CheckBox checkBox) {
+												 CheckBox checkBox) {
 
 		for (UserPreference userPreference : preferredRotaplanDepartments) {
 			if (entity.getId().equals(userPreference.getEntityUuid())
@@ -76,5 +69,5 @@ public class DepartmentUserChoose extends AbstractWindow {
 	public void closeWindow(){
 		this.close(CLOSE_ACTION_ID,true);
 	}
-	
+
 }

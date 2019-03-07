@@ -11,7 +11,6 @@ import com.haulmont.cuba.gui.components.DataGrid.ButtonRenderer;
 import com.haulmont.cuba.gui.components.DataGrid.ColumnGenerator;
 import com.haulmont.cuba.gui.components.DataGrid.ColumnGeneratorEvent;
 import com.haulmont.cuba.gui.components.DataGrid.RendererClickEvent;
-import com.haulmont.cuba.gui.components.DataGrid.RendererClickListener;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import eu.crewbase.lineup.entity.coredata.PeriodKind;
@@ -61,18 +60,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 	}
 
 	private void initIndividualColumn() {
-		RendererClickListener listener = new RendererClickListener() {
 
-			@Override
-			public void onClick(RendererClickEvent event) {
-				event.getColumnId();
-				PeriodTemplate template = periodTemplatesDs.getItem((UUID) event.getItemId());
-				setSiteId(template.getSite().getId().toString());
-				setClazzName(template.getPeriodKind().getId());
-
-				close("OPEN_INDIVIDUAL", true);
-			}
-		};
 
 		ColumnGenerator<PeriodTemplate, String> columnGenerator = new DataGrid.ColumnGenerator<PeriodTemplate, String>() {
 
@@ -90,15 +78,25 @@ public class ShiftPeriodChooser extends AbstractWindow {
 
 		DataGrid.Column column = dataGrid.addGeneratedColumn("individual", columnGenerator);
 		column.setCaption("");
+
 		ButtonRenderer btnRenderer = dataGrid.createRenderer(DataGrid.ButtonRenderer.class);
-		btnRenderer.setRendererClickListener(listener);
+/*		btnRenderer.setRendererClickListener(e->{
+
+			PeriodTemplate template = periodTemplatesDs.getItem((UUID) e.getItemId());
+			setSiteId(template.getSite().getId().toString());
+			setClazzName(template.getPeriodKind().getId());
+
+			close("OPEN_INDIVIDUAL", true);
+				}
+
+		);*/
 		column.setRenderer(btnRenderer);
 
 	}
 
 	private void initRenderers() {
 
-		RendererClickListener listener = new RendererClickListener() {
+/*		RendererClickListener listener = new RendererClickListener() {
 
 			@Override
 			public void onClick(RendererClickEvent event) {
@@ -113,14 +111,14 @@ public class ShiftPeriodChooser extends AbstractWindow {
 
 				close("OK", true);
 			}
-		};
+		};*/
 		ColumnGenerator<PeriodTemplate, String> columnGenerator = new DataGrid.ColumnGenerator<PeriodTemplate, String>() {
 
 			@Override
 			public String getValue(ColumnGeneratorEvent<PeriodTemplate> event) {
 				String label = "";
 				PeriodTemplate template = event.getItem();
-				Integer value = (Integer) template.getValue(event.getColumnId());
+				Integer value = template.getValue(event.getColumnId());
 				if (value != null) {
 					label = value.toString() + (value == 1 ? " Tag" : " Tage");
 				}
@@ -138,7 +136,7 @@ public class ShiftPeriodChooser extends AbstractWindow {
 			DataGrid.Column column = dataGrid.addGeneratedColumn("duration" + i, columnGenerator);
 			column.setCaption("");
 			ButtonRenderer btnRenderer = dataGrid.createRenderer(DataGrid.ButtonRenderer.class);
-			btnRenderer.setRendererClickListener(listener);
+			//btnRenderer.setRendererClickListener(listener);
 			column.setRenderer(btnRenderer);
 		}
 		// individual button hinzu, wie wird dann auf close reagiert? anderes

@@ -10,6 +10,7 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.LookupField;
 import com.haulmont.cuba.gui.components.OptionsGroup;
 
+import com.vaadin.v7.data.Property;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
@@ -39,12 +40,21 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 	}
 
 	private void initListener() {
-		craftType.addValueChangeListener(new ValueChangeListener() {
+		craftType.getDatasource().addItemChangeListener(e -> {
+			List<Integer> list = new ArrayList<>();
+			CraftType craftType = (CraftType) e.getItem();
+			if (craftType != null) {
+				for (int i = 0; i <= craftType.getSeats(); i++) {
+					list.add(i);
+				}
+				freeSeatsOutbound.setOptionsList(list);
+				freeSeatsInbound.setOptionsList(list);
+			}
+		});
+/*		craftType.addValueChangeListener(e ->
 
-			@Override
-			public void valueChanged(ValueChangeEvent e) {
 				List<Integer> list = new ArrayList<>();
-				CraftType craftType = (CraftType) e.getValue();
+				CraftType craftType = (CraftType) e. getValue();
 				if (craftType != null) {
 					for (int i = 0; i <= craftType.getSeats(); i++) {
 						list.add(i);
@@ -52,8 +62,7 @@ public class CrewChangeCreateDTOEdit extends AbstractEditor<CrewChangeCreateDTO>
 					freeSeatsOutbound.setOptionsList(list);
 					freeSeatsInbound.setOptionsList(list);
 				}
-			}
-		});
+		});*/
 	}
 
 	private void presetModeOfTransfer() {
