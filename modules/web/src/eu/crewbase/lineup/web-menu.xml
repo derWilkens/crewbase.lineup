@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
+    <item icon="LIST_UL"
+          insertBefore="administration"
+          screen="lineup$Transfer.browse"/>
     <item icon="GROUP"
           insertBefore="administration"
           screen="lineup$CrewChangeCreateDTO.edit"/>
@@ -46,7 +49,7 @@
           icon="font-icon:GROUP"
           insertBefore="administration">
                 <item screen="CampaignPlan"/>
-        <item screen="lineup$Transfer.browse"/>
+        
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
         <item screen="lineup$Ticket.browse"/>
@@ -93,5 +96,6 @@
             <item screen="lineup$SiteCategory.browse"/>
         </menu>
          -->
+        <item screen="lineup$Transfer.overview"/>
     </menu>
 </menu-config>

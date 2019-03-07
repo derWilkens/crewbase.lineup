@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="eu.crewbase.lineup.web.transfer.TransferOverview"
+        focusComponent="transfersTable"
+        lookupComponent="transfersTable"
+        messagesPack="eu.crewbase.lineup.web.transfer">
+    <dsContext>
+        <groupDatasource id="transfersDs"
+                         class="eu.crewbase.lineup.entity.wayfare.Transfer"
+                         view="transfer-overview">
+            <query>
+                <![CDATA[select e from lineup$Transfer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="transfersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="transfersTable"
+                datasource="transfersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="transfersTable"
+                    width="100%">
+            <columns>
+                <column id="client"
+                        visible="false"/>
+                <column id="transferOrderNo"/>
+                <column id="crewChange.startDate"/>
+                <column id="waypoints.takeOff"/>
+            </columns>
+            <rows datasource="transfersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

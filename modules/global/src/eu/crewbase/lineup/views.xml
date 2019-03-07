@@ -488,13 +488,17 @@
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
-          name="transfer-temp">
+          name="transfer-overview">
         <property name="waypoints"
                   view="_minimal">
             <property name="site"
                       view="_minimal"/>
             <property name="stopoverTime"/>
             <property name="posOrder"/>
+        </property>
+        <property name="crewChange"
+                  view="_minimal">
+            <property name="startDate"/>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"

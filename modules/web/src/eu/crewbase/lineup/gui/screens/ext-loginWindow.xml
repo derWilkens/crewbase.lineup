@@ -6,6 +6,16 @@
     <dialogMode height="600"
                 width="800"/>
     <layout>
+        <vbox id="loginWrapper">
+            <vbox id="loginMainBox">
+                <vbox id="loginForm">
+                    <hbox id="rememberLocalesBox">
+                        <lookupField id="localesSelect"
+                                     visible="false"/>
+                    </hbox>
+                </vbox>
+            </vbox>
+        </vbox>
         <label id="poweredByLink"
                visible="false"/>
     </layout>

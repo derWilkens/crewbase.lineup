@@ -28,14 +28,14 @@
                               class="eu.crewbase.lineup.entity.coredata.Site"
                               view="siteSelect">
             <query>
-                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Airport']]>
+                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Airport' order by 'siteName']]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="platformDs"
                               class="eu.crewbase.lineup.entity.coredata.Site"
                               view="siteSelect">
             <query>
-                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Helideck']]>
+                <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Helideck'  order by 'siteName']]>
             </query>
         </collectionDatasource>
     </dsContext>
@@ -70,7 +70,8 @@
                              inputPrompt="(start typing...)"
                              nullOptionVisible="false"
                              optionsDatasource="platformDs"
-                             property="destinationSite"/>
+                             property="destinationSite"
+                             width="200px"/>
             </groupBox>
         </vbox>
         <groupBox caption="Transportation"

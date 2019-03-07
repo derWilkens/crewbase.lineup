@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.esotericsoftware.minlog.Log;
 import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
@@ -37,8 +36,8 @@ import eu.crewbase.lineup.entity.coredata.Company;
 import eu.crewbase.lineup.entity.coredata.CraftType;
 import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
 import eu.crewbase.lineup.entity.coredata.Site;
-import eu.crewbase.lineup.entity.dto.TripDTO;
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import eu.crewbase.lineup.entity.dto.TripDTO;
 
 /**
  * @author christian

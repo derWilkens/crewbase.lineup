@@ -129,4 +129,6 @@
             template="eu/crewbase/lineup/web/ticket/ticket-edit.xml"/>
     <screen id="loginWindow"
             template="eu/crewbase/lineup/gui/screens/ext-loginWindow.xml"/>
+    <screen id="lineup$Transfer.overview"
+            template="eu/crewbase/lineup/web/transfer/transfer-overview.xml"/>
 </screen-config>
