@@ -47,10 +47,7 @@ public class EmlSiteChoose extends AbstractLookup {
 				}
 			}
 
-			checkBox.addValueChangeListener(new ValueChangeListener() {
-
-				@Override
-				public void valueChanged(ValueChangeEvent e) {
+			checkBox.addValueChangeListener(e->{
 					if (checkBox.isChecked()) {
 						preferencesService.createPreference(context,
 								sitesTable.getSingleSelected().getId(), null);
@@ -58,8 +55,6 @@ public class EmlSiteChoose extends AbstractLookup {
 						preferencesService.deletePreferenceByEntity(context,
 								sitesTable.getSingleSelected().getId());
 					}
-				}
-
 			});
 			return checkBox;
 		});

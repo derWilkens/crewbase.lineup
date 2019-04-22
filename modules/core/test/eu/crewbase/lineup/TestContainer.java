@@ -32,10 +32,10 @@ import java.util.Properties;
 import javax.naming.NamingException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.text.StrLookup;
-import org.apache.commons.lang.text.StrSubstitutor;
-import org.apache.commons.lang.text.StrTokenizer;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StrLookup;
+import org.apache.commons.text.StrSubstitutor;
+import org.apache.commons.text.StrTokenizer;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

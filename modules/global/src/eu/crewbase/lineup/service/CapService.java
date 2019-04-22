@@ -8,5 +8,5 @@ import eu.crewbase.lineup.entity.period.AttendencePeriod;
 public interface CapService {
     String NAME = "lineup_CapService";
     
-    public List<Role> getAvailableUserRoles(AttendencePeriod dutyPeriod);
+    List<Role> getAvailableUserRoles(AttendencePeriod dutyPeriod);
 }
