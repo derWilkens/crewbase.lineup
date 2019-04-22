@@ -18,7 +18,8 @@ modules/gui/.settings/org.eclipse.jdt.core.prefs
 .settings/lineup-remote_debug.launch
 gradle/wrapper/gradle-wrapper.jar
 *.prefs
+*.prefs
+*.prefs
 modules/web/.settings/org.eclipse.jdt.core.prefs
-*.classpath
-
-.idea/
+modules/global/.classpath
+modules/core/.classpath

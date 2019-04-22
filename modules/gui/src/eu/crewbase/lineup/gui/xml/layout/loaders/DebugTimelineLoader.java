@@ -6,7 +6,7 @@ import com.haulmont.cuba.gui.xml.layout.loaders.AbstractComponentLoader;
 public class DebugTimelineLoader extends AbstractComponentLoader<DebugTimeline> {
     @Override
     public void createComponent() {
-        //resultComponent = factory.createComponent(DebugTimeline.class);
+        resultComponent = factory.createComponent(DebugTimeline.class);
         loadId(resultComponent, element);
     }
 

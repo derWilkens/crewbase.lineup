@@ -1,7 +1,7 @@
 package eu.crewbase.lineup.listener;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
 import org.springframework.stereotype.Component;
 
 import com.haulmont.cuba.core.EntityManager;
@@ -28,10 +28,9 @@ public class OffshoreUserEntityListener implements BeforeInsertEntityListener<Of
 
 	private String getRandomPassword() {
 	    StringBuffer password = new StringBuffer(20);
-	    //int next = (int) RandomUtils.nextInt(1,10);
-	    //password.append(RandomStringUtils.randomAlphanumeric(8));
-	    //return password.toString();
-	    return RandomStringUtils.randomAlphanumeric(8);
+	    int next = RandomUtils.nextInt(13) + 8;
+	    password.append(RandomStringUtils.randomAlphanumeric(next));
+	    return password.toString();
 	}
 
 

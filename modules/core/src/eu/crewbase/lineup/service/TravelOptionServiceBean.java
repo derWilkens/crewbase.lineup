@@ -113,7 +113,9 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		List<FavoriteTrip> favoriteTrips = getFavoriteTripsBySiteList(transferWithFavTripSites.getSiteHash());
 
 		for (TravelOption existingTravelOption : existingTravelOptionList) {
-			favoriteTrips.remove(existingTravelOption.getFavoriteTrip());
+			if (favoriteTrips.contains(existingTravelOption.getFavoriteTrip())) {
+				favoriteTrips.remove(existingTravelOption.getFavoriteTrip());
+			}
 		}
 		
 		log.debug("New fitting FavoriteTrips: " + favoriteTrips.size() + ", " + transfer.getRoute());

@@ -7,7 +7,7 @@ import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 public interface CrewChangeService {
     String NAME = "lineup_CrewChangeService";
-    UUID createCrewChange(CrewChangeCreateDTO dto);
+    public UUID createCrewChange(CrewChangeCreateDTO dto);
     
 
 //    public void moveWaypoint (UUID waypointId, UUID newPrevStandstill);

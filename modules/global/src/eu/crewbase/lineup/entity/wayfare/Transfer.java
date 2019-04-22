@@ -168,7 +168,8 @@ public class Transfer extends StandardClientEntity {
 
 		for (Waypoint waypoint : this.getWaypoints()) {
 			route = route + delim + waypoint.getSite().getSiteName();
-            delim = " - ";
+			;
+			delim = " - ";
 		}
 		return route;
 	}

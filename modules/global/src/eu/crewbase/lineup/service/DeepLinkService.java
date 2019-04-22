@@ -4,5 +4,5 @@ import com.haulmont.chile.core.model.Instance;
 
 public interface DeepLinkService {
     String NAME = "lineup_DeepLinkService";
-    String generateDeepLinkForEntity(Instance entityInstance);
+    public String generateDeepLinkForEntity(Instance entityInstance); 
 }

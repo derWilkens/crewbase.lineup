@@ -54,7 +54,7 @@ public class TravelOptionBookTransfer extends AbstractEditor<TravelOption> {
 	}
 
     public void bookSeats(Component source) {
-    	travelOptionService.bookSeats(getItem().getId(), (Integer) bookedSeats.getValue());
+    	travelOptionService.bookSeats(getItem().getId(), bookedSeats.getValue());
     	this.close(WINDOW_CLOSE);
     }
 

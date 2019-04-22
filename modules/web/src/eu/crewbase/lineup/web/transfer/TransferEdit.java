@@ -7,7 +7,6 @@ import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.LookupField;
 
-import eu.crewbase.lineup.entity.coredata.Site;
 import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
@@ -22,7 +21,7 @@ public class TransferEdit extends AbstractEditor<Transfer> {
     	if(siteLookup.getValue()!=null){
     		Waypoint waypoint = dataManager.create(Waypoint.class);
     		Transfer transfer = this.getItem();
-    		waypoint.setSite((Site) siteLookup.getValue());
+    		waypoint.setSite(siteLookup.getValue());
     		this.getItem().addWaypointShortestWay(waypoint);
     		dataManager.commit(this.getItem());
     	}

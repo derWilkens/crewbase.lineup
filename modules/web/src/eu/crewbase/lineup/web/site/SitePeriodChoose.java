@@ -47,14 +47,19 @@ public class SitePeriodChoose extends AbstractLookup {
 				}
 			}
 
-			checkBox.addValueChangeListener(e-> {
-				if (checkBox.isChecked()) {
-					preferencesService.createPreference(context,
-							sitesTable.getSingleSelected().getId(), null);
-				} else {
-					preferencesService.deletePreferenceByEntity(context,
-							sitesTable.getSingleSelected().getId());
+			checkBox.addValueChangeListener(new ValueChangeListener() {
+
+				@Override
+				public void valueChanged(ValueChangeEvent e) {
+					if (checkBox.isChecked()) {
+						preferencesService.createPreference(context,
+								sitesTable.getSingleSelected().getId(), null);
+					} else {
+						preferencesService.deletePreferenceByEntity(context,
+								sitesTable.getSingleSelected().getId());
+					}
 				}
+
 			});
 			return checkBox;
 		});

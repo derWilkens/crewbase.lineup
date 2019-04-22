@@ -122,11 +122,14 @@ public class EmlTimeline extends AbstractWindow {
 		if (displayedSite != null) {
 			siteChooser.setValue(displayedSite.getId());
 		}
-		siteChooser.addValueChangeListener(e -> {
+		siteChooser.addValueChangeListener(new ValueChangeListener() {
 
+			@Override
+			public void valueChanged(ValueChangeEvent e) {
 				preferencesService.deletePreferenceByEntity(UserPreferencesContext.EmlDisplaySite, null);
-				preferencesService.createPreference(UserPreferencesContext.EmlDisplaySite, (UUID) e, null);
+				preferencesService.createPreference(UserPreferencesContext.EmlDisplaySite, (UUID) e.getValue(), null);
 				loadEmlDto();
+			}
 		});
 	}
 
@@ -248,9 +251,10 @@ public class EmlTimeline extends AbstractWindow {
 						isCalledAlready = false;
 					}
 				});
+				;
 			} else {
 
-				attendencePeriodDs.setItem(newItem);
+				attendencePeriodDs.setItem((AttendencePeriod) newItem);
 				attendencePeriodsDs.updateItem(newItem);
 				getDsContext().commit();
 				TimelineItem timelineItem = timelineDTOService.periodToTimelineItem(newItem,

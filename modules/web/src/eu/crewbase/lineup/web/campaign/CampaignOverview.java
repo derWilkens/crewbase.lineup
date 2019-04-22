@@ -89,7 +89,7 @@ public class CampaignOverview extends AbstractLookup {
 	@Inject
 	private TimelineService timelineDTOService;
 	private TimelineDTO dto;
-
+	
 	@Override
 	public void init(Map<String, Object> params) {
 
@@ -131,31 +131,35 @@ public class CampaignOverview extends AbstractLookup {
 					checkBox.setValue(true);
 				}
 			}
-			checkBox.addValueChangeListener(e->{
+			checkBox.addValueChangeListener(new ValueChangeListener() {
 
-				if (checkBox.isChecked()) {
-					final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
+				@Override
+				public void valueChanged(ValueChangeEvent e) {
 
-					final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
-					newItem.setContextId(UserPreferencesContext.CampaignBrowse);
-					newItem.setEntityUuid(functionCategoryUserSettings.getSingleSelected().getId());
-					userPreferencesDs.addItem(newItem);
-					userPreferencesDs.commit();
-				} else {
-					UserPreference tmp = null;
-					Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
-					while (iter.hasNext()) {
-						UserPreference userPreference = iter.next();
-						if (userPreference.getEntityUuid()
-								.equals(functionCategoryUserSettings.getSingleSelected().getId())) {
-							tmp = userPreference;
+					if (checkBox.isChecked()) {
+						final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
+
+						final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
+						newItem.setContextId(UserPreferencesContext.CampaignBrowse);
+						newItem.setEntityUuid((UUID) functionCategoryUserSettings.getSingleSelected().getId());
+						userPreferencesDs.addItem((UserPreference) newItem);
+						userPreferencesDs.commit();
+					} else {
+						UserPreference tmp = null;
+						Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
+						while (iter.hasNext()) {
+							UserPreference userPreference = (UserPreference) iter.next();
+							if (userPreference.getEntityUuid()
+									.equals(functionCategoryUserSettings.getSingleSelected().getId())) {
+								tmp = userPreference;
+							}
 						}
+						userPreferencesDs.removeItem(tmp);
+						userPreferencesDs.commit();
 					}
-					userPreferencesDs.removeItem(tmp);
-					userPreferencesDs.commit();
+					timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
+					timeline.refresh();
 				}
-				timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
-				timeline.refresh();
 			});
 			return checkBox;
 		});
@@ -172,34 +176,39 @@ public class CampaignOverview extends AbstractLookup {
 				}
 			}
 
-			checkBox.addValueChangeListener(e-> {
+			checkBox.addValueChangeListener(new ValueChangeListener() {
 
-				if (checkBox.isChecked()) {
-					final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
-					final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
-					newItem.setContextId(UserPreferencesContext.CampaignBrowse);
-					newItem.setEntityUuid(siteUserSettings.getSingleSelected().getId());
-					userPreferencesDs.addItem(newItem);
-					userPreferencesDs.commit();
-				} else {
-					UserPreference tmp = null;
-					Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
-					while (iter.hasNext()) {
-						UserPreference userPreference = iter.next();
-						try {
-							if (userPreference.getEntityUuid().equals(siteUserSettings.getSingleSelected().getId())) {
-								tmp = userPreference;
+				@Override
+				public void valueChanged(ValueChangeEvent e) {
+
+					if (checkBox.isChecked()) {
+						final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
+						final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
+						newItem.setContextId(UserPreferencesContext.CampaignBrowse);
+						newItem.setEntityUuid((UUID) siteUserSettings.getSingleSelected().getId());
+						userPreferencesDs.addItem((UserPreference) newItem);
+						userPreferencesDs.commit();
+					} else {
+						UserPreference tmp = null;
+						Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
+						while (iter.hasNext()) {
+							UserPreference userPreference = (UserPreference) iter.next();
+							try {
+								if (userPreference.getEntityUuid().equals(siteUserSettings.getSingleSelected().getId())) {
+									tmp = userPreference;
+								}
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
 						}
+						userPreferencesDs.removeItem(tmp);
+						userPreferencesDs.commit();
 					}
-					userPreferencesDs.removeItem(tmp);
-					userPreferencesDs.commit();
+					timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
+					timeline.refresh();
 				}
-				timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
-				timeline.refresh();
+
 			});
 			return checkBox;
 		});
@@ -215,29 +224,34 @@ public class CampaignOverview extends AbstractLookup {
 				}
 			}
 
-			checkBox.addValueChangeListener(e->{
+			checkBox.addValueChangeListener(new ValueChangeListener() {
 
-				if (checkBox.isChecked()) {
-					final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
-					final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
-					newItem.setContextId(UserPreferencesContext.CampaignBrowse);
-					newItem.setEntityUuid(personsOnDutyUserSettings.getSingleSelected().getId());
-					userPreferencesDs.addItem(newItem);
-					userPreferencesDs.commit();
-				} else {
-					UserPreference tmp = null;
-					Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
-					while (iter.hasNext()) {
-						UserPreference userPreference = iter.next();
-						if (userPreference.getEntityUuid().equals(personsOnDutyUserSettings.getSingleSelected().getId())) {
-							tmp = userPreference;
+				@Override
+				public void valueChanged(ValueChangeEvent e) {
+
+					if (checkBox.isChecked()) {
+						final DataSupplier dataservice = userPreferencesDs.getDataSupplier();
+						final UserPreference newItem = dataservice.newInstance(userPreferencesDs.getMetaClass());
+						newItem.setContextId(UserPreferencesContext.CampaignBrowse);
+						newItem.setEntityUuid((UUID) personsOnDutyUserSettings.getSingleSelected().getId());
+						userPreferencesDs.addItem((UserPreference) newItem);
+						userPreferencesDs.commit();
+					} else {
+						UserPreference tmp = null;
+						Iterator<UserPreference> iter = userPreferencesDs.getItems().iterator();
+						while (iter.hasNext()) {
+							UserPreference userPreference = (UserPreference) iter.next();
+							if (userPreference.getEntityUuid().equals(personsOnDutyUserSettings.getSingleSelected().getId())) {
+								tmp = userPreference;
+							}
 						}
+						userPreferencesDs.removeItem(tmp);
+						userPreferencesDs.commit();
 					}
-					userPreferencesDs.removeItem(tmp);
-					userPreferencesDs.commit();
+					timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
+					timeline.refresh();
 				}
-				timeline.addDTO(UserPreferencesContext.CampaignBrowse, timelineDTOService.getDto(UserPreferencesContext.CampaignBrowse));
-				timeline.refresh();
+
 			});
 			return checkBox;
 		});

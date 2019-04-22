@@ -7,11 +7,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractFrame;
+import com.haulmont.cuba.gui.components.Frame;
+import com.haulmont.cuba.gui.components.OptionsGroup;
+import com.haulmont.cuba.gui.components.PopupView;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 
 import eu.crewbase.lineup.entity.UserPreference;
@@ -51,30 +53,28 @@ public class Preferredsites extends AbstractFrame {
 		}
 		optionsGroup.setValue(preferredSiteList);
 		
-		optionsGroup.addValueChangeListener(new Consumer<HasValue.ValueChangeEvent>() {
-			@Override
-			public void accept(HasValue.ValueChangeEvent e) {
-				String selectedValue = e.getValue() == null ? "0" : String.valueOf(((Collection) e.getValue()).size());
-				showNotification("selected: " + selectedValue, NotificationType.HUMANIZED);
-				LinkedHashSet<Site> currentVal = null;
-				LinkedHashSet<Site> prevVal = null;
+		optionsGroup.addValueChangeListener(e -> {
+			@SuppressWarnings("rawtypes")
+			String selectedValue = e.getValue() == null ? "0" : String.valueOf(((Collection) e.getValue()).size());
+			showNotification("selected: " + selectedValue, NotificationType.HUMANIZED);
+			LinkedHashSet<Site> currentVal = null;
+			LinkedHashSet<Site> prevVal = null;
 
-				currentVal = (LinkedHashSet<Site>) e.getValue();
+			currentVal = (LinkedHashSet<Site>) e.getValue();
 
-				if (e.getPrevValue() instanceof LinkedHashSet) {
-					prevVal = (LinkedHashSet<Site>) e.getPrevValue();
+			if (e.getPrevValue() instanceof LinkedHashSet) {
+				prevVal = (LinkedHashSet<Site>) e.getPrevValue();
+			}
+			if (prevVal != null) {
+				Site removedSite = getRemovedItem(prevVal, currentVal);
+				if(removedSite != null){
+					preferencesService.deletePreferenceByEntity(UserPreferencesContext.SiteRotaplan, removedSite.getUuid());
 				}
-				if (prevVal != null) {
-					Site removedSite = getRemovedItem(prevVal, currentVal);
-					if (removedSite != null) {
-						preferencesService.deletePreferenceByEntity(UserPreferencesContext.SiteRotaplan, removedSite.getUuid());
-					}
-				}
-				Site addedSite = getAddedItem(prevVal, currentVal);
+			}
+			Site addedSite = getAddedItem(prevVal, currentVal);
 
-				if (addedSite != null) {
-					preferencesService.createPreference(UserPreferencesContext.SiteRotaplan, addedSite.getUuid(), null);
-				}
+			if (addedSite != null) {
+				preferencesService.createPreference(UserPreferencesContext.SiteRotaplan, addedSite.getUuid(), null);
 			}
 		});
 	}
