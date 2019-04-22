@@ -3,50 +3,28 @@
  */
 package eu.crewbase.lineup.entity.wayfare;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-
+import com.esotericsoftware.minlog.Log;
+import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.cuba.core.entity.annotation.*;
+import com.haulmont.cuba.core.global.DeletePolicy;
+import eu.crewbase.lineup.entity.coredata.*;
+import eu.crewbase.lineup.entity.dto.TripDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.esotericsoftware.minlog.Log;
-import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
-import com.haulmont.cuba.core.entity.annotation.Lookup;
-import com.haulmont.cuba.core.entity.annotation.LookupType;
-import com.haulmont.cuba.core.entity.annotation.OnDelete;
-import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
-import com.haulmont.cuba.core.global.DeletePolicy;
-
-import eu.crewbase.lineup.entity.coredata.Company;
-import eu.crewbase.lineup.entity.coredata.CraftType;
-import eu.crewbase.lineup.entity.coredata.ModeOfTransfer;
-import eu.crewbase.lineup.entity.coredata.Site;
-import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
-import eu.crewbase.lineup.entity.dto.TripDTO;
+import javax.persistence.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author christian
  */
-@Listeners({ "lineup_TransferListener" })
+@Listeners({"lineup_TransferListener"})
 @Table(name = "LINEUP_TRANSFER")
 @Entity(name = "lineup$Transfer")
 public class Transfer extends StandardClientEntity {
 	private static final long serialVersionUID = -5709533341256299692L;
+
 	private static final Logger log = LoggerFactory.getLogger(Transfer.class);
 	// private static final Logger log =
 	// LoggerFactory.getLogger(Transfer.class);
@@ -74,14 +52,14 @@ public class Transfer extends StandardClientEntity {
 	protected CrewChange crewChange;
 
 	@Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "OPERATED_BY_ID")
 	protected Company operatedBy;
 
 	@Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
-    @OnDeleteInverse(DeletePolicy.UNLINK)
+	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MODE_OF_TRANSFER_ID")

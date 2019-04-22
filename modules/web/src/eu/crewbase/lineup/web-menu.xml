@@ -1,50 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <item icon="LIST_UL"
-          insertBefore="administration"
-          screen="lineup$Transfer.browse"/>
-    <item icon="GROUP"
-          insertBefore="administration"
-          screen="lineup$CrewChangeCreateDTO.edit"/>
-    <item id="bookTickets"
-          icon="CART_PLUS"
-          insertBefore="administration"
-          screen="lineup$TravelOption.browse">
-        <param name="tableDatasource"
-               value="availableTicketsDs"/>
-        <param name="windowLabel"
-               value="Available Tickets"/>
-    </item>
-    <item id="approveBookings"
-          icon="font-icon:CHECK_SQUARE_O"
-          insertBefore="administration"
-          screen="lineup$TravelOption.browse">
-        <param name="tableDatasource"
-               value="approveBookingsDs"/>
-        <param name="windowLabel"
-               value="Approve Bookings"/>
-    </item>
-    <item id="myBookings"
-          icon="font-icon:CALENDAR_CHECK_O"
-          insertBefore="administration"
-          screen="lineup$TravelOption.browse">
-        <param name="tableDatasource"
-               value="myBookingsDs"/>
-        <param name="windowLabel"
-               value="my Bookings"/>
-    </item>
-    <item id="overviewBookings"
-          icon="PAPER_PLANE_O"
-          insertBefore="administration"
-          screen="lineup$TravelOption.browse">
-        <param name="tableDatasource"
-               value="overviewBookingsDs"/>
-        <param name="windowLabel"
-               value="Booking Overview"/>
-    </item>
-    <item icon="STAR"
-          insertBefore="administration"
-          screen="lineup$FavoriteTrip.browse"/>
     <!--     <menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
@@ -83,19 +38,41 @@
         <item screen="lineup$PeriodImportStage.browse"/>
         <item screen="lineup$UserImportStage.browse"/>
     </menu> -->
-    <menu id="masterdata"
-          icon="font-icon:TABLE"
-          insertBefore="administration">
+    <item description="" icon="LIST_UL" insertBefore="administration" screen="lineup$Transfer.overview"/>
+    <item icon="GROUP" insertBefore="administration" openType="DIALOG" screen="lineup$CrewChangeCreateDTO.create"/>
+    <item icon="CART_PLUS" id="bookTickets" insertBefore="administration" screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="availableTicketsDs"/>
+        <param name="windowLabel"
+               value="Available Tickets"/>
+    </item>
+    <item icon="font-icon:CHECK_SQUARE_O" id="approveBookings" insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="approveBookingsDs"/>
+        <param name="windowLabel"
+               value="Approve Bookings"/>
+    </item>
+    <item icon="font-icon:CALENDAR_CHECK_O" id="myBookings" insertBefore="administration"
+          screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="myBookingsDs"/>
+        <param name="windowLabel"
+               value="my Bookings"/>
+    </item>
+    <item icon="PAPER_PLANE_O" id="overviewBookings" insertBefore="administration" screen="lineup$TravelOption.browse">
+        <param name="tableDatasource"
+               value="overviewBookingsDs"/>
+        <param name="windowLabel"
+               value="Booking Overview"/>
+    </item>
+    <item icon="STAR" insertBefore="administration" screen="lineup$FavoriteTrip.browse"/>
+    <menu icon="font-icon:TABLE" id="masterdata" insertBefore="administration">
         <menu id="Crafts">
             <item screen="lineup$CraftType.browse"/>
             <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
         <item screen="lineup$Site.browse"/>
-        <!-- 
-        <menu id="Sites">
-            <item screen="lineup$SiteCategory.browse"/>
-        </menu>
-         -->
         <item screen="lineup$Transfer.overview"/>
     </menu>
 </menu-config>

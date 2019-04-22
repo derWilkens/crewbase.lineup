@@ -2,7 +2,7 @@
 @import "eu.crewbase.lineup/hover-ext-defaults";
 @import "app-components";
 @import "eu.crewbase.lineup/hover-ext";
-
+@import url(http://fonts.googleapis.com/css?family=Roboto);
 .hover {
   // include auto-generated app components SCSS
   @include app_components;
