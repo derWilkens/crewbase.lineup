@@ -146,14 +146,14 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	@After
 	public void tearDown() throws Exception {
 		if (ccId != null) {
-			dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
+			//dataManager.remove(dataManager.getReference(CrewChange.class, ccId));
 			try (Transaction tx = persistence.createTransaction()) {
 				List<Site> siteList = persistence.getEntityManager()
 						.createQuery("select s from lineup$Site s where s.createdBy = 'test_admin'", Site.class)
 						.getResultList();
 
 				for (Site site : siteList) {
-					persistence.getEntityManager().remove(site);
+					//persistence.getEntityManager().remove(site);
 				}
 				tx.commit();
 			}
@@ -229,7 +229,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 		try (Transaction tx = persistence.createTransaction()) {
 
-			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+			cc = entityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDE - DWAL - EMDE", transfer.getRouteShort());
 		}
@@ -562,6 +562,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		
 		try (Transaction tx = persistence.createTransaction()) {
 			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+			cc = entityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDE - EMDE", transfer.getRouteShort());
 			assertEquals(0, transfer.getTickets().size());

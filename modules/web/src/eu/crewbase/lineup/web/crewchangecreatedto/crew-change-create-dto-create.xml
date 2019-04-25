@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd" caption="msg://editorCaption" focusComponent="startDateTimeField"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd" xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd" caption="msg://editorCaption" focusComponent="startDateTimeField"
         messagesPack="eu.crewbase.lineup.web.crewchangecreatedto">
+
     <data>
         <instance id="crewChangeCreateDTODc" class="eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO" view="_local">
             <loader id="crewChangeCreateDTODl"/>
         </instance>
         <collection id="airportsDc" class="eu.crewbase.lineup.entity.coredata.Site" view="siteSelect">
-            <loader id="sitesDl">
+            <loader id="airportsDl">
                 <query>
                     <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Airport' order by 'siteName']]></query>
             </loader>
@@ -14,7 +15,13 @@
         <collection id="craftTypesDc" class="eu.crewbase.lineup.entity.coredata.CraftType" view="craftType-select">
             <loader id="craftTypesDl">
                 <query>
-                    <![CDATA[select e from lineup$CraftType e]]></query>
+                    <![CDATA[select e from lineup$CraftType e]]>
+                    <condition>
+                            <c:jpql>
+                                <c:where>e.modeOfTransfer.id = :modeOfTransferId</c:where>
+                            </c:jpql>
+                    </condition>
+                </query>
             </loader>
         </collection>
         <collection id="modeOfTransfersDc" class="eu.crewbase.lineup.entity.coredata.ModeOfTransfer" view="_local">
@@ -23,19 +30,24 @@
             </loader>
         </collection>
         <collection id="platformsDc" class="eu.crewbase.lineup.entity.coredata.Site" view="siteSelect">
-            <loader id="sitesDl">
+            <loader id="platformsDl">
                 <query>
                     <![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Helideck' order by 'siteName']]></query>
             </loader>
         </collection>
     </data>
     <dialogMode height="AUTO" width="600" forceDialog="true"/>
+    <actions>
+        <action id="createCrewChange" />
+    </actions>
     <layout expand="editActions" spacing="true">
 
         <vbox spacing="true">
             <groupBox caption="Take Off" orientation="horizontal" spacing="true">
-                <dateField id="startDateTimeField" property="startDateTime"/>
+                <dateField id="startDateTimeField" dataContainer="crewChangeCreateDTODc" datatype="dateTime"
+                           property="startDateTime"/>
             </groupBox>
+
             <groupBox caption="Trip" orientation="horizontal" spacing="true">
                 <lookupField id="departureSiteField" caption="Departure" dataContainer="crewChangeCreateDTODc"
                              inputPrompt="(start typing...)" optionsContainer="airportsDc" property="departureSite" nullOptionVisible="false"/>
@@ -60,7 +72,8 @@
 
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>
-            <button action="windowCommit"/>
+            <!--button action="createCrewChange"/-->
+            <!--button action="windowCommit"/-->
             <button action="windowClose"/>
         </hbox>
     </layout>

@@ -38,7 +38,7 @@
         <item screen="lineup$PeriodImportStage.browse"/>
         <item screen="lineup$UserImportStage.browse"/>
     </menu> -->
-    <item description="" icon="LIST_UL" insertBefore="administration" screen="lineup$Transfer.overview"/>
+    <item icon="LIST_UL" insertBefore="administration" screen="lineup$Transfer.overview"/>
     <item icon="GROUP" insertBefore="administration" openType="DIALOG" screen="lineup$CrewChangeCreateDTO.create"/>
     <item icon="CART_PLUS" id="bookTickets" insertBefore="administration" screen="lineup$TravelOption.browse">
         <param name="tableDatasource"
@@ -73,6 +73,5 @@
             <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
         <item screen="lineup$Site.browse"/>
-        <item screen="lineup$Transfer.overview"/>
     </menu>
 </menu-config>

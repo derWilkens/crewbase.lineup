@@ -3,24 +3,15 @@
  */
 package eu.crewbase.lineup.entity.wayfare;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
-
 import eu.crewbase.lineup.entity.coredata.Site;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @author christian
@@ -45,8 +36,8 @@ public class Waypoint extends StandardEntity {
 	@Column(name = "POS_ORDER")
 	protected Integer posOrder;
 
-	@OnDeleteInverse(DeletePolicy.UNLINK)
-	@OnDelete(DeletePolicy.CASCADE)
+	@OnDelete(DeletePolicy.UNLINK)
+	@OnDeleteInverse(DeletePolicy.CASCADE)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSFER_ID")
 	protected Transfer transfer;

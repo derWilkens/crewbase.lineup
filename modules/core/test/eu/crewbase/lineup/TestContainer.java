@@ -382,7 +382,7 @@ public class TestContainer extends ExternalResource {
 
         StrTokenizer tokenizer = new StrTokenizer(configProperty);
         List<String> locations = tokenizer.getTokenList();
-        locations.add(getSpringConfig());
+        //locations.add(getSpringConfig());
 
         springAppContext = new CubaCoreApplicationContext(locations.toArray(new String[locations.size()]));
         AppContext.Internals.setApplicationContext(springAppContext);

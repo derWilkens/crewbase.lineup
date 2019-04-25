@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.haulmont.cuba.testsupport.TestContainer;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.junit.ClassRule;
@@ -16,7 +17,7 @@ import com.haulmont.cuba.core.global.Metadata;
 
 import eu.crewbase.lineup.service.EntityService;
 
-public class LineupTestContainer extends TestContainer {
+public class LineupTestContainer extends com.haulmont.cuba.testsupport.TestContainer {
 
     @ClassRule
 	public static LineupTestContainer cont = new LineupTestContainer();
