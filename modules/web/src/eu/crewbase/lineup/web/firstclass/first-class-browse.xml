@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="firstClassesTable"
+        messagesPack="eu.crewbase.lineup.web.firstclass">
+    <data readOnly="true">
+        <collection id="firstClassesDc"
+                    class="eu.crewbase.lineup.entity.tmp.FirstClass"
+                    view="_local">
+            <loader id="firstClassesDl">
+                <query>
+                    <![CDATA[select e from lineup$FirstClass e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="firstClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="firstClassesTable"
+                dataLoader="firstClassesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="firstClassesTable"
+                    width="100%"
+                    dataContainer="firstClassesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="firstAttr"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="firstClassesTable.create"/>
+                <button id="editBtn" action="firstClassesTable.edit"/>
+                <button id="removeBtn" action="firstClassesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

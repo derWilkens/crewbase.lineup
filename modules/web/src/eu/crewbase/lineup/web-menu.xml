@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <!--     <menu id="lineUp"
+    <menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
                 <item screen="CampaignPlan"/>
@@ -8,7 +8,10 @@
         <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
         <item screen="lineup$Ticket.browse"/>
-    </menu> -->
+        <item screen="lineup$FirstClass.browse"/>
+        <item screen="lineup$SecondClass.browse"/>
+        <item screen="lineup$ThirdClass.browse"/>
+    </menu>
     <!--     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">

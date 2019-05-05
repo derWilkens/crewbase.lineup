@@ -1,19 +1,11 @@
 package eu.crewbase.lineup.entity.wayfare;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.haulmont.chile.core.annotations.NamePattern;
-
 import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
 import eu.crewbase.lineup.entity.dto.TripDTO;
 
+import javax.persistence.*;
 import java.util.List;
-import javax.persistence.OneToMany;
 
 //@Listeners("lineup_TravelOptionListener")
 @NamePattern(" %s|transfer")

@@ -5,7 +5,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import eu.crewbase.lineup.entity.coredata.SiteCategory;
+import eu.crewbase.lineup.entity.dto.CrewChangeCreateDTO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -25,7 +28,7 @@ import eu.crewbase.lineup.entity.wayfare.Transfer;
 import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 
-public class CrewChangeTest {
+public class CrewChangeTest  extends LineupTestContainer{
 
 
 	private User user;
@@ -35,36 +38,37 @@ public class CrewChangeTest {
 	private ArrayList<Waypoint> waypointList;
 	private Site hus;
 	private Site sw1;
-	
-	
-	
+
 	/**
 	 * Kompletten CrewChange anlegen
 	 */
-	@ClassRule
-	public static LineupTestContainer cont = new LineupTestContainer();
-	
+
 	@Before
 	public void setUp() throws Exception {
-		
-		user = cont.persistence().createTransaction().execute(em -> {
-			User user = new User();
-			user.setName("testCustomer");
-			em.persist(user);
-			return user;
-		});
+
+		SiteCategory category = super.dataManager.load(SiteCategory.class)
+				.query("select e from lineup$SiteCategory e where e.categoryName = :type")
+				.parameter("type", "Helideck")
+				.one();
+
+		hus = createSite("Husum", "", 53.9616666666667, 6.47916666666667, category);
+		sw1 = createSite("SylWin alpha", "SWAL", 54.3569444444444, 6.03055555555556, category);
+
+
 		operatedBy = cont.persistence().createTransaction().execute(em ->{
 			Company comp = new Company();
 			//comp.setClient(1);
 			comp.setCompanyName("CompName");
 			comp.setContactPerson("SinglePointOfContactInComp");
 			comp.setEmail("operatorComp@derWilkens.de");
+			em.persist(comp);
 			return comp;
 		});
 			
 		modeOfTransfer = cont.persistence().createTransaction().execute(em ->{
 			ModeOfTransfer modeOfTransfer = new ModeOfTransfer();
 			modeOfTransfer.setMode("Helicopter");
+			em.persist(modeOfTransfer);
 			return modeOfTransfer;
 		});
 		
@@ -110,13 +114,14 @@ public class CrewChangeTest {
 	}
     @After
     public void tearDown() throws Exception {
+		cont.deleteRecord(crewChange);
         cont.deleteRecord(user);
     }
     
     
     @Test
     public void test() {
-    	
+
     	List<Transfer> transfers = crewChange.getTransfers();
     	assertTrue(transfers.size() == 1);
     	Transfer transfer1 = transfers.iterator().next();
@@ -133,5 +138,17 @@ public class CrewChangeTest {
             assertTrue(list.size() > 0);
         }
     }
-    
+
+	private UUID createCC(int freeSeatsWay1, int freeSeatsWay2) {
+		CrewChangeCreateDTO dto = metadata.create(CrewChangeCreateDTO.class);
+		dto.setStartDateTime(new Date());
+		dto.setDepartureSite(sw1);
+		dto.setDestinationSite(hus);
+		dto.setCraftType(getCraftTypeByType("AW139"));
+		dto.setFreeSeatsOutbound(freeSeatsWay1);
+		dto.setFreeSeatsInbound(freeSeatsWay2);
+
+		//return service.createCrewChange(dto);
+	return null;
+	}
 }

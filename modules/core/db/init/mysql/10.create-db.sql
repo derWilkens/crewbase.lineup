@@ -716,7 +716,7 @@ create table LINEUP_TICKET (
     DELETE_TS datetime(3),
     DELETED_BY varchar(50),
     --
-    TRANSFER_ID varchar(32) not null,
+    TRANSFER_ID varchar(32),
     START_SITE_ID varchar(32) not null,
     DESTINATION_SITE_ID varchar(32) not null,
     PASSENGER_ID varchar(32),

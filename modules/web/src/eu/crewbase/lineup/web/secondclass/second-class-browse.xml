@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="secondClassesTable"
+        messagesPack="eu.crewbase.lineup.web.secondclass">
+    <data readOnly="true">
+        <collection id="secondClassesDc"
+                    class="eu.crewbase.lineup.entity.tmp.SecondClass"
+                    view="_local">
+            <loader id="secondClassesDl">
+                <query>
+                    <![CDATA[select e from lineup$SecondClass e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="secondClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="secondClassesTable"
+                dataLoader="secondClassesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="secondClassesTable"
+                    width="100%"
+                    dataContainer="secondClassesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="secAttr"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="secondClassesTable.create"/>
+                <button id="editBtn" action="secondClassesTable.edit"/>
+                <button id="removeBtn" action="secondClassesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

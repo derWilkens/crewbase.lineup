@@ -1,18 +1,13 @@
 package eu.crewbase.lineup.entity.tmp;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
+
+import javax.persistence.*;
 import java.util.List;
-import javax.persistence.OneToMany;
-import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s|secAttr")
 @Table(name = "LINEUP_SECOND_CLASS")

@@ -32,21 +32,17 @@ public class Transfer extends StandardClientEntity {
 	@Column(name = "TRANSFER_ORDER_NO", nullable = false)
 	protected Integer transferOrderNo;
 
-	@OnDeleteInverse(DeletePolicy.UNLINK)
+	@OnDelete(DeletePolicy.CASCADE)
 	@OrderBy("posOrder")
 	@Composition
-	@OnDelete(DeletePolicy.CASCADE)
 	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
 	protected List<Waypoint> waypoints;
 
 	@Composition
-	@OnDeleteInverse(DeletePolicy.UNLINK)
 	@OnDelete(DeletePolicy.CASCADE)
 	@OneToMany(mappedBy = "transfer", cascade = CascadeType.PERSIST)
 	protected List<Ticket> tickets;
 
-	@OnDeleteInverse(DeletePolicy.CASCADE)
-	@OnDelete(DeletePolicy.UNLINK)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CREW_CHANGE_ID")
 	protected CrewChange crewChange;

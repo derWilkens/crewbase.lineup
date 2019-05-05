@@ -78,7 +78,8 @@ System.out.println(e);
     }
     @Subscribe
     protected void onBeforeClose(BeforeCloseEvent event) {
-        //notifications.create(Notifications.NotificationType.HUMANIZED)
-        //        .withCaption(this.getEditedEntity().getStartDateTime().toString()).show();
+        notifications.create(Notifications.NotificationType.HUMANIZED)
+                .withCaption(this.getEditedEntity().getStartDateTime().toString()).show();
+
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="thirdClassesTable"
+        messagesPack="eu.crewbase.lineup.web.thirdclass">
+    <data readOnly="true">
+        <collection id="thirdClassesDc"
+                    class="eu.crewbase.lineup.entity.tmp.ThirdClass"
+                    view="_local">
+            <loader id="thirdClassesDl">
+                <query>
+                    <![CDATA[select e from lineup$ThirdClass e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="thirdClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="thirdClassesTable"
+                dataLoader="thirdClassesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="thirdClassesTable"
+                    width="100%"
+                    dataContainer="thirdClassesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="thirdAttr"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="thirdClassesTable.create"/>
+                <button id="editBtn" action="thirdClassesTable.edit"/>
+                <button id="removeBtn" action="thirdClassesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

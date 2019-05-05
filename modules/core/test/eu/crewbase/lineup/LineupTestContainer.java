@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.haulmont.cuba.testsupport.TestContainer;
+import eu.crewbase.lineup.entity.coredata.CraftType;
+import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.coredata.SiteCategory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.junit.ClassRule;
@@ -73,6 +76,22 @@ public class LineupTestContainer extends com.haulmont.cuba.testsupport.TestConta
         dbUrl = resourceElem.attributeValue("url");
         dbUser = resourceElem.attributeValue("username");
         dbPassword = resourceElem.attributeValue("password");
+    }
+
+    protected CraftType getCraftTypeByType(String type) {
+        return dataManager.load(CraftType.class).query("select s from lineup$CraftType s where s.name = :type")
+                .parameter("type", type).one();
+    }
+
+    protected Site createSite(String name, String itemDesignation, double lat, double lon, SiteCategory category) {
+        Site site1 = metadata.create(Site.class);
+        site1.setSiteName(name);
+        site1.setItemDesignation(itemDesignation);
+        site1.setLatitude(lat);
+        site1.setLongitude(lon);
+        site1.setSiteCategory(category);
+        dataManager.commit(site1);
+        return site1;
     }
 
     public static class Common extends LineupTestContainer {

@@ -1,13 +1,9 @@
 package eu.crewbase.lineup.entity.tmp;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.StandardEntity;
+
+import javax.persistence.*;
 
 @NamePattern("%s|secondClass")
 @Table(name = "LINEUP_THIRD_CLASS")

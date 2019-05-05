@@ -5,9 +5,6 @@ package eu.crewbase.lineup.entity.wayfare;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.cuba.core.entity.annotation.OnDelete;
-import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
-import com.haulmont.cuba.core.global.DeletePolicy;
 import eu.crewbase.lineup.entity.coredata.Site;
 
 import javax.persistence.*;
@@ -36,8 +33,6 @@ public class Waypoint extends StandardEntity {
 	@Column(name = "POS_ORDER")
 	protected Integer posOrder;
 
-	@OnDelete(DeletePolicy.UNLINK)
-	@OnDeleteInverse(DeletePolicy.CASCADE)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSFER_ID")
 	protected Transfer transfer;

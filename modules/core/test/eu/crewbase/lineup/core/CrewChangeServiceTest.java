@@ -51,38 +51,17 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	private TravelOptionService travelOptionService;
 	private TransferService transferService;
 
+	//erstmal aufräumen, alle CC werden entfernt, diese bleiben nach dem Test stehen, damit ich besser debuggen kann.
+	//eigentlich eine doofe Begründung
+	//deshalb den ganzen Mist auch in teardown aufrufen und ggf. auskommentieren
+
 	@Before
 	public void setUp() throws Exception {
 		super.setUp();
 		log.warn("GEHT LOS!");
 		AppBeans.get(UserSessionSource.class).getUserSession().setAttribute("client_id", 1);
 
-		try (Transaction tx = persistence.createTransaction()) {
-
-			List<CrewChange> ccList = persistence.getEntityManager()
-					.createQuery("select cc from lineup$CrewChange cc where cc.createdBy = 'test_admin'",
-							CrewChange.class)
-					.getResultList();
-			for (CrewChange crewChange : ccList) {
-				// persistence.getEntityManager().remove(crewChange);
-			}
-
-			List<Site> siteList = persistence.getEntityManager()
-					.createQuery("select s from lineup$Site s where s.createdBy = 'test_admin'", Site.class)
-					.getResultList();
-			for (Site site : siteList) {
-				// persistence.getEntityManager().remove(site);
-			}
-			// deleteRecord(siteList.stream().toArray());
-			List<FavoriteTrip> favList = persistence.getEntityManager()
-					.createQuery("select s from lineup$FavoriteTrip s where s.createdBy = 'test_admin'",
-							FavoriteTrip.class)
-					.getResultList();
-			for (FavoriteTrip fav : favList) {
-				persistence.getEntityManager().remove(fav);
-			}
-			tx.commit();
-		}
+		//cleanUp();
 
 		service = AppBeans.get(CrewChangeService.NAME);
 		travelOptionService = AppBeans.get(TravelOptionService.NAME);
@@ -115,11 +94,6 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 				.parameter("itemDesignation", itemDesignation).one();
 	}
 
-	private CraftType getCraftTypeByType(String type) {
-		return dataManager.load(CraftType.class).query("select s from lineup$CraftType s where s.name = :type")
-				.parameter("type", type).one();
-	}
-
 	@Test
 	public void testLoadUser() {
 		try (Transaction tx = persistence.createTransaction()) {
@@ -132,14 +106,8 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		}
 	}
 
-	private Site createSite(String name, String itemDesignation, double lat, double lon, SiteCategory category) {
-		Site site1 = metadata.create(Site.class);
-		site1.setSiteName(name);
-		site1.setItemDesignation(itemDesignation);
-		site1.setLatitude(lat);
-		site1.setLongitude(lon);
-		site1.setSiteCategory(category);
-		dataManager.commit(site1);
+	private Site createSiteX(String name, String itemDesignation, double lat, double lon, SiteCategory category) {
+		Site site1 = super.createSite(name, itemDesignation, lat, lon, category);
 		return site1;
 	}
 
@@ -153,7 +121,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 						.getResultList();
 
 				for (Site site : siteList) {
-					//persistence.getEntityManager().remove(site);
+					persistence.getEntityManager().remove(site);
 				}
 				tx.commit();
 			}
@@ -166,6 +134,11 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		// Hin 2 frei, Rück 3 frei von 12 -> 8+7 --> 19 Tickets
 		ccId = createCC(2, 3);
 		validateCrewChange(ccId);
+		try (Transaction tx = persistence.createTransaction()) {
+			CrewChange crewChange = persistence.getEntityManager().find(CrewChange.class, ccId);
+			persistence.getEntityManager().remove(crewChange);
+			tx.commit();
+		}
 	}
 
 	@Test
@@ -635,10 +608,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	}
 
 	private UUID createCC(int freeSeatsWay1, int freeSeatsWay2) {
+		return createCC(freeSeatsWay1, freeSeatsWay2,emde, bwbe );
+	}
+	private UUID createCC(int freeSeatsWay1, int freeSeatsWay2, Site site1, Site site2) {
 		CrewChangeCreateDTO dto = metadata.create(CrewChangeCreateDTO.class);
 		dto.setStartDateTime(new Date());
-		dto.setDepartureSite(emde);
-		dto.setDestinationSite(bwbe);
+		dto.setDepartureSite(site1);
+		dto.setDestinationSite(site2);
 		dto.setCraftType(getCraftTypeByType("AW139"));
 		dto.setFreeSeatsOutbound(freeSeatsWay1);
 		dto.setFreeSeatsInbound(freeSeatsWay2);
@@ -687,6 +663,36 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 				.setParameter("transferId", transfer.getId());
 		List<Ticket> ticketList = query.getResultList();
 		assertEquals(19, ticketList.size());
+	}
+
+	private void cleanUp(){
+		try (Transaction tx = persistence.createTransaction()) {
+
+			List<CrewChange> ccList = persistence.getEntityManager()
+					.createQuery("select cc from lineup$CrewChange cc where cc.createdBy = 'test_admin'",
+							CrewChange.class)
+					.getResultList();
+			for (CrewChange crewChange : ccList) {
+				persistence.getEntityManager().remove(crewChange);
+
+			}
+
+			List<Site> siteList = persistence.getEntityManager()
+					.createQuery("select s from lineup$Site s where s.createdBy = 'test_admin'", Site.class)
+					.getResultList();
+			for (Site site : siteList) {
+				persistence.getEntityManager().remove(site);
+			}
+
+			List<FavoriteTrip> favList = persistence.getEntityManager()
+					.createQuery("select s from lineup$FavoriteTrip s where s.createdBy = 'test_admin'",
+							FavoriteTrip.class)
+					.getResultList();
+			for (FavoriteTrip fav : favList) {
+				persistence.getEntityManager().remove(fav);
+			}
+			tx.commit();
+		}
 	}
 
 }

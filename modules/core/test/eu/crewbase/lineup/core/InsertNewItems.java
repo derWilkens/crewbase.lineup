@@ -52,17 +52,6 @@ public class InsertNewItems extends LineupTestContainer {
 
 	}
 
-	private Site createSite(String name, String itemDesignation, double lat, double lon, SiteCategory category) {
-		Site site1 = metadata.create(Site.class);
-		site1.setSiteName(name);
-		site1.setItemDesignation(itemDesignation);
-		site1.setLatitude(lat);
-		site1.setLongitude(lon);
-		site1.setSiteCategory(category);
-		dataManager.commit(site1);
-		return site1;
-	}
-
 	@Test
 	public void testLoadUser() {
 
