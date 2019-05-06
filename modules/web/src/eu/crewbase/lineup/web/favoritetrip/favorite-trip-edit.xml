@@ -1,45 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        class="eu.crewbase.lineup.web.favoritetrip.FavoriteTripEdit"
-        datasource="favoriteTripDs"
-        focusComponent="fieldGroup"
+        focusComponent="form"
         messagesPack="eu.crewbase.lineup.web.favoritetrip">
-    <dsContext>
-        <datasource id="favoriteTripDs"
-                    class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
-                    view="favoriteTrip-manage"/>
-        <collectionDatasource id="startSitesDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="siteSelect">
-            <query>
-                <![CDATA[select e from lineup$Site e ]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="destinationsDs"
-                              class="eu.crewbase.lineup.entity.coredata.Site"
-                              view="siteSelect">
-            <query>
-                <![CDATA[select e from lineup$Site e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
-    <dialogMode height="600"
-                width="800"/>
-    <layout expand="windowActions"
-            spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="favoriteTripDs">
+    <data>
+        <instance id="favoriteTripDc"
+                  class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
+                  view="favoriteTrip-manage">
+            <loader/>
+        </instance>
+        <collection id="startSitesDc" class="eu.crewbase.lineup.entity.coredata.Site" view="_minimal">
+            <loader id="startSitesLc">
+                <query><![CDATA[select e from lineup$Site e order by e.siteName]]></query>
+            </loader>
+        </collection>
+        <collection id="destinationsDc" class="eu.crewbase.lineup.entity.coredata.Site" view="_minimal">
+            <loader id="destinationsLc">
+                <query><![CDATA[select e from lineup$Site e order by e.siteName]]></query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="AUTO"
+                width="600"
+                modal="true"
+                forceDialog="true"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="favoriteTripDc">
             <column width="250px">
-                <field optionsDatasource="startSitesDs"
-                       property="startSite"/>
-                <field optionsDatasource="destinationsDs"
-                       property="destination"/>
-                <field property="emailNotification"/>
-                <field property="sendSummery"/>
+                <lookupField id="startSiteField" optionsContainer="startSitesDc" property="startSite"/>
+                <lookupField id="destinationField" optionsContainer="destinationsDc" property="destination"/>
+                <checkBox id="emailNotificationField" property="emailNotification"/>
+                <checkBox id="sendSummeryField" property="sendSummery"/>
             </column>
-        </fieldGroup>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

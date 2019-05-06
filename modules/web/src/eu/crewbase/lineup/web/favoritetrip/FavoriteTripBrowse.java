@@ -1,6 +1,11 @@
 package eu.crewbase.lineup.web.favoritetrip;
 
-import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.screen.*;
+import eu.crewbase.lineup.entity.wayfare.FavoriteTrip;
 
-public class FavoriteTripBrowse extends AbstractLookup {
+@UiController("lineup$FavoriteTrip.browse")
+@UiDescriptor("favorite-trip-browse.xml")
+@LookupComponent("favoriteTripsTable")
+@LoadDataBeforeShow
+public class FavoriteTripBrowse extends StandardLookup<FavoriteTrip> {
 }

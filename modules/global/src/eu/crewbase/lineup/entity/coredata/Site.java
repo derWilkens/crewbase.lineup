@@ -3,26 +3,17 @@
  */
 package eu.crewbase.lineup.entity.coredata;
 
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.chile.core.annotations.NumberFormat;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.InheritanceType;
-import javax.persistence.Inheritance;
-import com.haulmont.chile.core.annotations.NumberFormat;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author christian
@@ -31,12 +22,12 @@ import com.haulmont.chile.core.annotations.NumberFormat;
 @Table(name = "LINEUP_SITE")
 @Entity(name = "lineup$Site")
 public class Site extends StandardEntity {
-	private static final long serialVersionUID = -1161554407313338235L;
+    private static final long serialVersionUID = -1161554407313338235L;
 
-	@Column(name = "SITE_NAME", nullable = false, length = 50)
-	protected String siteName;
+    @Column(name = "SITE_NAME", nullable = false, length = 50)
+    protected String siteName;
 
-	    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SITE_CATEGORY_ID")
     protected SiteCategory siteCategory;
@@ -49,29 +40,28 @@ public class Site extends StandardEntity {
     @Column(name = "LONGITUDE")
     protected Double longitude;
 
-@Column(name = "ITEM_DESIGNATION", length = 7)
-	protected String itemDesignation;
+    @Column(name = "ITEM_DESIGNATION", length = 7)
+    protected String itemDesignation;
 
-	@Lookup(type = LookupType.DROPDOWN)
-	@OnDeleteInverse(DeletePolicy.UNLINK)
-	@OnDelete(DeletePolicy.UNLINK)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PARENT_SITE_ID")
-	protected Site parentSite;
+    @Lookup(type = LookupType.DROPDOWN)
+    @OnDeleteInverse(DeletePolicy.UNLINK)
+    @OnDelete(DeletePolicy.UNLINK)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_SITE_ID")
+    protected Site parentSite;
 
-	@Column(name = "SHORT_ITEM_DESIGNATION", length = 4)
-	protected String shortItemDesignation;
+    @Column(name = "SHORT_ITEM_DESIGNATION", length = 4)
+    protected String shortItemDesignation;
 
-	
 
-	@OnDeleteInverse(DeletePolicy.UNLINK)
-	@OnDelete(DeletePolicy.UNLINK)
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SITE_TYPE_ID")
-	protected SiteType siteType;
+    @OnDeleteInverse(DeletePolicy.UNLINK)
+    @OnDelete(DeletePolicy.UNLINK)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SITE_TYPE_ID")
+    protected SiteType siteType;
 
-	@OneToMany(mappedBy = "site")
-	protected List<SiteRoleRule> siteRoleRules;
+    @OneToMany(mappedBy = "site")
+    protected List<SiteRoleRule> siteRoleRules;
 
     public void setSiteCategory(SiteCategory siteCategory) {
         this.siteCategory = siteCategory;

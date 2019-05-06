@@ -61,7 +61,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		log.warn("GEHT LOS!");
 		AppBeans.get(UserSessionSource.class).getUserSession().setAttribute("client_id", 1);
 
-		//cleanUp();
+		cleanUp();
 
 		service = AppBeans.get(CrewChangeService.NAME);
 		travelOptionService = AppBeans.get(TravelOptionService.NAME);
