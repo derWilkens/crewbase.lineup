@@ -76,5 +76,6 @@
             <item screen="lineup$ModeOfTransfer.browse"/>
         </menu>
         <item screen="lineup$Site.browse"/>
+        <item screen="lineup$Ticket.browse"/>
     </menu>
 </menu-config>

@@ -130,7 +130,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		User user = getUserByUsername(favoriteTrip.getCreatedBy());
 		if (user == null) {
 			// qwe user
-			user = dataManager.load(User.class).query("select u from sec$User u where u.login = 'qwe'").one();
+			//user = dataManager.load(User.class).query("select u from sec$User u where u.login = 'qwe'").one();
 		}
 		travelOption.setFavoriteTrip(favoriteTrip);
 		travelOption.setTransfer(originalTransfer);

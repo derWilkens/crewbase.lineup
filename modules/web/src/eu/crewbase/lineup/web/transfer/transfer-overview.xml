@@ -12,9 +12,14 @@
     <layout expand="transfersTable" spacing="true">
         <groupTable id="transfersTable" width="100%" dataContainer="transfersDc">
             <columns>
-                <column id="transferOrderNo"/>
-                <column id="crewChange.startDate"/>
-                <column id="takeoff" caption="msg://TakeOff" generator="generateTakeOffCell"/>
+                <!--column id="transferOrderNo"/-->
+                <column id="crewChange.startDate" caption="msg://TakeOff">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                               format="dd/MM/yyyy HH:mm"/>
+                </column>
+                <column id="route" caption="Route" generator="generateRoute"/>
+                <column id="bookedSeats" caption="Booked" generator="generateBookedSeats"/>
+                <column id="freeSeats" caption="Free" generator="generateFreeSeats"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel" alwaysVisible="true"/>

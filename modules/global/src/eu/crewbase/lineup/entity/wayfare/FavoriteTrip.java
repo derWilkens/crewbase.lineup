@@ -127,7 +127,7 @@ public class FavoriteTrip extends StandardClientEntity {
 		}
 		return false;
 	}
-	public String toString(){
+	public String toStringX(){
 		return "FavTrip: " + startSite.getItemDesignation() + " - " + destination.getItemDesignation();
 	}
 

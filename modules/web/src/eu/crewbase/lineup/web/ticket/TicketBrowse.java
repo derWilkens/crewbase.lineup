@@ -1,6 +1,11 @@
 package eu.crewbase.lineup.web.ticket;
 
-import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.screen.*;
+import eu.crewbase.lineup.entity.wayfare.Ticket;
 
-public class TicketBrowse extends AbstractLookup {
+@UiController("lineup$Ticket.browse")
+@UiDescriptor("ticket-browse.xml")
+@LookupComponent("ticketsTable")
+@LoadDataBeforeShow
+public class TicketBrowse extends StandardLookup<Ticket> {
 }

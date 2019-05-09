@@ -489,16 +489,17 @@
     <view class="eu.crewbase.lineup.entity.wayfare.Transfer"
           extends="_local"
           name="transfer-overview">
-        <property name="waypoints"
-                  view="_minimal">
-            <property name="site"
-                      view="_minimal"/>
+        <property name="waypoints" view="_minimal">
+            <property name="site" view="_minimal"/>
             <property name="stopoverTime"/>
             <property name="posOrder"/>
         </property>
-        <property name="crewChange"
-                  view="_minimal">
+        <property name="tickets" view="_local"/>
+        <property name="crewChange" view="_minimal">
             <property name="startDate"/>
+        </property>
+        <property name="craftType" view="_minimal">
+            <property name="seats"/>
         </property>
     </view>
     <view class="eu.crewbase.lineup.entity.wayfare.FavoriteTrip"
@@ -547,5 +548,14 @@
                 <property name="itemDesignation"/>
             </property>
         </property>
+    </view>
+    <view entity="lineup$Ticket" name="ticket-view" extends="_local">
+        <property name="transfer" view="_minimal">
+            <property name="crewChange" view="_minimal">
+                <property name="startDate"/>
+            </property>
+        </property>
+        <property name="startSite" view="_minimal"/>
+        <property name="destinationSite" view="_minimal"/>
     </view>
 </views>

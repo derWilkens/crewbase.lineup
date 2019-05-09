@@ -71,7 +71,7 @@
         </groupBox>
 
         <hbox id="editActions" spacing="true">
-            <button action="createCrewChange" stylename="primary"/>
+            <button stylename="primary" action="windowCommitAndClose"/>
             <!--button action="createCrewChange"/-->
             <!--button action="windowCommit"/-->
             <button action="windowClose"/>

@@ -374,8 +374,8 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 	public void testNotifyRecipient() {
 
 		try (Transaction tx = persistence.createTransaction()) {
-			// passenden Favorit mit Benachrichtigungswunsch erstellen
-			// nicht passenden Favorit erstellen
+			// - passenden Favorit mit Benachrichtigungswunsch erstellen
+			// - nicht passenden Favorit erstellen
 			// Ich will mit von BWBE zu DWAL, DWBE kann nicht erreicht werden
 			/** "EMDE - BWBE - DWAL - EMDE" */
 			FavoriteTrip trip1 = metadata.create(FavoriteTrip.class);
@@ -402,7 +402,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		}
 
 		// CC erstellen EMDE - BWBE
-		ccId = createCC(6, 6);
+		ccId = createCC(1, 2);
 
 		Transfer transfer;
 		try (Transaction tx = persistence.createTransaction()) {
@@ -431,27 +431,30 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		// FT erstellen EMDE - DWAL
 		createFavoriteTrip();
 		// CC erstellen EMDE - BWBE
-		ccId = createCC(6, 6);
+		ccId = createCC(5, 8); //Kapa 24, 13 Frei, 11 Tickets müssen zunächst erzeugt werden
 
+		//Transfer checken
 		Transfer transfer;
 		try (Transaction tx = persistence.createTransaction()) {
 			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
 			assertEquals("EMDE - BWBE - EMDE", transfer.getRouteShort());
-			assertEquals(12, transfer.getTickets().size());
+			assertEquals(11, transfer.getTickets().size());
 		}
 
+		//TravelOption muss erzeugt worden sein
 		TravelOption travelOption = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.transfer.crewChange.id = :ccId")
 				.parameter("ccId", ccId).one();
 
+		//2 der 13 freien Plätze buchen
 		travelOptionService.bookSeats(travelOption.getId(), 2);
 		try (Transaction tx = persistence.createTransaction()) {
 			travelOption = entityManager().find(TravelOption.class, travelOption.getId());
 			assertEquals(2, travelOption.getBookedSeats().intValue());
 			assertEquals(TravelOptionStatus.Requested, travelOption.getStatus());
 		}
-
+		//die 2 Plätze bestätigen, jetzt sind es 13 Tickets
 		travelOptionService.approveBooking(travelOption.getId());
 		try (Transaction tx = persistence.createTransaction()) {
 			TravelOption to = entityManager().find(TravelOption.class, travelOption.getId());
@@ -459,7 +462,9 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			assertEquals(2, to.getBookedTickets().size());
 			assertEquals(TravelOptionStatus.Approved, to.getStatus());
 			transfer = persistence.getEntityManager().find(Transfer.class, transfer.getId());
-			assertEquals(14, transfer.getTickets().size());
+
+			//13 Tickets
+			assertEquals(13, transfer.getTickets().size());
 		}
 
 	}

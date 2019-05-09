@@ -72,14 +72,18 @@ System.out.println(e);
 
     @Subscribe("createCrewChange")
     protected void oncreateCrewChangeActionPerformed(Action.ActionPerformedEvent event) {
-        Notifications.NotificationBuilder notificationBuilder = notifications.create(Notifications.NotificationType.HUMANIZED);
-        notificationBuilder.withCaption(this.getEditedEntity().getStartDateTime().toString()).show();
-        crewChangeService.createCrewChange(this.getEditedEntity());
+        //Notifications.NotificationBuilder notificationBuilder = notifications.create(Notifications.NotificationType.HUMANIZED);
+        //notificationBuilder.withCaption(this.getEditedEntity().getStartDateTime().toString()).show();
+        //crewChangeService.createCrewChange(this.getEditedEntity());
     }
+
     @Subscribe
     protected void onBeforeClose(BeforeCloseEvent event) {
-        notifications.create(Notifications.NotificationType.HUMANIZED)
-                .withCaption(this.getEditedEntity().getStartDateTime().toString()).show();
 
-    }
+        if(event.getCloseAction().toString().equals("CloseAction{actionId='commit'}")) {
+                crewChangeService.createCrewChange(this.getEditedEntity());
+                notifications.create(Notifications.NotificationType.HUMANIZED)
+                        .withCaption("Flight successfull created.").show();
+            }
+        }
 }
