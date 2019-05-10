@@ -24,7 +24,7 @@ public class CrewChange extends StandardClientEntity {
     private static final long serialVersionUID = 3072080113502808893L;
 
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 

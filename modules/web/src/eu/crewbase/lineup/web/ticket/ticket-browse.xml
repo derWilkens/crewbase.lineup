@@ -15,8 +15,10 @@
         </collection-->
         <keyValueCollection id="ticketAmountDc">
             <loader id="ticketAmountDl">
-                <query>SELECT c.startDate, t.startSite, t.destinationSite, COUNT(t) AS total, ct.seats as seat FROM lineup$Ticket t
-                    LEFT JOIN t.transfer.crewChange c left join t.transfer.craftType ct
+                <query>SELECT c.startDate, t.startSite, t.destinationSite, COUNT(t) AS total, ct.seats as seats
+                    FROM lineup$Ticket t
+                    LEFT JOIN t.transfer.crewChange c
+                    LEFT JOIN t.transfer.craftType ct
                     GROUP BY c.startDate, t.startSite, t.destinationSite
                     ORDER BY c.startDate, t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC
                 </query>
@@ -29,7 +31,7 @@
                 <property name="startSite" class="eu.crewbase.lineup.entity.coredata.Site"/>
                 <property name="destinationSite" class="eu.crewbase.lineup.entity.coredata.Site"/>
                 <property name="total" datatype="int"/>
-                <property name="seat" datatype="int"/>
+                <property name="seats" datatype="int"/>
             </properties>
         </keyValueCollection>
     </data>
@@ -48,11 +50,12 @@
                     aggregatable="true">
 
             <columns>
-                <column id="startDate"/>
-                <column id="startSite"/>
-                <column id="destinationSite"/>
-                <column id="total"/>
-                <column id="seat"/>
+                <column id="startDate" caption="Take Off"/>
+                <column id="startSite" caption="Start"/>
+                <column id="destinationSite" caption="Destination"/>
+                <column id="seats" caption="Seats" visible="false"/>
+                <column id="total" caption="Booked" visible="false"/>
+                <column id="available" caption="Available" generator="generateAvailableCell"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

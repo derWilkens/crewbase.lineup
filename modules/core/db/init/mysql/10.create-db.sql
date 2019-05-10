@@ -55,7 +55,7 @@ create table LINEUP_CREW_CHANGE (
     DELETED_BY varchar(50),
     CLIENT integer not null,
     --
-    START_DATE date not null,
+    START_DATE datetime(3) not null,
     --
     primary key (ID)
 )^
