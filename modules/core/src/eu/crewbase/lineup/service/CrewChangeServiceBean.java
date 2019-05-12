@@ -59,28 +59,17 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			transfer.setCrewChange(cc);
 			transfer.setCraftType(dto.getCraftType());
 
-			/**
-			 * 2 Standard-Waypoints anlegen A - B - A
-			 */
-			Waypoint awp1 = dataManager.create(Waypoint.class);
-			awp1.setSite(dto.getDepartureSite());
-			awp1.setTakeOff(dto.getStartDateTime());
-			awp1.setTransfer(transfer);
-			transfer.getWaypoints().add(awp1);
-
-			Waypoint wp1 = dataManager.create(Waypoint.class);
-			wp1.setSite(dto.getDestinationSite());
-			wp1.setTransfer(transfer);
-			transfer.getWaypoints().add(wp1);
-
-			Waypoint wp2 = dataManager.create(Waypoint.class);
-			wp2.setSite(dto.getDepartureSite());
-			wp2.setTakeOff(dto.getStartDateTime());
-			wp2.setTransfer(transfer);
-			transfer.getWaypoints().add(wp2);
 
 			cc.getTransfers().add(transfer);
 			persistence.getEntityManager().persist(transfer);
+
+			/**
+			 * 2 Standard-Waypoints anlegen A - B - A
+			 */
+
+			addWaypoint(transfer,dto.getDepartureSite());
+			addWaypoint(transfer, dto.getDestinationSite());
+			addWaypoint(transfer, dto.getDepartureSite());
 
 			tx.commit();
 		}
@@ -99,6 +88,14 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 		return cc.getId();
 
+	}
+
+	private void addWaypoint(Transfer transfer, Site site) {
+		Waypoint wp = dataManager.create(Waypoint.class);
+		wp.setSite(site);
+		wp.setTakeOff(transfer.getCrewChange().getStartDate());
+		wp.setStopoverTime(15);
+		transfer.addWaypoint(wp);
 	}
 
 	private void createTicketsX(int freeSeats, Site siteA, Site siteB, Transfer transfer) {

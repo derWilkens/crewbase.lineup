@@ -1,11 +1,6 @@
 package eu.crewbase.lineup.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -283,6 +278,7 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		// Neuen WP erstellen
 		Waypoint waypoint = metadata.create(Waypoint.class);
 		waypoint.setSite(site);
+		waypoint.setTakeOff(new Date());
 		return waypoint;
 	}
 

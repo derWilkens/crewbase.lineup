@@ -93,37 +93,42 @@ public class TransferServiceBean implements TransferService {
 	public boolean addWaypoint(UUID transferId, UUID siteId, int position) {
 		try (Transaction tx = persistence.createTransaction()) {
 			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
-
-			Waypoint waypoint = metadata.create(Waypoint.class);
 			Site site = persistence.getEntityManager().find(Site.class, siteId);
-			waypoint.setSite(site);
-			boolean waypointAdded = transfer.addWaypointAt(waypoint, position);
-			persistence.getEntityManager().persist(transfer);
-			tx.commit();
-			log.debug("Added Site:" + site.getItemDesignation());
-			log.debug("New Route: " + transfer.getRouteShort());
-			travelOptionService.updateTravelOptions(transferId);
+
+			//wenn die Distanz zu groß ist --> false; könnte man mal in eine Exception umbauen
+			boolean waypointAdded = addWaypoint(transfer, site, position);
+
+			if(waypointAdded) {
+				persistence.getEntityManager().persist(transfer);
+				tx.commit();
+
+				log.debug("Added Site:" + site.getItemDesignation());
+				log.debug("New Route: " + transfer.getRouteShort());
+
+				travelOptionService.updateTravelOptions(transferId);
+			}
+
 			return waypointAdded;
 		}
 	}
 
 	@Override
 	public boolean addWaypoint(UUID transferId, UUID siteId) {
-		try (Transaction tx = persistence.createTransaction()) {
-			Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
-			Waypoint waypoint = metadata.create(Waypoint.class);
-			Site site = persistence.getEntityManager().find(Site.class, siteId);
-			waypoint.setSite(site);
-			boolean waypointAdded = transfer.addWaypointShortestWay(waypoint);
-			persistence.getEntityManager().persist(transfer);
-			tx.commit();
-			log.debug("Added Site:" + site.getItemDesignation());
-			log.debug("New Route: " + transfer.getRouteShort());
-			travelOptionService.updateTravelOptions(transferId);
-			return waypointAdded; 
-		}
+		return addWaypoint(transferId,siteId,0);
 	}
-	
+
+	private boolean addWaypoint(Transfer transfer, Site site, int position) {
+		Waypoint waypoint = metadata.create(Waypoint.class);
+		waypoint.setSite(site);
+		waypoint.setTakeOff(transfer.getCrewChange().getStartDate());
+		waypoint.setStopoverTime(15);
+		if(position==0) {
+			return transfer.addWaypointShortestWay(waypoint);
+		}else
+			return transfer.addWaypointAt(waypoint,position);
+
+	}
+
 	@Override
 	public boolean moveWaypoint(UUID transferId, UUID siteId, int position) {
 		try (Transaction tx = persistence.createTransaction()) {
