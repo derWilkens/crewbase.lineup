@@ -41,17 +41,19 @@ public class TransferServiceBean implements TransferService {
 
 			if (travelOptionId != null) {
 				travelOption = persistence.getEntityManager().find(TravelOption.class, travelOptionId);
-				createTickets(travelOption.getTransfer().getId(), travelOption.getFavoriteTrip().getStartSite(),
-						travelOption.getFavoriteTrip().getDestination(), travelOption.getBookedSeats(), travelOptionId);
+				Waypoint wpA = travelOption.getTransfer().getWaypointBySide(travelOption.getFavoriteTrip().getStartSite());
+				Waypoint wpB = travelOption.getTransfer().getWaypointBySide(travelOption.getFavoriteTrip().getDestination());
+
+				createTickets(travelOption.getTransfer().getId(), wpA, wpB, travelOption.getBookedSeats(), travelOptionId);
 			}
 			tx.commit();
 		}
 	}
 
 	@Override
-	public void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats) {
+	public void createTickets(UUID transferId, Waypoint waypointA, Waypoint waypointB, int bookedSeats) {
 		try (Transaction tx = persistence.createTransaction()) {
-			createTickets(transferId, siteA, siteB, bookedSeats, null);
+			createTickets(transferId, waypointA, waypointB, bookedSeats, null);
 			tx.commit();
 		}
 		//nach dem Commit können die freien Kapazitäten neu berechnet werden 
@@ -59,7 +61,7 @@ public class TransferServiceBean implements TransferService {
 		travelOptionService.updateTravelOptions(transferId);
 	}
 
-	private void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats, UUID travelOptionId) {
+	private void createTickets(UUID transferId, Waypoint waypointA, Waypoint waypointB, int bookedSeats, UUID travelOptionId) {
 
 		Transfer transfer = persistence.getEntityManager().find(Transfer.class, transferId);
 
@@ -72,17 +74,18 @@ public class TransferServiceBean implements TransferService {
 		for (int i = 0; i < bookedSeats; i++) {
 			Ticket ticket = metadata.create(Ticket.class);
 			ticket.setTransfer(transfer);
-			ticket.setStartSite(siteA);
-			ticket.setDestinationSite(siteB);
+			ticket.setStartWaypoint(waypointA);
+			ticket.setDestinationWaypoint(waypointB);
 			ticket.setTravelOption(travelOption);
 			transfer.getTickets().add(ticket);
 		}
-		Waypoint wpA = metadata.create(Waypoint.class);
-		Waypoint wpB = metadata.create(Waypoint.class);
-		wpA.setSite(siteA);
-		wpB.setSite(siteB);
-		transfer.addWaypointShortestWay(wpA);
-		transfer.addWaypointShortestWay(wpB);
+		//Waypoint wpA = metadata.create(Waypoint.class);
+		//Waypoint wpB = metadata.create(Waypoint.class);
+		//wpA.setSite(siteA);
+		//wpB.setSite(siteB);
+		//transfer.addWaypointShortestWay(wpA);
+		//transfer.addWaypointShortestWay(wpB);
+
 		transfer.setUpdateTs(new Date());
 		persistence.getEntityManager().persist(transfer);
 		

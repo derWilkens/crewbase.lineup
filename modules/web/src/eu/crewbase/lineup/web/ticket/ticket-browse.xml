@@ -15,18 +15,16 @@
         </collection-->
         <keyValueCollection id="ticketAmountDc">
             <loader id="ticketAmountDl">
-                <query>SELECT c.startDate, t.startSite, t.destinationSite, COUNT(t) AS total, ct.seats as seats
-                    FROM lineup$Ticket t
-                    LEFT JOIN t.transfer.crewChange c
-                    LEFT JOIN t.transfer.craftType ct
-                    GROUP BY c.startDate, t.startSite, t.destinationSite
-                    ORDER BY c.startDate, t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC
+                <query>SELECT ticket.startWaypoint.takeOff, ticket.startWaypoint.site, ticket.destinationWaypoint.site, COUNT(ticket) AS total, ticket.transfer.craftType.seats
+                    FROM lineup$Ticket ticket
+                    GROUP BY ticket.startWaypoint.takeOff, ticket.startWaypoint.site, ticket.destinationWaypoint.site
+                    ORDER BY ticket.startWaypoint.takeOff ASC
                 </query>
                 <!--
                 SELECT e FROM Employee e LEFT JOIN e.address a ORDER BY a.city
                 -->
             </loader>
-            <properties idProperty="total">
+            <properties>
                 <property name="startDate" datatype="dateTime"/>
                 <property name="startSite" class="eu.crewbase.lineup.entity.coredata.Site"/>
                 <property name="destinationSite" class="eu.crewbase.lineup.entity.coredata.Site"/>

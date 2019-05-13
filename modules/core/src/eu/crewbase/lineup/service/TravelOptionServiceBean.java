@@ -220,9 +220,9 @@ public class TravelOptionServiceBean implements TravelOptionService {
 		List<TripDTO> resultList = new ArrayList<TripDTO>();
 		try (Transaction tx = persistence.createTransaction()) {
 			List<Object[]> ticketList = persistence.getEntityManager()
-					.createQuery("SELECT t.startSite AS siteA, t.destinationSite, COUNT(t) AS total "
+					.createQuery("SELECT t.startWaypoint.site, t.destinationWaypoint.site, COUNT(t) AS total "
 							+ "FROM lineup$Ticket t where t.transfer.id = :transferId "
-							+ "GROUP BY t.startSite, t.destinationSite ORDER BY t.startSite.itemDesignation, t.destinationSite.itemDesignation ASC")
+							+ "GROUP BY t.startWaypoint.site, t.destinationWaypoint.site ORDER BY t.startWaypoint.site.itemDesignation, t.destinationWaypoint.site.itemDesignation ASC")
 					.setParameter("transferId", transfer.getId()).getResultList();
 
 			for (Object[] result : ticketList) {

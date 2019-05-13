@@ -385,4 +385,13 @@ public class Transfer extends StandardClientEntity {
         }
         return resultCapaMap;
     }
+
+    public Waypoint getWaypointBySide(Site site) {
+        for(Waypoint wp:getWaypoints()){
+            if(wp.getSite().getId().equals(site.getId())){
+                return  wp;
+            }
+        }
+        return null;
+    }
 }

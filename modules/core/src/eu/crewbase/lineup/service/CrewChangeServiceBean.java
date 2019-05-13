@@ -45,6 +45,9 @@ public class CrewChangeServiceBean implements CrewChangeService {
 	public UUID createCrewChange(CrewChangeCreateDTO dto) {
 		CrewChange cc = null;
 		Transfer transfer = dataManager.create(Transfer.class);
+		Waypoint wp1;
+		Waypoint wp2;
+		Waypoint wp3;
 
 		try (Transaction tx = persistence.getTransaction()) {
 			cc = dataManager.create(CrewChange.class);
@@ -67,19 +70,19 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			 * 2 Standard-Waypoints anlegen A - B - A
 			 */
 
-			addWaypoint(transfer,dto.getDepartureSite());
-			addWaypoint(transfer, dto.getDestinationSite());
-			addWaypoint(transfer, dto.getDepartureSite());
+			wp1 = addWaypoint(transfer, dto.getDepartureSite());
+			wp2 = addWaypoint(transfer, dto.getDestinationSite());
+			wp3 = addWaypoint(transfer, dto.getDepartureSite());
 
 			tx.commit();
 		}
 
 		if (dto.getFreeSeatsOutbound() != null) {
-			transferService.createTickets(transfer.getId(), dto.getDepartureSite(), dto.getDestinationSite(),
+			transferService.createTickets(transfer.getId(), wp1,wp2,
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsOutbound());
 		}
 		if (dto.getFreeSeatsInbound() != null) {
-			transferService.createTickets(transfer.getId(), dto.getDestinationSite(), dto.getDepartureSite(),
+			transferService.createTickets(transfer.getId(), wp2,wp3,
 					transfer.getCraftType().getSeats() - dto.getFreeSeatsInbound());
 		}
 		// @fixme: das darf gerne zum TransferListener, auch das funktioniert
@@ -90,23 +93,13 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 	}
 
-	private void addWaypoint(Transfer transfer, Site site) {
+	private Waypoint addWaypoint(Transfer transfer, Site site) {
 		Waypoint wp = dataManager.create(Waypoint.class);
 		wp.setSite(site);
 		wp.setTakeOff(transfer.getCrewChange().getStartDate());
 		wp.setStopoverTime(15);
 		transfer.addWaypoint(wp);
-	}
-
-	private void createTicketsX(int freeSeats, Site siteA, Site siteB, Transfer transfer) {
-		int amount = transfer.getCraftType().getSeats() - freeSeats;
-		for (int i = 0; i < amount; i++) {
-			Ticket ticket = metadata.create(Ticket.class);
-			ticket.setTransfer(transfer);
-			ticket.setStartSite(siteA);
-			ticket.setDestinationSite(siteB);
-			transfer.getTickets().add(ticket);
-		}
+		return wp;
 	}
 
 	/**

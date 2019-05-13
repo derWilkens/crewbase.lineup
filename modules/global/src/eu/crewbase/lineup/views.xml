@@ -555,7 +555,7 @@
                 <property name="startDate"/>
             </property>
         </property>
-        <property name="startSite" view="_minimal"/>
-        <property name="destinationSite" view="_minimal"/>
+        <property name="startWaypoint" view="_minimal"/>
+        <property name="destinationWaypoint" view="_minimal"/>
     </view>
 </views>

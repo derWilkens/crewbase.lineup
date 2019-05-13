@@ -717,10 +717,10 @@ create table LINEUP_TICKET (
     DELETED_BY varchar(50),
     --
     TRANSFER_ID varchar(32),
-    START_SITE_ID varchar(32) not null,
-    DESTINATION_SITE_ID varchar(32) not null,
     PASSENGER_ID varchar(32),
     TRAVEL_OPTION_ID varchar(32),
+    START_WAYPOINT_ID varchar(32),
+    DESTINATION_WAYPOINT_ID varchar(32),
     --
     primary key (ID)
 )^

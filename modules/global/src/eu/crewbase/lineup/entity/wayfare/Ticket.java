@@ -3,12 +3,10 @@ package eu.crewbase.lineup.entity.wayfare;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import eu.crewbase.lineup.entity.coredata.AppUser;
-import eu.crewbase.lineup.entity.coredata.Site;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
-@NamePattern("%s %s %s|startSite,destinationSite,passenger")
+@NamePattern("  %s|passenger")
 @Table(name = "LINEUP_TICKET")
 @Entity(name = "lineup$Ticket")
 public class Ticket extends StandardEntity {
@@ -18,16 +16,6 @@ public class Ticket extends StandardEntity {
     @JoinColumn(name = "TRANSFER_ID")
     protected Transfer transfer;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "START_SITE_ID")
-    protected Site startSite;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DESTINATION_SITE_ID")
-    protected Site destinationSite;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PASSENGER_ID")
     protected AppUser passenger;
@@ -35,6 +23,30 @@ public class Ticket extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRAVEL_OPTION_ID")
     protected TravelOption travelOption;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "START_WAYPOINT_ID")
+    protected Waypoint startWaypoint;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DESTINATION_WAYPOINT_ID")
+    protected Waypoint destinationWaypoint;
+
+    public Waypoint getDestinationWaypoint() {
+        return destinationWaypoint;
+    }
+
+    public void setDestinationWaypoint(Waypoint destinationWaypoint) {
+        this.destinationWaypoint = destinationWaypoint;
+    }
+
+    public Waypoint getStartWaypoint() {
+        return startWaypoint;
+    }
+
+    public void setStartWaypoint(Waypoint startWaypoint) {
+        this.startWaypoint = startWaypoint;
+    }
 
     public void setTravelOption(TravelOption travelOption) {
         this.travelOption = travelOption;
@@ -51,22 +63,6 @@ public class Ticket extends StandardEntity {
 
     public Transfer getTransfer() {
         return transfer;
-    }
-
-    public void setStartSite(Site startSite) {
-        this.startSite = startSite;
-    }
-
-    public Site getStartSite() {
-        return startSite;
-    }
-
-    public void setDestinationSite(Site destinationSite) {
-        this.destinationSite = destinationSite;
-    }
-
-    public Site getDestinationSite() {
-        return destinationSite;
     }
 
     public void setPassenger(AppUser passenger) {

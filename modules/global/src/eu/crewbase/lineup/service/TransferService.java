@@ -3,13 +3,14 @@ package eu.crewbase.lineup.service;
 import java.util.UUID;
 
 import eu.crewbase.lineup.entity.coredata.Site;
+import eu.crewbase.lineup.entity.wayfare.Waypoint;
 
 public interface TransferService {
 	String NAME = "lineup_TransferService";
 
 	void createTickets(UUID travelOptionId);
 
-	void createTickets(UUID transferId, Site siteA, Site siteB, int bookedSeats);
+	void createTickets(UUID transferId, Waypoint waypointA, Waypoint waypointB, int bookedSeats);
 
 	boolean addWaypoint(UUID transferId, UUID siteId);
 
