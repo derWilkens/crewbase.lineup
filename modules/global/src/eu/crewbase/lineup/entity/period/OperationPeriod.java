@@ -1,17 +1,10 @@
 package eu.crewbase.lineup.entity.period;
 
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.haulmont.chile.core.annotations.NamePattern;
-
 import eu.crewbase.lineup.entity.dto.PeriodDTO;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "LINEUP_OPERATION_PERIOD")
 @Entity(name = "lineup$OperationPeriod")

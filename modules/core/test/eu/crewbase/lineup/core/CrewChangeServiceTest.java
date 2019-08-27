@@ -53,7 +53,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 
 	//erstmal aufräumen, alle CC werden entfernt, diese bleiben nach dem Test stehen, damit ich besser debuggen kann.
 	//eigentlich eine doofe Begründung
-	//deshalb den ganzen Mist auch in teardown aufrufen und ggf. auskommentieren
+	//deshalb eigentlich später den ganzen Mist auch in teardown aufrufen und ggf. auskommentieren
 
 	@Before
 	public void setUp() throws Exception {
@@ -155,6 +155,23 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		try (Transaction tx = persistence.createTransaction()) {
 			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			transfer = cc.getTransfers().get(0);
+			assertEquals("EMDE - BWBE - DWAL - EMDE", transfer.getRouteShort());
+		}
+	}
+	@Test
+	public void testAddTwoWaypoint() {
+		ccId = createCC(0, 0);
+		Transfer transfer;
+
+		try (Transaction tx = persistence.createTransaction()) {
+			cc = persistence.getEntityManager().find(CrewChange.class, ccId);
+			transfer = cc.getTransfers().get(0);
+			Waypoint wp1 = metadata.create(Waypoint.class);
+			Waypoint wp2 = metadata.create(Waypoint.class);
+			wp1.setSite(bwbe);
+			wp2.setSite(dwal);
+
+			transfer.addWaypointShortestWay(wp1,wp2);
 			assertEquals("EMDE - BWBE - DWAL - EMDE", transfer.getRouteShort());
 		}
 	}
@@ -317,7 +334,7 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		// FT erstellen EMDE - DWAL
 		createFavoriteTrip();
 		// CC erstellen EMDE - BWBE
-		ccId = createCC(5, 8); //Kapa 24, 13 Frei, 11 Tickets müssen zunächst erzeugt werden
+		ccId = createCC(5, 8); //Kapa  2*12, 13 Frei, 7+4 Tickets müssen zunächst erzeugt werden
 
 		//Transfer checken
 		Transfer transfer;
@@ -332,6 +349,9 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		TravelOption travelOption = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.transfer.crewChange.id = :ccId")
 				.parameter("ccId", ccId).one();
+
+		//5 von 12 sind frei EMDE nach DWAL
+		assertEquals(5, travelOption.getAvailableSeats().intValue());
 
 		//2 der 13 freien Plätze buchen
 		travelOptionService.bookSeats(travelOption.getId(), 2);
@@ -361,13 +381,15 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		// FT erstellen EMDE - DWAL
 		FavoriteTrip favTrip1 = createFavoriteTrip(emde, dwal);
 		FavoriteTrip favTrip2 = createFavoriteTrip(emde, bwbe);
+		FavoriteTrip favTrip3 = createFavoriteTrip(dwal, bwbe);
+
 		// CC erstellen EMDE - BWBE
-		ccId = createCC(6, 6);
+		ccId = createCC(3,5); //3+5 frei
 
 		List<TravelOption> travelOptionList = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.transfer.crewChange.id = :ccId")
 				.parameter("ccId", ccId).list();
-		assertEquals(2, travelOptionList.size());
+		assertEquals(3, travelOptionList.size());
 
 		TravelOption travelOption1 = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
@@ -375,11 +397,20 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 		TravelOption travelOption2 = dataManager.load(TravelOption.class)
 				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
 				.parameter("favTripId", favTrip2.getId()).one();
-
-		assertEquals(6, travelOption1.getAvailableSeats().intValue());
-		assertEquals(6, travelOption2.getAvailableSeats().intValue());
+		TravelOption travelOption3 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip3.getId()).one();
+		assertEquals(3, travelOption1.getAvailableSeats().intValue());
+		assertEquals(3, travelOption2.getAvailableSeats().intValue());
+		assertEquals(5, travelOption3.getAvailableSeats().intValue());
 
 		travelOptionService.bookSeats(travelOption1.getId(), 2);
+		travelOption1 = dataManager.load(TravelOption.class)
+				.query("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId")
+				.parameter("favTripId", favTrip1.getId()).one();
+		assertEquals(1, travelOption1.getAvailableSeats().intValue());
+		assertEquals(2, travelOption1.getBookedSeats().intValue());
+
 		travelOptionService.approveBooking(travelOption1.getId());
 
 		try (Transaction tx = persistence.createTransaction()) {
@@ -389,10 +420,13 @@ public class CrewChangeServiceTest extends LineupTestContainer {
 			travelOption2 = persistence.getEntityManager()
 					.createQuery("select m from lineup$TravelOption m where m.favoriteTrip.id=:favTripId", TravelOption.class)
 					.setParameter("favTripId", favTrip2.getId()).getFirstResult();
-			assertEquals(6, travelOption1.getAvailableSeats().intValue());
-			assertEquals(6, travelOption2.getAvailableSeats().intValue());
+			assertEquals(1, travelOption1.getAvailableSeats().intValue());
+			assertEquals(1, travelOption2.getAvailableSeats().intValue());
+			assertEquals(5, travelOption3.getAvailableSeats().intValue());
+
 			CrewChange cc = persistence.getEntityManager().find(CrewChange.class, ccId);
 			assertEquals("EMDE - DWAL - BWBE - EMDE", travelOption1.getTransfer().getRouteShort());
+
 		}
 
 	}

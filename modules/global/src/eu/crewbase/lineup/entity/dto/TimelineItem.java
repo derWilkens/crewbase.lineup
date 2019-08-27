@@ -79,7 +79,7 @@ public class TimelineItem extends AbstractNotPersistentStringIdEntity {
 		this.content = ((Function<Period, String>) timelineConfig.getItemLabelFunction()).apply(entity);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		this.start = entity.getStartDate() != null ? formatter.format(entity.getStartDate()) : null;
-		this.end = entity.getEndDate() != null ? formatter.format(entity.getEndDate()) : null;
+		this.end = (entity.getEndDate() != null) ? formatter.format(entity.getEndDate()) : null;
 		this.group = ((Function<Period, String>) timelineConfig.getGroupIdFunction()).apply(entity);
 		this.subgroupId = ((Function<Period, String>) timelineConfig.getParentGroupIdFunction()).apply(entity);
 		this.style = ((Function<Period, String>) timelineConfig.getStyleFunction()).apply(entity);

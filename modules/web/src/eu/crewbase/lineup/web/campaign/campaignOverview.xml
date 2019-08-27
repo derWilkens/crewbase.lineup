@@ -18,7 +18,7 @@
             </query>
         </collectionDatasource>
         <collectionDatasource id="userPreferencesDs"
-                              class="eu.crewbase.lineup.UserPreference"
+                              class="eu.crewbase.lineup.entity.UserPreference"
                               view="_local">
             <query>
                 <![CDATA[select e from lineup$UserPreference e where e.context = 'CampaignBrowse' and e.userId =  :session$userId]]>

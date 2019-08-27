@@ -8,13 +8,14 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import eu.crewbase.lineup.entity.coredata.Site;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * @author christian
  */
 @Table(name = "LINEUP_WAYPOINT")
-@NamePattern(" %s |takeOff")
+@NamePattern("  |")
 @Entity(name = "lineup$Waypoint")
 public class Waypoint extends StandardEntity {
 	private static final long serialVersionUID = -4973545925621830772L;
@@ -23,7 +24,7 @@ public class Waypoint extends StandardEntity {
 	@JoinColumn(name = "SITE_ID")
 	protected Site site;
 
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TAKE_OFF")
 	protected Date takeOff;
 
@@ -36,6 +37,14 @@ public class Waypoint extends StandardEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TRANSFER_ID")
 	protected Transfer transfer;
+
+	public Date getTakeOff() {
+		return takeOff;
+	}
+
+	public void setTakeOff(Date takeOff) {
+		this.takeOff = takeOff;
+	}
 
 	public void setTransfer(Transfer transfer) {
 		this.transfer = transfer;
@@ -76,11 +85,29 @@ public class Waypoint extends StandardEntity {
 		return stopoverTime;
 	}
 
-	public void setTakeOff(Date takeOff) {
-		this.takeOff = takeOff;
+    public void calculateTakeOff(Waypoint preWaypoint) {
+		final int distanceTo = preWaypoint.getSite().getDistanceTo(this.getSite());
+		int duration = calculateTravelDuration(distanceTo);
+		if(this.getStopoverTime()!=null){
+			duration = duration + this.getStopoverTime();
+		}
+		this.setTakeOff(addMinutes(preWaypoint.getTakeOff(), duration) );
+    }
+
+	private Date addMinutes(Date date, int minutes) {
+		if(date == null) date = new Date();//für dummy Berechnungen
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.add(Calendar.MINUTE, (minutes));
+		return c.getTime();
+	}
+	private int calculateTravelDuration(int distanceTo) {
+		int maxSpeed = 200; //km/h
+		int duration = (int) ((Float.valueOf(distanceTo) / Float.valueOf(maxSpeed) * 60));
+		return roundUp(duration, 5);
 	}
 
-	public Date getTakeOff() {
-		return takeOff;
+	private int roundUp(int duration, int i) {
+		return duration - duration % i + i;
 	}
 }

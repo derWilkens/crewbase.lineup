@@ -243,4 +243,9 @@ public class CampaignOverview extends AbstractLookup {
 		});
 	}
 
+	public void save() {
+	}
+
+	public void cancel() {
+	}
 }

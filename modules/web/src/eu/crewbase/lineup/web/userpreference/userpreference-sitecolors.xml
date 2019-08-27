@@ -12,7 +12,7 @@
             </query>
         </collectionDatasource>
         <collectionDatasource id="userPreferencesDs"
-                              class="eu.crewbase.lineup.UserPreference">
+                              class="eu.crewbase.lineup.entity.UserPreference">
             <query>
                 <![CDATA[select e from lineup$UserPreference e where e.contextId = 30 and e.userId =  :session$userId]]>
             </query>

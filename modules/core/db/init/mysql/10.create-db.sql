@@ -696,7 +696,7 @@ create table LINEUP_WAYPOINT (
     DELETED_BY varchar(50),
     --
     SITE_ID varchar(32),
-    TAKE_OFF time(3),
+    TAKE_OFF datetime(3),
     STOPOVER_TIME integer,
     POS_ORDER integer,
     TRANSFER_ID varchar(32),

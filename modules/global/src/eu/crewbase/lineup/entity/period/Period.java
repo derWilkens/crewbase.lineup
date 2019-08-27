@@ -1,20 +1,17 @@
 package eu.crewbase.lineup.entity.period;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import com.haulmont.chile.core.annotations.NamePattern;
+import eu.crewbase.lineup.DateFormatter;
+import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
+import eu.crewbase.lineup.entity.dto.PeriodDTO;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.haulmont.chile.core.annotations.NamePattern;
-
-import eu.crewbase.lineup.DateFormatter;
-import eu.crewbase.lineup.entity.coredata.StandardClientEntity;
-import eu.crewbase.lineup.entity.dto.PeriodDTO;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 
 @NamePattern("%s %s |startDate,endDate")
 @MappedSuperclass
@@ -29,13 +26,13 @@ public class Period extends StandardClientEntity {
 	@Column(name = "END_DATE")
 	protected Date endDate;
 
-@Column(name = "REMARK")
+	@Column(name = "REMARK")
 	protected String remark;
 
-@Column(name = "COLOR")
+	@Column(name = "COLOR")
 	protected String color;
 
-			public void setColor(String color) {
+	public void setColor(String color) {
 		if(color!=null&&color!=""){
 		this.color = color;
 		}

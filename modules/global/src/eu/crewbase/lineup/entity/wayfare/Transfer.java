@@ -194,6 +194,72 @@ public class Transfer extends StandardClientEntity {
     public boolean addWaypoint(Waypoint waypoint) {
         return this.addWaypointAt(waypoint, 0);
     }
+    private int getOptimalPosition(Waypoint waypoint, int startPosition, int endPosition){
+        int optimalPosition = -1;
+        if (this.getSiteHash().containsKey(waypoint.getSite().getId())) {
+            return optimalPosition;
+        }
+        CraftType craft = this.getCraftType();
+        int minDistance = craft.getMaxRange();
+
+        for (int i = startPosition; i < endPosition; i++) {
+
+            this.getWaypoints().add(i, waypoint);
+
+            if (this.getTotalDistance() < craft.getMaxRange() && this.getTotalDistance() < minDistance) {
+                minDistance = this.getTotalDistance();
+                optimalPosition = i;
+            }
+            this.getWaypoints().remove(waypoint);
+        }
+        return optimalPosition;
+
+    }
+    public boolean addWaypointShortestWay(Waypoint wp1, Waypoint wp2) {
+        //wenn wp1 enthalten ist, die Position fix nehmen und wp2 irgendwo dahinter einfügen
+        //wenn wp2 drin ist, wp1 irgendwo davor einfügen
+        if (this.getSiteHash().containsKey(wp1.getSite().getId())) {
+            int wp1Pos = this.getWaypointBySide(wp1.getSite()).posOrder;
+            int wp2Pos = getOptimalPosition(wp2,wp1Pos+1, this.getWaypoints().size());
+            if(wp2Pos > -1) this.addWaypointAt(wp2,wp2Pos);
+            this.renumber();
+            this.recalcTakeOff();
+            return true;
+        }
+        else
+        if (this.getSiteHash().containsKey(wp2.getSite().getId())) {
+            int wp2Pos = this.getWaypointBySide(wp2.getSite()).posOrder;
+            int wp1Pos = getOptimalPosition(wp2,0,wp2Pos);
+            if(wp2Pos > -1) this.addWaypointAt(wp1,wp1Pos);
+            this.renumber();
+            this.recalcTakeOff();
+            return true;
+        }else{
+            //wp1 einsetzen, wp2 dahinter einsetzen, optimum finden
+            int minimalDistance = this.getCraftType().getMaxRange();
+            int wp1PosMin = -1;
+            int wp2PosMin = -1;
+            for(int i = 1 ; i<this.getWaypoints().size();i++){
+                this.getWaypoints().add(i,wp1);
+                for(int j = i; j<this.getWaypoints().size();j++){
+                    int wp2Pos = this.getOptimalPosition(wp2,i+1,this.getWaypoints().size());
+                    if(wp2Pos > 0){
+                        this.getWaypoints().add(wp2Pos,wp2);
+                        if(this.getTotalDistance()<minimalDistance){
+                            minimalDistance = this.getTotalDistance();
+                            wp1PosMin = i;
+                            wp2PosMin = j;
+                        }
+                    }
+                }
+            }
+            if(wp1PosMin > 0){
+                this.getWaypoints().add(wp1PosMin,wp1);
+                this.getWaypoints().add(wp2PosMin,wp2);
+            }
+        }
+        return false;
+    }
 
     // Wegpunkt wird so eingesetzt, dass die Strecke minimal ist
     // @fixme optimum wird erreicht, wenn PAX-Reisedauer UND Strecke minimal ist
@@ -201,34 +267,16 @@ public class Transfer extends StandardClientEntity {
 
         // schon drin, also true zurück
         if (this.getSiteHash().containsKey(waypoint.getSite().getId())) {
-            return true; //auch wenns eigentlich falsch istg
+            return true; //auch wenns eigentlich falsch ist, weil der Wegpunkt dann nicht unbedingt auch an der kürzesten Stelle ist
         }
 
         waypoint.setTransfer(this);
-        int len = this.getWaypoints().size();
-        int optimalPosition = 0;
+        int optimalPosition = getOptimalPosition(waypoint,1,this.getWaypoints().size());
 
-        CraftType craft = this.getCraftType();
-        int minDistance = craft.getMaxRange();
-
-        for (int i = 1; i < len; i++) {
-
-            this.getWaypoints().add(i, waypoint);
-            Log.debug(this.getRouteShort() + " Dist: " + this.getTotalDistance());
-
-            // neue Distanz ist erreichbar und kleiner als optimum? Else
-            // Wegpunkt wieder rausnehmen
-            if (this.getTotalDistance() < craft.getMaxRange() && this.getTotalDistance() < minDistance) {
-                minDistance = this.getTotalDistance();
-                optimalPosition = i;
-            }
-            this.getWaypoints().remove(waypoint);
-        }
-
-        if (optimalPosition > 0) {
+        if ( optimalPosition > 0) {
             this.addWaypointAt(waypoint, optimalPosition);
             this.renumber();
-            this.calculateTakeOff();
+            this.recalcTakeOff();
             return true;
         }
         return false;
@@ -248,11 +296,11 @@ public class Transfer extends StandardClientEntity {
             return false;
         }
         this.renumber();
-        this.calculateTakeOff();
+        this.recalcTakeOff();
         return true;
     }
 
-    private void calculateTakeOff() {
+    private void recalcTakeOff() {
         Waypoint preWaypoint = null;
         Waypoint currentWaypoint = null;
 
@@ -260,33 +308,12 @@ public class Transfer extends StandardClientEntity {
         while (it.hasNext()) {
             if (preWaypoint == null) {
                 preWaypoint = it.next();
-            } else if (it.hasNext()) {
+            } else {
                 currentWaypoint = it.next();
-                final int distanceTo = preWaypoint.getSite().getDistanceTo(currentWaypoint.getSite());
-                int duration = calculateTravelDuration(distanceTo);
-                Calendar c = Calendar.getInstance();
-                if(preWaypoint.getTakeOff()==null){
-                    preWaypoint.setTakeOff(new Date());
-                }
-                c.setTime(preWaypoint.getTakeOff());
-                if(currentWaypoint.getStopoverTime()!=null){
-                    duration = duration + currentWaypoint.getStopoverTime();
-                }
-                c.add(Calendar.MINUTE, (duration));
-                currentWaypoint.setTakeOff(c.getTime());
+                currentWaypoint.calculateTakeOff(preWaypoint);
                 preWaypoint = currentWaypoint;
             }
         }
-    }
-
-    private int calculateTravelDuration(int distanceTo) {
-        int maxSpeed = 200; //km/h
-        int duration = (int) ((Float.valueOf(distanceTo) / Float.valueOf(maxSpeed) * 60));
-        return roundUp(duration, 5);
-    }
-
-    private int roundUp(int duration, int i) {
-        return duration - duration % i + i;
     }
 
     public boolean isLastWaypoint(Waypoint waypoint) {
@@ -341,11 +368,11 @@ public class Transfer extends StandardClientEntity {
         }
 
         log.debug("Booked in total: " + bookedSeats + " | Transfer: " + this.getRouteShort());
-        return bookedSeats;
+        return this.getCraftType().getSeats() - bookedSeats;
     }
 
     /**
-     * Für jede Site werden die Booked Seats berechnet. Für Ticketgruppe wird
+     * Für jede Site werden die Booked Seats berechnet. Für die Ticketgruppe wird
      * die Strecke durchlaufen und die besetzten Plätze aufaddiert.
      */
     public HashMap<UUID, Integer> getBookedSeatsMap(List<TripDTO> groupedTickets) {
@@ -394,4 +421,6 @@ public class Transfer extends StandardClientEntity {
         }
         return null;
     }
+
+
 }
