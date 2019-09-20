@@ -36,13 +36,20 @@ public class CrewChangeCreateDTOCreate extends StandardEditor<CrewChangeCreateDT
     @Inject
     private CollectionContainer<CraftType> craftTypesDc;
 
+    @Subscribe("onInitEntity")
     protected void onInitEntity(InitEntityEvent<CrewChangeCreateDTO> event) {
-              //event.getEntity().setStatus(Status.ACTIVE);
+        if(event.getEntity()==null){
+            this.setEntityToEdit(new CrewChangeCreateDTO());
+
+        }
+
     }
-@Subscribe("startDateTimeField")
-protected void onValueChangeEventX(HasValue.ValueChangeEvent e){
-System.out.println(e);
-}
+
+    @Subscribe("startDateTimeField")
+    protected void onValueChangeEventX(HasValue.ValueChangeEvent e) {
+        System.out.println(e);
+    }
+
     @Subscribe("craftType")
     protected void onValueChangeEvent(HasValue.ValueChangeEvent<CraftType> e) {
         List<Integer> list = new ArrayList<>();
@@ -55,11 +62,12 @@ System.out.println(e);
             freeSeatsInbound.setOptionsList(list);
         }
     }
+
     @Subscribe("modeOfTransferLF")
     private void onModeOfTransferLFValueChange(HasValue.ValueChangeEvent<ModeOfTransfer> event) {
         if (event.getValue() != null) {
             ModeOfTransfer mode = event.getValue();
-            craftTypesDl.setParameter("modeOfTransferId",  mode.getId());
+            craftTypesDl.setParameter("modeOfTransferId", mode.getId());
         } else {
             craftTypesDl.removeParameter("modeOfTransferId");
         }
@@ -80,10 +88,10 @@ System.out.println(e);
     @Subscribe
     protected void onBeforeClose(BeforeCloseEvent event) {
 
-        if(event.getCloseAction().toString().equals("CloseAction{actionId='commit'}")) {
-                crewChangeService.createCrewChange(this.getEditedEntity());
-                notifications.create(Notifications.NotificationType.HUMANIZED)
-                        .withCaption("Flight successfull created.").show();
-            }
+        if (event.getCloseAction().toString().equals("CloseAction{actionId='commit'}")) {
+            crewChangeService.createCrewChange(this.getEditedEntity());
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption("Flight successfull created.").show();
         }
+    }
 }
