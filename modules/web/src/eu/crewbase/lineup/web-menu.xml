@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <menu id="lineUp"
+    <!--menu id="lineUp"
           icon="font-icon:GROUP"
           insertBefore="administration">
                 <item screen="CampaignPlan"/>
@@ -10,13 +10,13 @@
         <item screen="lineup$ShiftPeriod.choose"/>
         <item screen="lineup$PeriodTemplate.browse"/>
 
-        <!--item screen="lineup$Waypoint.browse"/>
+        <item screen="lineup$Waypoint.browse"/>
         <item screen="lineup$CrewChange.browse"/>
         <item screen="lineup$Ticket.browse"/>
         <item screen="lineup$FirstClass.browse"/>
         <item screen="lineup$SecondClass.browse"/>
-        <item screen="lineup$ThirdClass.browse"/-->
-    </menu>
+        <item screen="lineup$ThirdClass.browse"/>
+    </menu-->
     <!--     <menu id="crewChange"
           icon="font-icon:ARROWS_ALT"
           insertBefore="administration">
@@ -59,7 +59,7 @@
         <param name="tableDatasource"
                value="approveBookingsDs"/>
         <param name="windowLabel"
-               value="Approve Bookings"/>
+               value="Approve Booking Requests"/>
     </item>
     <item icon="font-icon:CALENDAR_CHECK_O" id="myBookings" insertBefore="administration"
           screen="lineup$TravelOption.browse">

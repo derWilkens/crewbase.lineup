@@ -46,7 +46,7 @@
         </groupBox>
         <hbox spacing="true">
             <button action="bookSeats"
-                    caption="BOOK"
+                    caption="Request Now"
                     stylename="friendly"/>
             <button action="cancel"
                     caption="Cancel"/>

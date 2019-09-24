@@ -36,13 +36,9 @@ public class CrewChangeCreateDTOCreate extends StandardEditor<CrewChangeCreateDT
     @Inject
     private CollectionContainer<CraftType> craftTypesDc;
 
-    @Subscribe("onInitEntity")
-    protected void onInitEntity(InitEntityEvent<CrewChangeCreateDTO> event) {
-        if(event.getEntity()==null){
+    @Subscribe
+    protected void onInit(InitEvent event) {
             this.setEntityToEdit(new CrewChangeCreateDTO());
-
-        }
-
     }
 
     @Subscribe("startDateTimeField")

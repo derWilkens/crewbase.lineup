@@ -64,7 +64,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 
 
 			cc.getTransfers().add(transfer);
-			persistence.getEntityManager().persist(transfer);
+			//persistence.getEntityManager().persist(transfer);
 
 			/**
 			 * 2 Standard-Waypoints anlegen A - B - A
@@ -74,6 +74,7 @@ public class CrewChangeServiceBean implements CrewChangeService {
 			wp2 = addWaypoint(transfer, dto.getDestinationSite());
 			wp3 = addWaypoint(transfer, dto.getDepartureSite());
 
+			persistence.getEntityManager().persist(transfer);
 			tx.commit();
 		}
 

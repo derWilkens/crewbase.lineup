@@ -11,12 +11,12 @@
         </instance>
         <collection id="startSitesDc" class="eu.crewbase.lineup.entity.coredata.Site" view="_minimal">
             <loader id="startSitesLc">
-                <query><![CDATA[select e from lineup$Site e order by e.siteName]]></query>
+                <query><![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Airport' order by e.siteName ]]></query>
             </loader>
         </collection>
         <collection id="destinationsDc" class="eu.crewbase.lineup.entity.coredata.Site" view="_minimal">
             <loader id="destinationsLc">
-                <query><![CDATA[select e from lineup$Site e order by e.siteName]]></query>
+                <query><![CDATA[select e from lineup$Site e where e.siteCategory.categoryName = 'Helideck' order by e.siteName ]]></query>
             </loader>
         </collection>
     </data>

@@ -1,7 +1,11 @@
 package eu.crewbase.lineup.tmp.firstclass;
 
-import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.screen.*;
 import eu.crewbase.lineup.entity.tmp.FirstClass;
 
-public class FirstClassEdit extends AbstractEditor<FirstClass> {
+@UiController("lineup$FirstClass.edit")
+@UiDescriptor("first-class-edit.xml")
+@EditedEntityContainer("firstClassDc")
+@LoadDataBeforeShow
+public class FirstClassEdit extends StandardEditor<FirstClass> {
 }

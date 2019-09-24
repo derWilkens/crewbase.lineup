@@ -79,8 +79,6 @@
             template="eu/crewbase/lineup/web/transfer/transfer-edit.xml"/>
     <screen id="lineup$FirstClass.browse"
             template="eu/crewbase/lineup/tmp/firstclass/first-class-browse.xml"/>
-    <screen id="lineup$FirstClass.edit"
-            template="eu/crewbase/lineup/tmp/firstclass/first-class-edit.xml"/>
     <screen id="lineup$SecondClass.browse"
             template="eu/crewbase/lineup/tmp/secondclass/second-class-browse.xml"/>
     <screen id="lineup$SecondClass.edit"
@@ -91,8 +89,6 @@
             template="eu/crewbase/lineup/tmp/thirdclass/third-class-edit.xml"/>
     <screen id="lineup$CrewChange.edit"
             template="eu/crewbase/lineup/web/crewchange/crew-change-edit.xml"/>
-    <screen id="lineup$CrewChangeCreateDTO.edit"
-            template="eu/crewbase/lineup/web/crewchangecreatedto/crew-change-create-dto-edit.xml"/>
     <screen id="lineup$CrewChange.overview"
             template="eu/crewbase/lineup/web/crewchange/crew-change-overview.xml"/>
     <screen id="lineup$SiteCategory.browse"
