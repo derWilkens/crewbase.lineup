@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.cubaVersion = '7.1.0'
+    ext.cubaVersion = '7.1.1'
     repositories {
         
         maven {
@@ -21,7 +21,7 @@ buildscript {
     }
 }
 
-def modulePrefix = 'lineup'
+def modulePrefix = 'travelConnect'
 
 def globalModule = project(":${modulePrefix}-global")
 def coreModule = project(":${modulePrefix}-core")
@@ -248,9 +248,10 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
 
 
 task buildUberJar(type: CubaUberJarBuilding) {
-    singleJar = true
-    logbackConfigurationFile = 'etc/uber-jar-logback.xml'
-    webPort = 8080
     coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
-    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    appProperties = ['cuba.automaticDatabaseUpdate': true]
+    webJettyConfPath = 'jetty.xml'
+    webPort = 8443
+    logbackConfigurationFile = 'etc/uber-jar-logback.xml'
+    singleJar = true
 }

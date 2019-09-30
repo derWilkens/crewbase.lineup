@@ -4,8 +4,8 @@
     <module blocks="*"
             name="global">
         <artifact appJar="true"
-                  name="lineup-global"/>
-        <artifact name="lineup-core" classifier="db" ext="zip" configuration="dbscripts"/>
+                  name="travelConnect-global"/>
+        <artifact name="travelConnect-core" classifier="db" ext="zip" configuration="dbscripts"/>
         <property name="cuba.persistenceConfig"
                   value="+eu/crewbase/lineup/persistence.xml"/>
         <property name="cuba.metadataConfig"
@@ -17,11 +17,11 @@
             dependsOn="global"
             name="core">
         <artifact appJar="true"
-                  name="lineup-core"/>
+                  name="travelConnect-core"/>
         <artifact classifier="db"
                   configuration="dbscripts"
                   ext="zip"
-                  name="lineup-core"/>
+                  name="travelConnect-core"/>
         <property name="cuba.springContextConfig"
                   value="+eu/crewbase/lineup/spring.xml"/>
         <property name="cuba.mainMessagePack"
@@ -31,18 +31,18 @@
             dependsOn="global"
             name="gui">
         <artifact appJar="true"
-                  name="lineup-gui"/>
+                  name="travelConnect-gui"/>
     </module>
     <module blocks="web"
             dependsOn="gui"
             name="web">
         <artifact appJar="true"
-                  name="lineup-web"/>
+                  name="travelConnect-web"/>
         <artifact classifier="web"
                   configuration="webcontent"
                   ext="zip"
-                  name="lineup-web"/>
-        <artifact name="lineup-web" configuration="themes" ext="jar"/>
+                  name="travelConnect-web"/>
+        <artifact name="travelConnect-web" configuration="themes" ext="jar"/>
         <property name="cuba.springContextConfig"
                   value="+eu/crewbase/lineup/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
